@@ -1,0 +1,3 @@
+SMTP_USERNAME=test.hafsana.node
+SMTP_PASSWORD=test@node
+app password:gqcv tfgr ndkw lvwe

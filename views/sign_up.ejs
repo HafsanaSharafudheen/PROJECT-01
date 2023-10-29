@@ -1,0 +1,180 @@
+<%- include('./partials/header.ejs') %>
+<section class="login py-3 ">
+    <div class="container login-container-div">
+        <div class="row">
+            <div class="col-lg-5  text-center pt-5">
+                <span class="welcome-text mt-5">Welcome to <span class="baby-b">Baby Bundles</span> !</span>
+                <br>
+                <span class="welcome-text">Your One-Stop Shop for All Things Baby</span>
+                <img src="/images/bottle.avif" class="img-fluid mt-5" alt="">
+
+            </div>
+            <div class="col-lg-7 right-side-div">
+                <!-- call api in this function -->
+                <form id="signup-form" action="/signup/send-otp" method="POST" onsubmit="return submitForm(this)">
+
+                    <div class="form-row ">
+                        <label class="form-label">Full Name</label>
+                        <div class="col-lg-10">
+
+                            <input type="text" placeholder="Full Name" class="inp px-3" name="fullName" id="fullName">
+                        </div>
+                    </div>
+                    <div class="form-row ">
+                        <label class="form-label"> Email</label>
+                        <div class="col-lg-10">
+
+                            <input type="email" placeholder="Email" name="email" class="inp px-3" id="Email">
+                        </div>
+                    </div>
+
+
+                    <p class="text-center pt-3" style="color: white;">Verify your number to create your Account</p>
+                    <div class="form-row py-3 ">
+                        <div class=" offset-1 col-lg-10">
+                            <button type="submit" class="login-button">Send OTP</button>
+
+                        </div>
+                    </div>
+                    <div class="register-link">
+                        <p>Already Have an Account?<a href="/">login</a></p>
+                    </div>
+
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Modal Content  for otp popup box-->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <form id="myModel" action="/signup/verify-otp" method="POST" onsubmit="return otpform(this)">
+
+                        <label for="otp">Enter th OTP send to youe number</label>
+                        <div>
+                            <input type="text" class="otp-input" name="digits" maxlength="4" required>
+
+
+                        </div>
+                        <button type="submit">Verify OTP</button>
+
+
+                    </form>
+                    <a class="text-center pt-3" href="#" onclick="return resend()" id="resendLink">Resend OTP</a>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+</section>
+
+<script>
+    // JavaScript function to open the modal of otp popup
+    submitForm = (form) => {
+
+        var obj = {
+            "fullName": form.elements.fullName.value,
+            "email": form.elements.email.value
+        };
+
+        fetch(form.action, {
+                method: form.method,
+                body: JSON.stringify(obj),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    let message = response.json();
+                    openModal();
+                } else {
+                    throw new Error('Network response was not ok.');
+                }
+            })
+            .catch(error => {
+                responseDiv.innerHTML = "An error occurred while submitting the form.";
+                console.error("Error:", error);
+            });
+
+        // Prevent the form from performing its default submission behavior
+        return false;
+    }
+
+
+    function openModal() {
+        $('#myModal').modal('show');
+    }
+
+    // JavaScript function to be called when the "Save" button is clicked
+    function popupfunc() {
+        alert('Function called from inside the modal');
+    }
+
+    function otpform(form) {
+        var signupForm = document.getElementById('signup-form')
+        var Userotp = {
+            "fullName": signupForm.elements.fullName.value,
+            "email": signupForm.elements.email.value,
+            "otp": form.elements.digits.value,
+
+        }
+        fetch(form.action, {
+                method: form.method,
+                body: JSON.stringify(Userotp),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+
+            .then(response => {
+                if (response.status == 200) {
+                    // Redirect to another page
+                    window.location.href = '/home';
+
+                } else {
+
+                    throw new Error('Network response was not ok.');
+                }
+
+            })
+            .catch(error => {
+                // Handle errors
+                console.error("Error:", error);
+            });
+
+        // Prevent the form from performing its default submission behavior
+        return false;
+    }
+
+    function closeModal() {
+        $('#myModal').modal('hide');
+    }
+
+    function resend() {
+        closeModal();
+        event.preventDefault();
+        var signupForm = document.getElementById('signup-form')
+
+        submitForm(signupForm);
+
+        return false;
+    }
+</script>
+
+
+
+<%- include('./partials/footer.ejs') %>
