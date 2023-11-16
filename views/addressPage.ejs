@@ -1,0 +1,96 @@
+<%- include('./partials/header.ejs') %>
+<link rel="stylesheet" type="text/css" href="/cartPage.css">
+
+<body>
+    <div class="container mt-5 row">
+      
+  <div class="col-md-8">
+      <h2>Select Addresses</h2>
+      <a href="/order/newAddressPage" class="btn btn-primary mb-3">+ Add new Address</a>
+  
+      
+
+<% if (addressList.length === 0) { %>
+    <p>No addresses available.</p>
+  <% } else { %>
+    <% addressList.forEach((address, index) => { %>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="address" id="address<%= index + 1 %>" <%= index === 0 ? 'checked' : '' %>>
+        <label class="form-check-label" for="address<%= index + 1 %>">
+           Full Name: <%= address.fullName %><br>
+           pincode:<%= address.pincode %><br>
+
+          Address: <%= address.address %><br>
+          landmark: <%= address.landmark %><br>
+          city: <%= address.city %><br>
+          state: <%= address.state %><br>
+          mobile: <%= address.mobile %><br>
+
+
+          <button onclick="orderConfirmation('')" class="btn btn-success">Deliver to this address</button>
+        </label>
+      </div>
+    <% }) %>
+  <% } %>
+  </div>
+  
+  <div class="col summary">
+    <form action="/order/addressPage" method="POST">
+    <div>
+        <h5><b>Summary</b></h5>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col" style="padding-left:0;">AMOUNT:</div>
+        <div class="col text-right">Rs.<span ><%= summary.amount%></span></div>
+    </div>
+    
+        <p>Selected Payment Method</p>          
+        <span ><%= summary.paymentMethod%></span>
+        <p>CODE</p>
+        <span ><%= summary.code%></span>    
+    <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+        <div class="col">TOTAL PRICE</div>
+        <div class="col text-right">Rs.<span id="totalPrice" name="totalPrice"><%= summary.totalPrice%></span></div>
+    </div>
+    
+    
+</form>
+</div>
+    </div>
+   
+  
+<script>
+   function orderConfirmation(addressIndex) {
+    try {
+        const selectedAddress = addressList[addressIndex];
+        fetch('/order/orderConfirmation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                address: selectedAddress,
+                // Add any other relevant information needed for order confirmation
+            }),
+        }).then(response => {
+            // Check if the response is successful
+            if (response.ok) {
+                // Handle success, e.g., redirect to a confirmation page
+                window.location.href = '/order/confirmation';
+            } else {
+                // Handle errors
+                alert('Failed to confirm order.');
+            }
+        });
+
+    } catch (error) {
+        // Handle errors
+        console.error('Error confirming order:', error);
+    }
+}
+
+</script>
+
+
+<%- include('./partials/footer.ejs') %>

@@ -1,0 +1,119 @@
+<%- include('./partials/header.ejs') %>
+<link rel="stylesheet" type="text/css" href="/product-preview.css">
+<script src="https://unpkg.com/js-image-zoom@0.4.1/js-image-zoom.js" type="application/javascript"></script>
+
+<%- include('./partials/navbar.ejs') %>
+
+<div class="container">
+  <div class="card">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="preview">
+            <div class="preview-pic tab-content">
+              <% productDetails.productImages.forEach(function(item, index) { %>
+              <div class="image-container tab-pane <%= index === 0 ? 'active' : '' %>" id="pic-<%= index %>">
+                <img src="/fileupload/files/<%= item.imageName %>">
+              </div>
+              <% }); %>
+            </div>
+            <ul class="preview-thumbnail nav nav-tabs">
+              <% productDetails.productImages.forEach(function(item, index) { %>
+              <li class="<%= index === 0 ? 'active' : '' %>">
+                <a data-target="#pic-<%= index %>" data-toggle="tab">
+                  <img src="/fileupload/files/<%= item.imageName %>" />
+                </a>
+              </li>
+              <% }); %>
+            </ul>
+          </div>
+        </div>
+        <!-- Assuming you are embedding this EJS code in an HTML file -->
+
+        <div class="col-md-6">
+          <div class="details">
+            <h3 class="product-title"><%= productDetails.productName %></h3>
+            <div class="rating">
+              <div class="stars">
+                <% for (let i = 0; i < productDetails.rating; i++) { %>
+                <span class="fa fa-star checked"></span>
+                <% } %>
+                <% for (let i = productDetails.rating; i < 5; i++) { %>
+                <span class="fa fa-star"></span>
+                <% } %>
+              </div>
+            </div>
+            <p class="product-description"><%= productDetails.productDescription %></p>
+            <div class="action">
+              <!-- Assuming 'token' is available in the global scope or defined in a way that it's accessible -->
+            
+                <% if (isCarted) { %>
+                  
+                  <a id="goToCartIcon2" class="add-to-cart btn btn-default"  href="/cartPage/cartPage">GO TO CART</a>
+                
+                <% } else {%>
+                  <button id="cartIcon" class="add-to-cart btn btn-default" type="button"
+                onclick="addToCart('<%= productDetails.productNumber %>')" >ADD TO CART</button>
+                <a id="goToCartIcon" class="add-to-cart btn btn-default"   style="display: none;" href="/cartPage/cartPage">GO TO CART</a>
+
+                  <% } %>
+                
+              <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  async function addToCart(productNumber) {
+
+    try {
+      fetch('/cartPage/addToCart', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            productNumber: productNumber,
+          })
+        }).then(response => {
+          // Check if the response is successful
+          if (response.ok) {
+          
+            alert('Product added to cart successfully!');
+document.getElementById('cartIcon').style.display="none";
+document.getElementById('goToCartIcon').style.display="block";
+
+
+
+            getCartCount();
+
+          } else {
+            // Handle errors
+            alert('Failed to add product to cart.');
+          }
+        });
+
+    } catch (error) {
+      // Handle errors
+      console.error('Error adding product to cart:', error);
+    }
+  }
+
+ 
+ 
+</script>
+
+
+
+
+
+
+
+
+
+<%- include('./partials/footer.ejs') %>

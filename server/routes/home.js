@@ -1,12 +1,37 @@
 const express=require('express');
 const router=express.Router();
+const Product=require('../models/product');
+const Cart=require('../models/Cart');
 
 
-router.get('/',(req,res)=>{
-    res.render('homepage')
+const jwtVerifyModule = require('../middileware/JWTverify')
+const productViewPage=require('../controllers/userWorks/productviewPage')
+
+
+router.get('/',jwtVerifyModule.JWTVerify, async (req,res)=>{
+    try {
+      console.log(req.body);
+        const products = await Product.find({"deleted":false});
+      //const wish=await Wish.findOne({ "user_id":req.userDetails.user_id,"product_id":products._id,deleted:{$ne:true}})
+
+        if (!products || products.length === 0) {
+          return res.status(400).json({ message: "No products available" });
+        } else {
+
+          // Render the 'adminProducts' view with the products data
+          res.render('homepage', { products: products, isWishListed:false});
+        }
+      } catch (error) {
+        console.error('Error while fetching products:', error);
+        return res.status(500).json({
+          error: 'Internal server error'
+        });
+      }
 })
 
-
+router.get('/productViewPage',jwtVerifyModule.JWTVerify,(req,res)=>{
+  productViewPage.productView(req,res)
+})
 
 
 

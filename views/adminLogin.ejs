@@ -1,0 +1,120 @@
+<%- include('./partials/header.ejs') %>
+
+
+
+<section class="login py-3 ">
+    <div class="container login-container-div">
+        <div class="row">
+            <div class="col-lg-5  text-center pt-5">
+                <span class="welcome-text mt-5">Welcome to <span class="baby-b">Baby Bundles</span> !</span>
+                <br>
+                <span class="welcome-text">Your One-Stop Shop for All Things Baby</span>
+                <img src="/images/bottle.avif" class="img-fluid mt-5" alt="">
+
+            </div>
+            <div class="col-lg-7 right-side-div py-5 ">
+                <h1 class="animate__animated animate__heartBeat">Administrator Login </h1>
+                <!-- login form for admin login -->
+
+                <form id="login-form" action="/admin" method="POST" onsubmit="return adminlogin(this)">
+
+
+                    <div class="form-row ">
+                        <label class="form-label">Email</label>
+                        <div class="col-lg-10">
+
+                            <input type="email" placeholder="Email" name="email" class="inp px-3" id="Email">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="form-label">Password</label>
+                        <div class="col-lg-10">
+                            <p id="error-message" style="color: red;"></p> <!-- Add this error message element -->
+
+                            <input type="password" placeholder="Password" name="password" class="inp px-3"
+                                id="password">
+                        </div>
+                    </div>
+
+                    <!-- <div class="remember-forgot">
+                        <label><input type="checkbox" id="remember-me" name="rememberMe">Remember me</label>
+                        <a href="#">Forgot Password</a>
+                    </div> -->
+
+                    <!-- login button -->
+                    <div class="form-row py-3 pt-5">
+                        <div class="offset-1 col-lg-10">
+                            <button type="submit" id="btn-login" class="login-button">LOGIN</button>
+                        </div>
+                    </div>
+
+
+
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+<script>
+    function adminlogin(form) {
+        try{
+
+        
+        const errorMessage = document.getElementById('error-message'); // Get the error message element
+
+        var adminDetails = {
+            "email": form.elements.email.value,
+            "password": form.elements.password.value,
+        };
+
+        fetch(form.action, {
+                method: form.method,
+                body: JSON.stringify(adminDetails),
+                headers: {
+                    'Content-Type': 'application/json',
+
+                },
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    let message = response.json();
+                    // Redirect to another page
+
+                    window.location.href = '/admin/adminDashboard';
+                } else {
+                    throw new Error('Network response was not ok.');
+                    let data=response.json();
+                    const errorMsg = data.message;
+                    errorMessage.textContent = errorMsg;
+                
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        }
+
+            catch{
+
+        // Prevent the form from performing its default submission behavior
+        return false;
+            
+}
+    }
+
+    function Redirect(address) {
+        const token = "";
+        fetch('/admin/adminDashboard', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                }
+            });
+    }
+</script>
+
+<%- include('./partials/footer.ejs') %>

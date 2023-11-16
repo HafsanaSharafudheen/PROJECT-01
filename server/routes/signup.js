@@ -13,9 +13,11 @@ router.post('/send-otp', (req, res) => {
 })
 router.post('/verify-otp', (req, res) => {
     
-      otpController.OTPVerificationEmail(req, res)
-     console.log(res.status)
+    otpController.OTPVerificationEmail(req, res,insertUser)
+      function insertUser(){
+        sign_upController.insertUser(req,res)
 
+      }
 })
 
 

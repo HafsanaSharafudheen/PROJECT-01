@@ -1,19 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Andika&family=Butterfly+Kids&family=Lilita+One&family=Pacifico&family=Roboto+Mono:wght@200&display=swap');
 
-  *{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-  
-    
+
+
     font-family: 'Roboto Mono', monospace;
 }
-.login-container-div{
+
+.login-container-div {
     background: white;
     border-radius: 30px;
     box-shadow: 8px 12px 46px -19px;
 }
-.welcome-text{
+
+.welcome-text {
     font-weight: 500;
     color: #D38E87;
     text-align: center;
@@ -23,43 +25,49 @@
     font-family: 'Andika', sans-serif;
 
 }
-.baby-b{
+
+.baby-b {
     font-size: 2rem;
     font-weight: bold;
-    color:  #d88689;
+    color: #d88689;
     font-family: 'Butterfly Kids', cursive;
 
 }
-.right-side-div{
-    background-color: #D7A2A2; 
+
+.right-side-div {
+    background-color: #D7A2A2;
+
     border-radius: 20px;
-   
+
     text-align: center;
 }
-.login h1{
+
+.login h1 {
     font-size: 1.5rem;
     font-family: 'Lilita One', sans-serif;
-   
+
     color: white;
 }
-.form-label{
-   color: white;
-   font-weight: 400;
-  padding: 10px ;
-  margin: 1em 10em 0em 0em
+
+.form-label {
+    color: white;
+    font-weight: 400;
+    padding: 10px;
+    margin: 1em 10em 0em 0em
 }
-.inp{
+
+.inp {
     height: 40px;
     width: 70%;
     border: none;
     outline: none;
-    margin-left: 6em;
+    /* margin-left: 6em; */
     border-radius: 60px;
     /* using box shadow generator */
     box-shadow: 0px 0px 20px 5px rgba(185, 120, 120, 0.75);
-
 }
-.login-button{
+
+.login-button {
     height: 50px;
     width: 50%;
     border: none;
@@ -67,60 +75,418 @@
     border-radius: 60px;
     font-weight: 900;
     background-color: white;
-   color: #D38E87;
-   /* font-family: 'Lilita One', sans-serif;  */
+    color: #D38E87;
+    /* font-family: 'Lilita One', sans-serif;  */
 }
+
 .login-button:active {
-    background-color:  #D38E87;
+    background-color: #D38E87;
     color: white;
-} 
-.remember-forgot{
-margin: 2em 2em 0em 5em;
-font-size: 15px;
-display: flex;
-color: white;
-justify-content: space-between;
 }
-.remember-forgot label input{
+
+.remember-forgot {
+    margin: 2em 2em 0em 5em;
+    font-size: 15px;
+    display: flex;
+    color: white;
+    justify-content: space-between;
+}
+
+.remember-forgot label input {
     margin-right: 5px;
 }
-.remember-forgot a{
+
+.remember-forgot a {
     text-decoration: none;
     color: white;
 }
-.remember-forgot a:hover{
+
+.remember-forgot a:hover {
     text-decoration: underline;
 }
-.register-link{
-font-size: 20px;
-color: white;
-text-align: center;
-margin: 10px 0px 0px 10px;
+
+.register-link {
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    margin: 10px 0px 0px 10px;
 }
-.register-link p a{
+
+.register-link p a {
     color: white;
     text-decoration: none;
     font-weight: 600;
 
 }
-.register-link a:hover{
+
+.register-link a:hover {
     text-decoration: underline;
 }
+
 /* signup css */
 
-/* otpcss */
-.otp-div {
-    background: white;
-    border-radius: 30px;
-    box-shadow: 8px 12px 46px -19px; 
-    width: 100vh;
-    margin: auto;
-  
+
+
+
+
+/* homepage  */
+/* Style the navbar */
+.navbar {
+    background-color: #D7A2A2;
 }
-.otp-input {
-    width: 120px;
+
+/* Style the navbar links */
+.navbar-nav .nav-link {
+    color: rgb(255, 255, 255);
+    margin-left: 50px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: black;
+}
+
+.fa-solid {
+    color: white;
+
+}
+
+.icon-color {
+    color: #0e0e0e;
+}
+
+/* Style for the button list */
+
+.button-list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    justify-content: end;
+    margin: 0;
+}
+
+
+/* Style for each list item */
+.button-list li {
+    margin: 0 10px;
+    /* Add spacing between buttons */
+}
+
+/* Style for the anchor (button) */
+.button-list a {
+    text-decoration: none;
+    color: white;
+    background-color: transparent;
+    padding: 5px 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+/* Style for the anchor (button) on hover */
+.button-list a:hover {
+    background-color:#be5f5f;
+}
+
+.badge {
+    position: absolute;
+    margin-top: -41px;
+    margin-left: 28px;
+    /* top: -10px; */
+    /* right: -10px; */
+    /* padding: 5px 10px; */
+    border-radius: 50%;
+    background: #af665e;
+    color: white;
+  }
+
+.icons-cart {
+    text-decoration: none;
+    margin: 11px 5px;
+    padding: 5px 5px;
+    border: 1px solid #D38E87;
+    border-radius: 5px;
+    margin-left: auto;
+}
+
+.icons-cart:hover {
+    background-color:#D7A2A2;
+
+}
+
+/* admin dahsboard */
+
+.admin-navbar {
+    height: 50px;
+    background-color: #D7A2A2;
+    color: white;
+
+}
+
+
+.user-icon-admin {
+    margin-left: 100px;
+    background-color: pink;
+    list-style: none;
+    text-decoration: none;
+    text-decoration: none;
+    color: white;
+    background-color: transparent;
+    padding: 5px 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.user-icon-admin:hover {
+    background-color: pink;
+}
+
+/* sidebar menu */
+.navbar-nav .nav-link {
+    color: #ffffff;
+    margin-left: 50px;
+}
+
+.nav-item {
+    margin-top: 20px;
+}
+
+
+.nav-link {
+    font-weight: 800;
+    color: black;
+
+    padding: 10px 15px;
+    border: 2px solid #D7A2A2;
+    border-radius: 5px;
     text-align: center;
-    margin: 5px;
-
 }
 
+.user-profile {
+    margin-left: auto;
+}
+
+.user-profile a {
+    text-decoration: none;
+    color: white;
+}
+/* Close button */
+.close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+#imgPreview {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.imgPreview-img {
+    width: 100px;
+}
+
+.otp-input {
+    width: 30%;
+    height: 30px;
+    text-align: center;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+.otp-input:focus {
+    outline: none;
+    border-color:#e76e72;
+    box-shadow: 0 0 5px #ccc;
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent background color */
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    /* Ensure it's above other content */
+}
+
+
+
+
+/* Style the form container */
+.form-style {
+    width: 70%;
+
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Style labels for consistency */
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* Style the submit button */
+#addButton {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Style the cancel button */
+#cancelButton {
+    background-color: #ccc;
+    color: #333;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* Style the image preview container */
+#imgPreview {
+    text-align: center;
+}
+
+
+/* Customize file upload button appearance */
+input[type="file"]+label {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+}
+
+/* Add some margin to the file upload button */
+input[type="file"]+label {
+    margin-bottom: 10px;
+}
+
+/* Style the file input label text */
+input[type="file"]+label::before {
+    content: "Choose File";
+    display: inline-block;
+    background: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+/* Style for the product category select */
+#productCategory {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Additional styling for optional fields like Product Coupon and Description */
+#productCoupon,
+#productDescription {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* homepage design */
+.inner {
+    overflow: hidden;
+}
+
+.inner img {
+    transition: all 1.5s ease;
+    width:300px;
+}
+
+.inner:hover img {
+    transform: scale(1.5);
+}
+.card-title{
+    text-transform: UPPERCASE;
+    font-weight: bold;
+    color: black;
+}
+.card-body a{
+    text-decoration: none;
+} 
+.icons-cart{
+    margin-left: auto;
+}
+
+/* 
+    /* Custom CSS  for carousal*/
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+      background-color: black; /* Set the button background color */
+      color: white; /* Set the button icon color */
+    }
+    
+    /* If you want to change the button shape to a circle, you can add these styles */
+    .carousel-control-prev,
+    .carousel-control-next {
+      width: 30px; /* Adjust the size as needed */
+      height: 30px;
+      border-radius: 50%; /* Make it circular */
+    }
+    /* deled row disabled  */
+    tr.disabled {
+        opacity: 0.8;
+      
+      }
+      .tableAdmin {
+        margin-left: 2rem;
+        border-collapse: collapse;
+        margin-top: 20px;
+        width: 100%;
+    }
+    
+    .tableAdmin th, .tableAdmin td {
+        border: 1px solid #D9D9D9;
+        padding: 12px;
+        text-align: center;
+    }
+    
+    .tableAdmin th {
+        background-color: #95A5A6;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+    
+    .tableAdmin tbody tr:nth-child(even) {
+        background-color:#e1ebfc;
+        display: inline;
+    }
+    
+  
+    /* Media query for smaller screens */
+    @media (max-width:500px) {
+        .tableAdmin th, .tableAdmin td {
+            font-size: 10px;
+        }
+    }
+    

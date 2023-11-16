@@ -6,41 +6,63 @@
         <div class="row">
             <div class="col-lg-5  text-center pt-5">
                 <span class="welcome-text mt-5">Welcome to <span class="baby-b">Baby Bundles</span> !</span>
-                    <br>
-                    <span class="welcome-text">Your One-Stop Shop for All Things Baby</span>
+                <br>
+                <span class="welcome-text">Your One-Stop Shop for All Things Baby</span>
                 <img src="/images/bottle.avif" class="img-fluid mt-5" alt="">
 
             </div>
             <div class="col-lg-7 right-side-div py-5 ">
                 <h1 class="animate__animated animate__heartBeat">WELCOME BACK</h1>
+                <!-- login form for login of user -->
+                <form id="login-form" action="/sent-otp" method="POST" onsubmit="return loginUser(this)">
 
-                <form action="/login" method="POST">
 
                     <div class="form-row ">
                         <label class="form-label">Email</label>
                         <div class="col-lg-10">
+                            <p id="error-message" style="color: red;"></p> <!-- Add this error message element -->
 
-                            <input type="email" placeholder="Email" class="inp px-3" id="Email">
+                            <input type="email" placeholder="Email" name="email" class="inp px-3" id="Email">
                         </div>
                     </div>
 
-                    <div class="form-row">
+                    <div class="form-row ">
                         <label class="form-label">Password</label>
                         <div class="col-lg-10">
+                            <p id="error-message" style="color: red;"></p> <!-- Add this error message element -->
 
-                            <input type="password" placeholder="Password" class="inp px-3" id="password">
+                            <input type="password" placeholder="Password" name="password" class="inp px-3" id="password">
                         </div>
                     </div>
-                    <div class="remember-forgot">
-                        <label><input type="checkbox">Remember me</label>
-                        <a href="#">Forgot Password</a>
+
+                    <div class="form-row " id="login-otp" style="display: none">
+                        <label for="otp" class="form-label">Enter the OTP send to your number</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="otp-input inp px-3" name="digits" maxlength="4">
+                        </div>
                     </div>
+
+<!--otp timer-->
+<div id="otp-timer" style="display: none;">
+    Time left: <span id="minutes">00</span>:<span id="seconds">00</span>
+  </div>
+                    <!-- send otp button -->
                     <div class="form-row py-3 pt-5">
-                        <div class=" offset-1 col-lg-10">
-                            <button type="submit" class="login-button">LOGIN</button>
+                        <div class="offset-1 col-lg-10">
+                            <button type="submit" id="btn-sendOTP" class="login-button">Send OTP</button>
 
+                            <a class="text-center pt-3" style="display: none;" href="#" onclick="return resend()"
+                                id="resendLink">Resend OTP</a>
                         </div>
                     </div>
+                    <!-- login button -->
+                    <div class="form-row py-3 pt-5" id="otp-verification" style="display: none;">
+                        <div class="offset-1 col-lg-10">
+                            <button type="button" id="btn-login" class="login-button"
+                                onclick="return otpform()">LOGIN</button>
+                        </div>
+                    </div>
+
                     <div class="register-link">
                         <p>Didn't Have an Account?<a href="/signup">Sign Up</a></p>
                     </div>
@@ -53,6 +75,165 @@
     </div>
 
 </section>
+
+<script>
+    //otp timer
+// JavaScript
+    let resetTime = false;
+    function startOTPTimer(duration) {
+        const resendLink = document.getElementById('resendLink');
+
+    let timer = duration;
+    const minutesElement = document.getElementById("minutes");
+    const secondsElement = document.getElementById("seconds");
+
+    const timerInterval = setInterval(function () {
+        const minutes = Math.floor(timer / 60);
+        const seconds = timer % 60;
+
+        minutesElement.textContent = minutes < 10 ? "0" + minutes : minutes;
+        secondsElement.textContent = seconds < 10 ? "0" + seconds : seconds;
+
+        if (--timer < 0||resetTime) {
+        clearInterval(timerInterval);
+        resendLink.style.display="block";
+        }
+        resetTime = false;
+    
+    }, 1000); // Update the timer every second
+}
+
+
+
+
+    function loginUser(form) {
+      
+    // Start the OTP timer with a duration of 5 minutes (300 seconds)
+    startOTPTimer(100);
+
+         $('#loaderOverlay').css('display', 'flex');
+        const loginotp = document.getElementById('login-otp');
+         const otptimer=document.getElementById('otp-timer');
+        const btnsendOTP = document.getElementById('btn-sendOTP');
+        //const resendLink = document.getElementById('resendLink');
+        const otpVerification = document.getElementById('otp-verification');
+        const btnlogin = document.getElementById('btn-login');
+        const errorMessage = document.getElementById('error-message'); // Get the error message element
+
+        var userDetails = {
+            "email": form.elements.email.value,
+            "password":form.elements.password.value,
+            "otp": form.elements.digits.value,
+        };
+        fetch(form.action, {
+                method: form.method,
+                body: JSON.stringify(userDetails),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+
+            .then(response => {
+                if (response.status === 200) {
+                    let message = response.json();
+
+                    loginotp.style.display = 'block';
+      btnsendOTP.style.display = 'none';
+      resendLink.style.display = 'block';
+      otptimer.style.display = "block";
+      otpVerification.style.display = "block";
+
+      $('#loaderOverlay').css('display', 'none');
+
+
+                   
+                } else if (response.status === 401) { // Unauthorized (invalid OTP)
+                    response.json().then(data => {
+                        const errorMsg = data.message;
+
+                        // Display the error message on the page
+                        errorMessage.textContent = errorMsg;
+                    });
+                    $('#loaderOverlay').css('display', 'none');
+
+                } else {
+                    $('#loaderOverlay').css('display', 'none');
+                    throw new Error('Network response was not ok.');
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                $('#loaderOverlay').css('display', 'none');
+            });
+        return false;
+    }
+
+    function otpform() {
+        $('#loaderOverlay').css('display', 'flex');
+
+        var loginForm = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message'); // Get the error message element
+
+        var Userotp = {
+
+            "email": loginForm.elements.email.value,
+            "password":loginForm.elements.password.value,
+            "otp": loginForm.elements.digits.value,
+
+        }
+        fetch('/verify-otp', {
+                method: "POST",
+                body: JSON.stringify(Userotp),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+
+            .then(response => {
+                if (response.status == 200) {
+                    // Redirect to another page
+                    $('#loaderOverlay').css('display', 'none');
+                    window.location.href = '/home';
+
+                } else if (response.status === 401) { //invalid otp or otp expired.
+                    response.json().then((data)=>{
+                        const errorMsg = data.message;
+                        // Display the error message on the page
+                        errorMessage.textContent =errorMsg;
+                    });
+                    $('#loaderOverlay').css('display', 'none');
+                    
+                } else {
+                    $('#loaderOverlay').css('display', 'none');
+                    throw new Error('Network response was not ok.');
+
+                }
+
+            })
+            .catch(error => {
+                // Handle errors
+                console.error("Error:", error);
+                $('#loaderOverlay').css('display', 'none');
+
+            });
+
+        // Prevent the form from performing its default submission behavior
+        return false;
+    }
+
+
+
+    function resend(){
+        const form = document.getElementById('login-form');
+        resetTime = true;
+        return loginUser(form);
+
+        
+    }
+   
+
+
+</script>
 
 
 <%- include('./partials/footer.ejs') %>

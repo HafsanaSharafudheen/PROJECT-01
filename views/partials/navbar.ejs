@@ -1,0 +1,190 @@
+<div class="row navbar">
+
+
+    <div class="col-lg-2">
+        <span class="baby-b" style="color: white ; margin-left: 10px;">Baby Bundles</span>
+
+    </div>
+    <div class="col-4">
+
+        <div class="input-group">
+            <div class="form-outline d-flex gap-1">
+                <input type="search" class="form-control" />
+
+                <button type="button" class="btn btn-light ">
+                    <i class="fa-solid fa-magnifying-glass icon-color fs-5"></i>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    <div class="col-6">
+        <div class="right-side-nav">
+            <ul class="button-list">
+
+                <li>
+                    <a href="/cartPage/cartPage">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </a>
+
+                    <span id="cartCount" class="badge" style="display: none;">0</span>
+                </li>
+
+                <li>
+                    <a href="/cartPage/wishlist">
+                        <i class="fa-regular fa-heart"></i>
+                    </a>
+                    <span id="wishlistCount" class="badge" style="display: none;">0</span>
+
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-wallet"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="/profile">
+                        <i class="fa-regular fa-user"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+</div>
+
+<nav class="navbar navbar-expand-lg row">
+
+    <div class="col-lg-12">
+        <div class="row">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/home">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu" id="categoryList" aria-labelledby="navbarDropdown">
+
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</nav>
+<script>
+    function getCartCount() {
+        const cartCountElement = document.getElementById('cartCount');
+
+        fetch('/cartPage/getCartCount', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    response.json().then((data) => {
+                        const cartCountElement = document.getElementById('cartCount');
+                        if (cartCountElement) {
+                            cartCountElement.innerHTML = data.count;
+                            cartCountElement.style.display = "block";
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                // Handle errors
+                console.error('Error:', error);
+            });
+
+        // Prevent the form from performing its default submission behavior
+        return false;
+    }
+
+
+    function getWhishlistCount() {
+        const wishlistCountElement = document.getElementById('wishlistCount');
+
+        fetch('/cartPage/getWishListCount', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    response.json().then((data) => {
+                        const wishlistCountElement = document.getElementById('wishlistCount');
+                        if (wishlistCount) {
+                            wishlistCountElement.innerHTML = data.count;
+                            wishlistCountElement.style.display = "block";
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                // Handle errors
+                console.error('Error:', error);
+            });
+
+        // Prevent the form from performing its default submission behavior
+        return false;
+    }
+
+    setTimeout(() => {
+        getCartCount();
+        getWhishlistCount();
+        getCategories();
+    }, 1000);
+
+    function getCategories() {
+        var categoryList = document.getElementById('categoryList')
+        fetch('/admin/getCategories', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    response.json().then((data) => {                        
+                        var categories = data.categories;
+                        for (var i = 0; i < categories.length; i++) {                            
+                            var li = document.createElement("li");
+                            li.className = "dropdown-item";
+                            var a = document.createElement("a");
+                            a.setAttribute("href","/home?category="+categories[i].categoryName)
+                            a.textContent = categories[i].categoryName;
+                            li.appendChild(a);
+                            categoryList.appendChild(li)
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        return false;
+    }
+
+   
+  
+</script>

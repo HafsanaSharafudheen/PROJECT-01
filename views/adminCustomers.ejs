@@ -1,0 +1,191 @@
+<%- include('./partials/header.ejs') %>
+<%- include('./partials/admin-navbar.ejs') %>
+
+        <!-- Page content -->
+        <div class="col-lg-9 col-md-8 col-sm-12">
+            <span class="welcome-text">View Customer Details</span>
+        
+            <div class="d-flex justify-content-center">
+                <table class="tableAdmin">
+                    <thead class=" table-header">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Registration Date</th>
+                            <th>Blocked</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% Users.forEach(function(x) { %>
+                            <tr>
+                                <td><%= x.fullName %></td>
+                                <td><%= x.email %></td>
+                                <td><%= (new Date(x.date)).toLocaleDateString("en-US") %></td>
+                                <td id="statusBlocked"><%= x.isBlocked %></td>
+                                <td>
+                                    <% if (!x.isBlocked) { %>
+                                        <button class="btn btn-danger" id="block-btn" title="Block User" onclick="blockUser('<%= x.email %>')">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                    <% } else { %>
+                                        <button class="btn btn-success" id="unblock-btn" title="Un-Block User" onclick="unblockUser('<%= x.email %>')">
+                                            <i class="fa-solid fa-unlock"></i>
+                                        </button>
+                                    <% } %>
+        
+                                    <div id="error-message" style="color: red;"></div>
+        
+                                </td>
+                            </tr>
+                        <% }); %>
+                        <!-- Add more rows for additional users -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+
+
+
+<script>
+
+
+
+
+
+    function blockUser(email) {
+        
+        Swal.fire({
+  title: "Are you sure?",
+  text: "You won't be able to revert this!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Yes, Block User!"
+}).then((result) => {
+  if (result.isConfirmed) {
+    blockUserConfirmation(email);
+  }
+});
+      
+function blockUserConfirmation(email){
+    const errorMessage = document.getElementById('error-message'); // Get the error message element
+       
+    fetch('/admin/blockUser', {
+                method: 'POST',
+                body: JSON.stringify({ "email": email },{"isBlocked":statusBlocked}), // Set isBlocked to false for unblocking
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+        
+            .then(response => {
+                if (response.status == 200) {
+                    response.json().then((data)=>{
+                        
+                        const errorMessage=data.message;
+                        errorMessage.textContent=errorMessage;
+                    });
+                       
+                        Swal.fire({
+                            title: "Success",
+                            text: "User Blocked Successfully",
+                            icon: "success",
+                            confirmButtonColor: "#3085d6",
+                            confirmButtonText: "Ok"
+                            }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                            });
+
+                } else if (response.status === 401) { //invalid otp or otp expired.
+                    response.json().then((data)=>{
+                        const errorMessage= data.message;
+
+                        // Display the error message on the page
+                        errorMessage.textContent =errorMessage;
+                        Swal.fire({
+                              
+                                icon: "error",
+                                title: "Failed to block",
+                                showConfirmButton: false,
+                                timer: 5000
+                        });
+                    });
+                    
+                } else {
+                    throw new Error('Network response was not ok.');
+
+                }
+
+            })
+            .catch(error => {
+                // Handle errors
+                console.error("Error:", error);
+            });
+
+        // Prevent the form from performing its default submission behavior
+        return false;
+    }
+    
+}
+ 
+    function unblockUser(email) {
+        const errorMessage = document.getElementById('error-message'); // Get the error message element
+       
+        fetch('/admin/unblockUser', {
+                method: 'POST',
+                body: JSON.stringify({ 'email': email },{"isBlocked":statusBlocked}), // Set isBlocked to false for unblocking
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+                if (response.status == 200) {
+
+                    response.json().then((data)=>{
+                    
+                        Swal.fire({
+                            title: "Success",
+                            text: "User Un-Blocked Successfully",
+                            icon: "success",
+                            confirmButtonColor: "#3085d6",
+                            confirmButtonText: "Ok"
+                            }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                            });
+
+                    });
+                   
+
+                        
+                } else if (response.status === 401) { //invalid otp or otp expired.
+                    response.json().then((data)=>{
+                        const  errorMessage = data.message;
+
+                        // Display the error message on the page
+                        errorMessage.textContent = errorMessage;
+                    });
+                    
+                } else {
+                    throw new Error('Network response was not ok.');
+
+                }
+
+            })
+            .catch(error => {
+                // Handle errors
+                console.error("Error:", error);
+            });
+
+        // Prevent the form from performing its default submission behavior
+        return false;
+    }
+</script>
+
+<%- include('./partials/adminfooter.ejs') %>

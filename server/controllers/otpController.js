@@ -38,8 +38,8 @@ async function SendOTPVerificationEmail(toEmail) {
     }
 
 };
-
-async function OTPVerificationEmail(req, res) {
+// compare the database otp with user otp
+async function OTPVerificationEmail(req, res,callbackFunc) {
     const userOTP = req.body.otp;
     const dbOTP = await OTPSchema.findOne({
         "email": req.body.email
@@ -51,21 +51,12 @@ async function OTPVerificationEmail(req, res) {
             message: 'OTP has expired'
         });
 
-    } else if (userOTP === dbOTP.otp) {
-        const newUser = new User({
-            "fullName": req.body.fullName,
-            "email": req.body.email,
-            "admin": false,
-          "otp":userOTP,
-            "date": new Date()
-        });
-        
-        await newUser.save();
-        return res.status(200).json({ message: 'OTP comparison done' })
-     
+    } else if (userOTP === dbOTP.otp ) {
+        callbackFunc();
+       
     } else {
         return res.status(401).json({
-            message: 'Invalid OTP'
+            message: 'Invalid OTP or check user password'
         });
     }
     

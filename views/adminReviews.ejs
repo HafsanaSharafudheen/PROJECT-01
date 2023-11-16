@@ -1,0 +1,102 @@
+<%- include('./partials/header.ejs') %>
+<%- include('./partials/admin-navbar.ejs') %>
+
+<button type="button" id="btn-addProducts" class="login-button" onclick="openModalforAdd(0)">ADD
+    PRODUCTS</button>
+PRODUCTS</button>
+
+
+<!-- Extra large modal -->
+<div id="addProductModal" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog"
+    aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+
+        <div class="modal-content">
+
+            <h2 id="popupHeader">Add Product</h2>
+
+            <form id="addProductForm" class="form-style" onsubmit="addProductSave(this)" action="/admin/addProducts"
+                method="POST" enctype="multipart/form-data">
+
+
+        </div> -->
+        <div class="row">
+            <div id="imgPreview" class="text-center d-flex ">
+                <!-- Image preview content goes here -->
+            </div>
+
+            <!-- Centered File Input Icon with Label -->
+            <div class="text-center p-5">
+                <label for="photos" class="file-upload-label">
+                    <i class="fas fa-plus-circle fa-3x"></i>
+                    <br>
+                    <span>Select Product Photos</span>
+                    <input type="file" id="photos" name="photos" accept="image/*" size="2000000" multiple
+                        onchange="readURL(this)" style="display: none;">
+                </label>
+            </div>
+
+
+        </div>
+        <div class="row">
+            <!-- First Column (6 columns wide on medium and larger screens) -->
+            <div class="col-md-6">
+                <!-- Add input fields for product details -->
+                <div class="form-group" id="divProductNumber">
+                    <label for="productNumber">Product Number:</label>
+                    <input type="text" id="productNumber" name="productNumber" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="productName">Product Name:</label>
+                    <input type="text" id="productName" name="productName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="brandName">Brand Name:</label>
+                    <input type="text" id="brandName" name="brandName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Price:</label>
+                    <input type="number" id="productPrice" name="productPrice" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="stock">Stock:</label>
+                    <input type="number" id="stock" name="stock" class="form-control" required>
+                </div>
+            </div>
+
+            <!-- Second Column (6 columns wide on medium and larger screens) -->
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="productCategory">Product Category:</label>
+                    <select id="productCategory" name="productCategory" class="form-control" required>
+                        <option value="Category 1">Category 1</option>
+                        <option value="Category 2">Category 2</option>
+                        <option value="Category 3">Category 3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productCoupon">Product Coupon:</label>
+                    <input type="text" id="productCoupon" name="productCoupon" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Description:</label>
+                    <input type="text" id="productDescription" name="productDescription" class="form-control">
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" id="addButton" class="btn btn-primary">Add Product</button>
+
+        </form>
+        <button type="button" id="cancelButton" onclick="cancelAddProduct()">Cancel</button>
+
+    </div>
+</div>
+<script>
+      function openModalforAdd(productNumber) {
+        $('#addProductModal').modal('show');
+
+        }
+</script>
+
+<%- include('./partials/footer.ejs') %>

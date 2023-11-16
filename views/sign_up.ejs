@@ -28,6 +28,13 @@
                         </div>
                     </div>
 
+                    <div class="form-row ">
+                        <label class="form-label"> Password</label>
+                        <div class="col-lg-10">
+
+                            <input type="password" placeholder="password" name="password" class="inp px-3" id="password">
+                        </div>
+                    </div>
 
                     <p class="text-center pt-3" style="color: white;">Verify your number to create your Account</p>
                     <div class="form-row py-3 ">
@@ -46,9 +53,7 @@
             </div>
         </div>
     </div>
-
-
-
+    
     <!-- Modal Content  for otp popup box-->
     <div class="modal" id="myModal">
         <div class="modal-dialog">
@@ -57,19 +62,18 @@
                 </div>
                 <div class="modal-body">
                     <form id="myModel" action="/signup/verify-otp" method="POST" onsubmit="return otpform(this)">
-
-                        <label for="otp">Enter th OTP send to youe number</label>
-                        <div>
-                            <input type="text" class="otp-input" name="digits" maxlength="4" required>
-
-
+                        <div class="form-group">
+                            <label for="otp">Enter the OTP sent to your number</label>
+                            <input type="text" class="form-control otp-input" name="digits" maxlength="4" required>
+                            <small id="error-message" class="text-danger"></small>
                         </div>
-                        <button type="submit">Verify OTP</button>
-
-
+                        <button type="submit" class="btn btn-primary">Verify OTP</button>
                     </form>
-                    <a class="text-center pt-3" href="#" onclick="return resend()" id="resendLink">Resend OTP</a>
-
+            
+                    <br>
+            
+                    <button class="btn btn-link text-center pt-3" onclick="return resend()" id="resendLink">Resend OTP</button>
+                
 
                 </div>
 
@@ -80,13 +84,16 @@
 
 
 </section>
-
+<style>
+</style>
 <script>
     // JavaScript function to open the modal of otp popup
     submitForm = (form) => {
+        $('#loaderOverlay').css('display', 'flex');
 
         var obj = {
             "fullName": form.elements.fullName.value,
+            "password":form.elements.password.value,
             "email": form.elements.email.value
         };
 
@@ -98,18 +105,30 @@
                 },
             })
             .then(response => {
-                if (response.status === 200) {
-                    let message = response.json();
-                    openModal();
-                } else {
-                    throw new Error('Network response was not ok.');
-                }
-            })
-            .catch(error => {
-                responseDiv.innerHTML = "An error occurred while submitting the form.";
-                console.error("Error:", error);
-            });
+        if (response.status === 200) {
+            $('#loaderOverlay').css('display', 'none');
 
+            let message = response.json();
+            openModal();
+        } else if (response.status === 401) { // Unauthorized (incorrect password)
+            response.json().then(data => {
+                const errorMessage = data.error;
+                // Display the error message under the email input field
+                document.getElementById('error-message').textContent = errorMessage;
+                $('#loaderOverlay').css('display', 'none');
+
+            });
+        } else {
+            throw new Error('Network response was not ok.');
+            $('#loaderOverlay').css('display', 'none');
+
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        $('#loaderOverlay').css('display', 'none');
+
+    });
         // Prevent the form from performing its default submission behavior
         return false;
     }
@@ -119,15 +138,15 @@
         $('#myModal').modal('show');
     }
 
-    // JavaScript function to be called when the "Save" button is clicked
-    function popupfunc() {
-        alert('Function called from inside the modal');
-    }
+   
 
     function otpform(form) {
+        $('#loaderOverlay').css('display', 'flex');
+
         var signupForm = document.getElementById('signup-form')
         var Userotp = {
             "fullName": signupForm.elements.fullName.value,
+            "password":signupForm.elements.password.value,
             "email": signupForm.elements.email.value,
             "otp": form.elements.digits.value,
 
@@ -144,16 +163,21 @@
                 if (response.status == 200) {
                     // Redirect to another page
                     window.location.href = '/home';
+                    $('#loaderOverlay').css('display', 'none');
 
                 } else {
 
                     throw new Error('Network response was not ok.');
+                    $('#loaderOverlay').css('display', 'none');
+
                 }
 
             })
             .catch(error => {
                 // Handle errors
                 console.error("Error:", error);
+                $('#loaderOverlay').css('display', 'none');
+
             });
 
         // Prevent the form from performing its default submission behavior
@@ -165,6 +189,9 @@
     }
 
     function resend() {
+        console.log('resend')
+        $('#loaderOverlay').css('display', 'flex');
+
         closeModal();
         event.preventDefault();
         var signupForm = document.getElementById('signup-form')
