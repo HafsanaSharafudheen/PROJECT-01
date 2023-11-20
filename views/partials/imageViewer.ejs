@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Gallery</title>
+  <style>
+    #main-section {
+      height: 400px; /* Set the desired height for the main section */
+      overflow: hidden;
+    }
+
+    .thumbnail {
+      width: 100%;
+      height: auto;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-lg-8">
+      <!-- Main Image View Section -->
+      <div id="main-section" class="mb-4">
+        <img id="main-image" src="" class="img-fluid" alt="Main Image">
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <!-- Image Thumbnails -->
+      <div class="row">
+        <div class="col-3">
+          <img src="img1.jpg" class="thumbnail" alt="Image 1" onclick="displayImage('img1.jpg')">
+        </div>
+        <div class="col-3">
+          <img src="img2.jpg" class="thumbnail" alt="Image 2" onclick="displayImage('img2.jpg')">
+        </div>
+        <div class="col-3">
+          <img src="img3.jpg" class="thumbnail" alt="Image 3" onclick="displayImage('img3.jpg')">
+        </div>
+        <div class="col-3">
+          <img src="img4.jpg" class="thumbnail" alt="Image 4" onclick="displayImage('img4.jpg')">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function displayImage(imageSrc) {
+    // Update the main image source
+    document.getElementById('main-image').src = imageSrc;
+  }
+</script>
+
+</body>
+</html>

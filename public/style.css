@@ -2,10 +2,9 @@
 
 * {
     padding: 0;
-    margin: 0;
+    margin: 0px;
+    font-size: 25px;
     box-sizing: border-box;
-
-
     font-family: 'Roboto Mono', monospace;
 }
 
@@ -20,8 +19,6 @@
     color: #D38E87;
     text-align: center;
     font-size: 1.0rem;
-    /* font-family: 'Butterfly Kids', cursive; */
-    /* font-family: 'Lilita One', sans-serif; */
     font-family: 'Andika', sans-serif;
 
 }
@@ -48,12 +45,12 @@
 
     color: white;
 }
-
 .form-label {
     color: white;
     font-weight: 400;
     padding: 10px;
-    margin: 1em 10em 0em 0em
+    margin: 0em 0em 0em 30px;
+    text-align:left; /* Align the text to the right */
 }
 
 .inp {
@@ -68,15 +65,14 @@
 }
 
 .login-button {
-    height: 50px;
-    width: 50%;
+    height: 40px;
+    width: 40%;
     border: none;
-    outline: none;
     border-radius: 60px;
     font-weight: 900;
     background-color: white;
     color: #D38E87;
-    /* font-family: 'Lilita One', sans-serif;  */
+padding-left: 10px;
 }
 
 .login-button:active {
@@ -106,10 +102,9 @@
 }
 
 .register-link {
-    font-size: 20px;
-    color: white;
     text-align: center;
-    margin: 10px 0px 0px 10px;
+    color: white;
+    margin-left: -59px;
 }
 
 .register-link p a {
@@ -123,21 +118,18 @@
     text-decoration: underline;
 }
 
-/* signup css */
 
 
 
 
 
-/* homepage  */
-/* Style the navbar */
 .navbar {
     background-color: #D7A2A2;
 }
 
 /* Style the navbar links */
 .navbar-nav .nav-link {
-    color: rgb(255, 255, 255);
+    color: rgb(17, 17, 17);
     margin-left: 50px;
 }
 
@@ -145,10 +137,9 @@
     color: black;
 }
 
-.fa-solid {
-    color: white;
-
-}
+ /* .fa-solid {
+    color: white; 
+}  */
 
 .icon-color {
     color: #0e0e0e;
@@ -243,7 +234,7 @@
 
 /* sidebar menu */
 .navbar-nav .nav-link {
-    color: #ffffff;
+    color: #000000;
     margin-left: 50px;
 }
 
@@ -419,16 +410,17 @@ input[type="file"]+label::before {
 
 .inner img {
     transition: all 1.5s ease;
-    width:300px;
+    width:10rem;
 }
 
 .inner:hover img {
-    transform: scale(1.5);
+    transform: scale(1.2);
 }
 .card-title{
     text-transform: UPPERCASE;
     font-weight: bold;
     color: black;
+    font-size: 14px;
 }
 .card-body a{
     text-decoration: none;
@@ -458,10 +450,7 @@ input[type="file"]+label::before {
       
       }
       .tableAdmin {
-        margin-left: 2rem;
-        border-collapse: collapse;
-        margin-top: 20px;
-        width: 100%;
+         margin-top: 30px;
     }
     
     .tableAdmin th, .tableAdmin td {
@@ -476,12 +465,9 @@ input[type="file"]+label::before {
         text-transform: uppercase;
         letter-spacing: 0.03em;
     }
-    
-    .tableAdmin tbody tr:nth-child(even) {
-        background-color:#e1ebfc;
-        display: inline;
+    .tableAdmin img{
+        width: 3rem;
     }
-    
   
     /* Media query for smaller screens */
     @media (max-width:500px) {
@@ -489,4 +475,23 @@ input[type="file"]+label::before {
             font-size: 10px;
         }
     }
-    
+.dropdown-item a{
+    text-decoration: none;
+    color: black;
+
+}
+.dropdown-item a:hover{
+    background-color: #E1E9F0;
+
+}
+/* footer */
+.sub-div a{
+    text-decoration: none;
+
+}
+
+.truncate-text {
+   max-height: 50px;
+   font-size: 12px;
+   overflow-y: auto ;
+  }

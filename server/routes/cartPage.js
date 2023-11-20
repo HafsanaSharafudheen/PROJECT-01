@@ -19,6 +19,7 @@ console.log(cartItems)
     })
     // Use the productIds to fetch product details
     var products =  await Product.find({ "_id": { $in: productIds } });
+
     products = JSON.parse(JSON.stringify(products))
     for (let i = 0; i < products.length; i++) {
       var cartOfProduct = cartItems.find(x => x.product_id.equals(products[i]._id))
@@ -31,7 +32,6 @@ console.log(cartItems)
       return acc +( curr.productPrice*curr.cartCount);
     }, 0);
     
-    console.log("products",products)
     
     res.render('cartPage',{products:products,cartItems:cartItems,amount:amount});
   }
@@ -45,7 +45,6 @@ router.get('/getCartCount', jwtVerifyModule.JWTVerify,async(req,res)=>{
     const cartItems=await Cart.find({ "user_id":req.userDetails.user_id,deleted:{$ne:true}});
     const cartCount = cartItems.length;
 
-    console.log(cartCount);    
 
     return res.status(200).json({count:cartCount});
 
@@ -57,7 +56,6 @@ try{
     const product = await Product.findOne({
         "productNumber": req.body.productNumber
       });
-      console.log('start 222')
 
       if (!product) {
         return res.status(400).json({
@@ -72,10 +70,8 @@ try{
             "cartCount":1,
             "date": new Date()
           });
-          console.log('start 333')
 
           await cartItem.save();
-          console.log('start 44')
 
   console.log('end')
    return res.status(200).json({message: `Product "${product.productName}" added to the cart!`, cartItem: cartItem });
@@ -117,7 +113,6 @@ router.get('/removeFromCart',jwtVerifyModule.JWTVerify,async(req,res)=>{
 } )
 
 router.post('/updateQuantity',async (req,res)=>{
-  console.log(req.body,"1111111111111111111111111111111111111111111111111111")
   if(req.body.action=='increase'){
     const resultIncrement = await Cart.updateOne({ '_id': req.body.cartId },{ $inc: { cartCount: 1 } });
      return res.status(200).json({ message: 'Cart count updated successfully' });
@@ -136,77 +131,12 @@ router.post('/updateQuantity',async (req,res)=>{
 })
 
 
-router.get('/wishlist',jwtVerifyModule.JWTVerify, async(req,res)=>{
-  try{
-    const wishItems=await Wish.find({ "user_id":req.userDetails.user_id});
-    if (!wishItems) {
-      throw new Error('wishlist not found');
-    }
 
-    const productIds= wishItems.map(x=>{
-      return x.product_id
-    })
-    // Use the productIds to fetch product details
-    const products = await Product.find({ _id: { $in: productIds } });
-
-
-    res.render('wishListPage',{products:products,});
-
-  }
-  catch (error) {
-    console.error('Error fetching product details from wishlist:', error);
-  }
-
-});
-router.get('/getWishlistCount', jwtVerifyModule.JWTVerify,async(req,res)=>{
-
-    const wishItems=await Wish.find({ "user_id":req.userDetails.user_id});
-    const wishlistCount = wishItems.length;
-
-    console.log(wishlistCount);    
-
-    return res.status(200).json({count:wishlistCount});
-
-})
-
-router.post('/addToWishlist',jwtVerifyModule.JWTVerify,async (req,res)=>{
-try{
-    console.log('start')
-    const product = await Product.findOne({
-        "productNumber": req.body.productNumber
-      });
-      console.log('start 222')
-
-      if (!product) {
-        return res.status(400).json({
-          message: "No product available"
-        });
-      } else {
-          
-        const wishItems = new Wish({
-           
-            "product_id": product._id,
-            "user_id":req.userDetails.user_id,
-            "cartCount":1,
-            "date": new Date()
-          });
-          console.log('start 333')
-
-          await wishItems.save();
-          console.log('start 44')
-
-  console.log('end')
-   return res.status(200).json({message: `Product "${product.productName}" added to the wishlist!`, wishItems: wishItems });
-
-}
-}
-catch (error) {
-    console.error('Error while fetching products:', error);
-    return res.status(500).json({
-      error: 'Internal server error'
-    });
-  }
-    
-})
 
 module.exports=router;
+
+
+
+
+
+ 

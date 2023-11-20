@@ -4,10 +4,9 @@
 <body>
     <div class="container mt-5 row">
       
-  <div class="col-md-8">
+  <div class="col-md-8 address-section">
       <h2>Select Addresses</h2>
-      <a href="/order/newAddressPage" class="btn btn-primary mb-3">+ Add new Address</a>
-  
+  <button class="btn btn-primary mb-3" id="newAddressModel" onclick="newAddressModel()" >+Add New Address</button>
       
 
 <% if (addressList.length === 0) { %>
@@ -27,7 +26,7 @@
           mobile: <%= address.mobile %><br>
 
 
-          <button onclick="orderConfirmation('')" class="btn btn-success">Deliver to this address</button>
+          <button onclick="orderConfirmation('<%= summary.amount%>','<%= summary.totalPrice%>','<%= summary.paymentMethod%>','<%= address._id %>')" class="btn btn-success">Deliver to this address</button>
         </label>
       </div>
     <% }) %>
@@ -59,19 +58,99 @@
 </div>
     </div>
    
-  
+  <!-- popup for new address -->
+  <div id="addressModal" class="modal">
+    <div class="modal-content">
+      
+      <!-- Your form content goes here -->
+      <link rel="stylesheet" type="text/css" href="/checkOutPage.css">
+      <div class="col-md-12 " >
+        <form action="/order/saveAddress" method="POST" onsubmit="return saveAddress(this)">
+            <h3>Add Your New Address</h3>
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" name="fullName" required>
+    
+            <label for="pincode">Pincode:</label>
+            <input type="text" id="pincode" name="pincode" required>
+    
+            <label for="address">Address:</label>
+            <textarea id="address" name="address" rows="4" required></textarea>
+    
+            <label for="landmark">Landmark:</label>
+            <input type="text" id="landmark" name="landmark">
+    
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" required>
+    
+            <label for="state">State:</label>
+            <input type="text" id="state" name="state" required>
+    
+            <label for="mobile">Mobile:</label>
+            <input type="text" id="mobile" name="mobile" required>
+
+
+            <button type="submit">SAVE</button>
+            <button onclick="window.location.reload();" type="button">CANCEL</button>
+
+        </form>
+      </div>
+    </div>
+  </div>
 <script>
-   function orderConfirmation(addressIndex) {
+function newAddressModel(){
+    document.getElementById('addressModal').style.display="block";
+}
+
+function saveAddress(form) {
+    var body = {
+             "user_id":form.elements._id.value,        
+            "fullName":form.elements.fullName.value,
+            "pincode":form.elements.pincode.value,
+            "landmark":form.elements.landmark.value,
+            "city":form.elements.city.value,
+            "state":form.elements.state.value,
+            "address":form.elements.address.value,
+            "mobile":form.elements.mobile.value
+        };
+        
+        fetch(form.action, {
+                method: form.method,
+                body: JSON.stringify(body),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+            
+                if (response.status == 200) {
+                   window.location.reload();
+                } else {
+                    response.json().then((data)=>{
+                        alert(data.message)                    
+                    });
+                }
+                return false;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+
+        // Prevent the form from performing its default submission behavior
+        return false;
+    }
+
+   function orderConfirmation(amount,totalPrice,paymentMethod,address_id) {
     try {
-        const selectedAddress = addressList[addressIndex];
         fetch('/order/orderConfirmation', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                address: selectedAddress,
-                // Add any other relevant information needed for order confirmation
+                amount:amount,
+                totalPrice:totalPrice,
+                paymentMethod:paymentMethod,
+                address_id:address_id
             }),
         }).then(response => {
             // Check if the response is successful

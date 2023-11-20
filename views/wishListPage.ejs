@@ -1,6 +1,91 @@
 
-
 <%- include('./partials/header.ejs') %>
-<h1>wishlistpage</h1>
-    
+<%- include('./partials/navbar.ejs') %>
+
+<div class="container">
+    <h2 class="my-4">Wishlist</h2>
+  
+    <div class="row pt-5">
+      <% products.forEach(product => { %>
+        <div class="col-md-6 col-lg-4">
+          <div class="card product-card">
+            <div><i id="wishlistButtonfilled" class="fa-solid fa-remove ml-auto" style="color: red;"            
+            onclick="addToWishlist('<%= product.productNumber %>')"></i> </div>
+
+            <img src="/fileupload/files/<%= product.productImages[0]?.imageName %>" alt="Product Image" class="img-fluid">
+            <div class="card-body">
+              <h5 class="card-title"><%= product.productName %></h5>
+              <p class="card-text">Rs<%= product.productPrice %></p>
+              <p class="card-text truncate-text">Rs<%= product.productDescription %></p>
+            </div>
+        
+          </div>
+        </div>
+        
+      <% }); %>
+    </div>
+  </div>    
+  <style>
+    .product-card{
+    border: 2px solid rgb(177, 130, 139);
+    padding: 10px;
+    height: 350px;
+     margin-bottom: 10px;
+    }
+    .product-card img{
+width: 7rem;
+    }
+   #wishlistButtonfilled{
+     float: right;
+   }
+  </style>
+  <script>
+     function addToWishlist(productNumber) {
+        // Use SweetAlert for confirmation
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Are you sure to remove',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Remove from wishlist'
+        }).then((result) => {
+            if (result.isConfirmed) {
+              AddWishlistAPI(productNumber)
+             
+            }
+
+
+        })
+      }
+
+function AddWishlistAPI(productNumber){
+
+  try {
+  fetch('/wishlist/addToWishlist', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      productNumber: productNumber,
+    })
+  }).then(response => {
+    // Check if the response is successful
+    if (response.ok) {
+      window.location.reload()
+    } else {
+      // Handle errors
+      alert('Failed to add product to wishlist.');
+    }
+  });
+
+} catch (error) {
+  // Handle errors
+  console.log('Error adding product to wishlist:', error);
+}
+}
+  </script>
+
 <%- include('./partials/footer.ejs') %>

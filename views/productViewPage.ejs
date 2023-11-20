@@ -28,7 +28,6 @@
             </ul>
           </div>
         </div>
-        <!-- Assuming you are embedding this EJS code in an HTML file -->
 
         <div class="col-md-6">
           <div class="details">
@@ -45,7 +44,6 @@
             </div>
             <p class="product-description"><%= productDetails.productDescription %></p>
             <div class="action">
-              <!-- Assuming 'token' is available in the global scope or defined in a way that it's accessible -->
             
                 <% if (isCarted) { %>
                   
@@ -58,7 +56,14 @@
 
                   <% } %>
                 
-              <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
+                  <% if (!isWishListed) { %>
+                    <i id="wishlistButton" class="fa-regular fa-heart"
+                      onclick="addToWishlist('<%= productDetails.productNumber %>')"></i>
+                    <% } else { %>
+                    <i id="wishlistButtonfilled" class="fa-solid fa-heart" style="color: red;"
+                      onclick="addToWishlist('<%= productDetails.productNumber %>')"></i>
+                    <% } %>
+                  
             </div>
           </div>
         </div>
@@ -69,7 +74,7 @@
 </div>
 
 <script>
-  async function addToCart(productNumber) {
+   function addToCart(productNumber) {
 
     try {
       fetch('/cartPage/addToCart', {
@@ -81,10 +86,8 @@
             productNumber: productNumber,
           })
         }).then(response => {
-          // Check if the response is successful
           if (response.ok) {
           
-            alert('Product added to cart successfully!');
 document.getElementById('cartIcon').style.display="none";
 document.getElementById('goToCartIcon').style.display="block";
 
@@ -93,18 +96,40 @@ document.getElementById('goToCartIcon').style.display="block";
             getCartCount();
 
           } else {
-            // Handle errors
             alert('Failed to add product to cart.');
           }
         });
 
     } catch (error) {
-      // Handle errors
       console.error('Error adding product to cart:', error);
     }
   }
 
- 
+   function addToWishlist(productNumber) {
+  try {
+     fetch('/wishlist/addToWishlist', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        productNumber: productNumber,
+      })
+    }).then(response => {
+          if (response.ok) {
+      window.location.reload();
+      getWhishlistCount();
+          }
+
+     else {
+      alert('Failed to add product to wishlist.');
+    }
+  })
+  } catch (error) {
+    console.error('Error adding product to wishlist:', error);
+  }
+}
+
  
 </script>
 

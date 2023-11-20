@@ -1,0 +1,106 @@
+<%- include('./partials/header.ejs') %>
+
+<div class="container ">
+  <h1 class="mt-4 mb-4 text-center">Order Details</h1>
+
+  <% orders.forEach(function(order) { %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+
+          <img src="/fileupload/files/<%=order.productImage%>" alt="Product Image" class="img-fluid">
+        </div>
+        <div class="col-md-8">
+          <h3><%= order.productName %></h3>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <p><strong>Order Status:</strong> <%= order.orderStatus %></p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Delivery Status:</strong> <%= order.deliveryStatus %></p>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-12">
+          <p><strong>Amount:</strong> <%= order.amount %></p>
+        </div>
+      </div>
+      <button class="backButton" onclick="window.location.href='/cartPage/cartPage'">Back To Cart</button>
+      <% if (order.orderStatus !== "Cancelled") { %>
+        <button class="backButton" onclick="cancelOrders('<%= order.orderid %>','<%= order.product_id %>')">Cancel Order</button>
+      <% } %>
+      
+    </div>
+  </div>
+  <% }); %>
+
+
+</div>
+<script>
+  
+  function cancelOrders(_id, product_id) {    
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Cancel Order!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        //   window.location.href = "/order/cancelOrder?_id=" + _id;
+        fetch("/order/cancelOrder", {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              "_id": _id,
+              "product_id":product_id
+            })
+          })
+          .then(response => {
+            if (response.ok) {
+              alert('Order canceled successfully');
+              window.location.reload();
+            } else {
+              console.error('Failed to cancel order');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+    });
+  }
+</script>
+<style>
+  .card-body {
+    border: 1px solid #af665e;
+  }
+
+  .card-body img {
+    width: 10rem;
+  }
+
+  .backButton {
+    border-color: rgb(255, 255, 255);
+    background-color: #D7A2A2;
+    color: white;
+    font-size: 0.9rem;
+    margin-top: 2vh;
+    padding: 1vh;
+  }
+
+  .backButton:hover {
+    background-color: #af665e;
+    color: white;
+  }
+</style>
+<%- include('./partials/footer.ejs') %>

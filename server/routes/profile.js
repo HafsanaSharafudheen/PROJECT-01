@@ -1,26 +1,41 @@
 const express = require('express');
 const router = express.Router();
 const jwtVerifyModule = require('../middileware/JWTverify')
-const User=require('../models/userdb')
+const User=require('../models/userdb');
+const upload = require('../middileware/fileUploader')
+const Address=require('../models/address')
 
 router.get('/', jwtVerifyModule.JWTVerify,async (req,res)=>{
   
-    const user = await User.findOne(req.userDetails.id);
+    const user = await User.findOne({"_id": req.userDetails.user_id});
+    const addressList = await Address.find({
+        "user_id": req.userDetails.user_id
+      })  
     if (!user) {
         return res.status(404).send('User not found');
       }
 
-res.render('profile',{user:user})
+res.render('profile',{user:user,addressList:addressList})
 })
-router.post('/updateProfile', jwtVerifyModule.JWTVerify,async (req,res)=>{
-    try{
+router.post('/updateProfile', upload.single('photos'), jwtVerifyModule.JWTVerify,async (req,res)=>{
 
-        const updatedUser = await User.findOneAndUpdate(
-            req.userDetails.id,
-            { $set: { "fullName":req.body.name, "email":req.body.email } },
+    try{
+if(req.file){
+
+    const updatedUser = await User.findOneAndUpdate(
+        {"_id":req.userDetails.user_id},
+        { $set: { "fullName":req.body.fullName,"profileImage":req.file.filename} },
+       
+      );
+}
+     else{
+        const updatedUserName = await User.findOneAndUpdate(
+            {"_id":req.userDetails.user_id},
+            { $set: { "fullName":req.body.fullName} },
            
           );
-      
+
+     } 
           res.redirect('/profile');
     }
     catch{

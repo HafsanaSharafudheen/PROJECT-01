@@ -7,6 +7,9 @@ const upload = require('../middileware/fileUploader')
 const jwtVerifyModule = require('../middileware/JWTverify')
 const Product = require('../models/product')
 const Category = require('../models/Category')
+const Order=require('../models/order')
+const User=require('../models/userdb');
+const { render } = require('../../app');
 
 router.get('/', (req, res) => {
   res.render('adminLogin')
@@ -40,18 +43,12 @@ router.post('/unblockUser', jwtVerifyModule.JWTVerify, (req, res) => {
 router.get('/adminProducts', jwtVerifyModule.JWTVerify, async (req, res) => {
   try {
     const products = await Product.find({});
+    const categories=await Category.find({})
 
-    if (!products || products.length === 0) {
-      return res.status(400).json({
-        message: "No products available"
-      });
-    } else {
-
-      // Render the 'adminProducts' view with the products data
       res.render('adminProducts', {
-        products: products
+        products: products,categories:categories
       });
-    }
+    
   } catch (error) {
     console.error('Error while fetching products:', error);
     return res.status(500).json({
@@ -60,7 +57,9 @@ router.get('/adminProducts', jwtVerifyModule.JWTVerify, async (req, res) => {
   }
 });
 
-
+router.get('/test',async (req,res)=>{
+  res.render('test')
+})
 
 router.post('/getProductByProductNumber', jwtVerifyModule.JWTVerify, async (req, res) => {
   try {
@@ -107,8 +106,6 @@ router.get('/deleteProduct',jwtVerifyModule.JWTVerify,  (req, res) => {
 router.get('/getCategories',async(req,res)=>{
   const categories = await Category.find();
   return res.status(200).json({categories:categories})
-
-
 })
 
 router.get('/adminCategories', jwtVerifyModule.JWTVerify, async (req, res) => {
@@ -174,8 +171,52 @@ router.get('/adminTransactions', jwtVerifyModule.JWTVerify, (req, res) => {
   res.render('adminTransactions');
 });
 
-router.get('/adminOrders', jwtVerifyModule.JWTVerify, (req, res) => {
-  res.render('adminOrders');
+router.get('/adminOrders', jwtVerifyModule.JWTVerify, async (req, res) => {
+  var orders = await Order.find({})
+  var users=await User.find({})
+  console.log(orders)
+
+  // Use the productIds to fetch product details
+  console.log(products, "products")
+  var result = orders.flatMap(order => order.orderProducts.map(x => ({
+    orderStatus: x.orderStatus,
+    amount: x.amount,
+    DeliveryDate: x.DeliveryDate,
+    product_id: x.product_id,
+
+    orderid: order._id,
+    paymentMethod:order.paymentMethod
+  })));
+  console.log(result,"reeeeeeeeeeee")
+  const productIds = result.map(x => {
+    return x.product_id
+  })
+  var products = await Product.find({
+    "_id": {
+      $in: productIds
+    }
+  });
+  // const userIds = users.map(x => {
+  //   return x.user_id
+  // })
+  // var users = await Product.find({
+  //   "_id": {
+  //     $in: userIds
+  //   }
+  // });
+
+  for (let i = 0; i < result.length; i++) {
+    var product = products.find(x => x._id == result[i].product_id)
+    if (product) {
+      result[i].productImage = product.productImages[0].imageName;
+      result[i].productName = product.productName;
+      result[i],productCategory=product.productCategory;
+    
+    result[i].productPrice=product.productPrice
+  }
+
+}
+  res.render('adminOrders',{orders:result});
 });
 router.get('/adminReviews', jwtVerifyModule.JWTVerify, (req, res) => {
   res.render('adminReviews');

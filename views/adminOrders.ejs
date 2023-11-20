@@ -1,6 +1,48 @@
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/admin-navbar.ejs') %>
+    <span class="welcome-text">View Order Details</span>
+
+    <div>
+        <table class="tableAdmin">
+            <thead class=" table-header">
+               
+                    <tr>
+                      <th>Product details</th>
+                      <th>Customer</th>
+                      <th>Order Date</th>
+                      <th>Order Id</th>
+
+                      <th>Category</th>
+                      <th>Price</th>
+                      <th>Payment Method</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% orders.forEach(function(order) { %>
+                      <tr><td>
+                            <img src="/fileupload/files/<%=order.productImage%>" alt="Product Image" class="img-fluid">
+                            <%= order.productName %></td>
+
+                        <td><%= order.fullName %></td>
+                        <td><%= order.date %></td>
+                        <td><%= order.orderid %></td>
+
+                        
+                        <td><%= order.productCategory %></td>
+                        <td><%= order.productPrice %></td>
+                        <td><%= order.paymentMethod %></td>
+                        <td><%= order.orderStatus %></td>
+                      </tr>
+                    <% }); %>
+                
+            
+            </tbody>
+        </table>
+    </div>
+</div>
 
 
+ 
 
 <%- include('./partials/footer.ejs') %>

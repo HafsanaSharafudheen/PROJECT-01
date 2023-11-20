@@ -1,7 +1,7 @@
 
 const Product = require('../../models/product');
 const Cart=require('../../models/Cart')
-
+const Wish=require('../../models/WishList')
 
 async function productView(req,res){
     const productNumber=req.query.ProductNumber;
@@ -11,7 +11,9 @@ console.log(req.query.productNumber)
         const productDetails=await Product.findOne({"productNumber":req.query.productNumber})
         if(productDetails){
             const cart=await Cart.findOne({ "user_id":req.userDetails.user_id,"product_id":productDetails._id,deleted:{$ne:true}})
-            res.render('productViewPage', { productDetails:productDetails,isCarted:cart?true:false,isWhishListed:cart?true:false});
+            const wish=await Wish.findOne({ "user_id":req.userDetails.user_id,"product_id":productDetails._id,deleted:{$ne:true}})
+
+            res.render('productViewPage', { productDetails:productDetails,isCarted:cart?true:false,isWishListed:wish?true:false});
         }
         else{
 

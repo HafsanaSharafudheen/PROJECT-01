@@ -14,6 +14,9 @@ const WishListSchema = new mongoose.Schema({
     required: true,
 },
 
+deleted: { type: Boolean,
+  default: false}, 
+
 });
 
 module.exports= mongoose.model('Wish', WishListSchema);

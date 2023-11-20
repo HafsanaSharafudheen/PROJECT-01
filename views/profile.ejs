@@ -2,67 +2,94 @@
 <link rel="stylesheet" type="text/css" href="/profile.css">
 
 
-<h1>User Profile</h1>
 
-<div class="container">
+<div class="container main-div">
     <div class="row">
+        
         <!-- Left Column for Profile Image -->
-        <div class="col-md-6">
+        <div class="col-md-6 text-center text-white pt-5">
+            <h1>User Profile </h1>
+
             <form action="/profile/updateProfile" method="POST" enctype="multipart/form-data">
-                <!-- <input type="file" id="profileImage" name="profileImage"> -->
                 <div class="profileImage-container">
                     <div class="profileImage-round">
-                        <!-- <label for="photos" class="file-upload-label"> -->
-                                <!-- <i class="fas fa-plus-circle fa-3x"></i> -->
-                            <input type="file" id="photos" name="photos" accept="image/*" size="2000000" multiple
-                                onchange="readURL(this)" style="display: none;">
-                        </label>
+                        <label for="photos" class="file-upload-label">
 
+                        <img id="previewImage" src="<%= user && user.profileImage ? '/fileupload/files/'+user.profileImage : '/images/download.png' %>" alt="Profile Image"></label>
+                        <input type="file" id="photos" name="photos" accept="image/*" size="2000000" multiple onchange="readURL(this)" style="display: none;">
                     </div>
                 </div>
-               
-            </form>
         </div>
 
         <!-- Right Column for Form Details -->
-        <div class="col-md-6">
-            <form action="/profile/updateProfile" method="POST">
+        <div class="col-md-6 pt-5" >
                 <label for="fullName">Name:</label>
                 <input type="text" id="fullName" name="fullName" value="<%= user ? user.fullName : '' %>" required>
 
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="<%= user ? user.email : '' %>" required>
+                <input type="email" disabled id="email" name="email" value="<%= user ? user.email : '' %>" required>
 
                 <!-- Add other input fields for additional profile information -->
+                <label for="address" style="font-weight: bold;">Address:</label>
+                
 
-                <button type="submit">Update Profile</button>
+
+              
+              <% if (addressList.length === 0) { %>
+                  <p>No addresses available.</p>
+                <% } else { %>
+                  <% addressList.forEach((address) => { %>
+                   
+                         Full Name: <%= address.fullName %><br>
+                         pincode:<%= address.pincode %><br>
+              
+                        Address: <%= address.address %><br>
+                        landmark: <%= address.landmark %><br>
+                        city: <%= address.city %><br>
+                        state: <%= address.state %><br>
+                        mobile: <%= address.mobile %><br>
+              
+              
+                     
+                  <% }) %>
+                <% } %>
+               
+                                <button  type="submit">Update Profile</button>
+                            </div>
             </form>
         </div>
     </div>
 </div>
 
+<div class="container pt-5">
+    <div class="row ">
+        <div class="col-md-4 p-3 text-center main-div">
+<h3>WISHLIST</h3>
+<a href="/wishlist/wishlist">View wishlist</a>
+        </div>
+        <div class="col-md-4 text-center p-3 main-div">
+            <h3>CART</h3>
+            <a href="/cartPage/cartPage">View Cart Items</a>
+        </div>
+        <div class="col-md-4 p-3 text-center main-div">
+            <h3>ORDERS</h3>
+            <a href="order/viewOrderPage">View Orders</a>
+        </div>
+    </div>
+</div>
 <script>
-     function readURL(input) {
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
 
-if (input.files && input.files.length > 0) {
+            reader.onload = function (e) {
+                // Update the src attribute of the previewImage
+                document.getElementById('previewImage').src = e.target.result;
+            };
 
-    var max = input.files.length;
-    if (input.files.length > 5) {
-        max = 5;
-        alert("Maximum upload count is restricted to Five", input.files.length)
+            reader.readAsDataURL(input.files[0]);
+        }
     }
-    for (let i = 0; i < max; i++) {
-        var reader = new FileReader();
-        const img = document.createElement("img")
-        img.className = "img-fluid imgPreview-img";
-        reader.onload = function (e) {
-            img.setAttribute('src', e.target.result);
-            document.getElementById('imgPreview').appendChild(img);
-        };
-
-        reader.readAsDataURL(input.files[i]);
-    }
-}
-}
 </script>
+
 <%- include('./partials/footer.ejs') %>

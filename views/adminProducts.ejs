@@ -1,97 +1,66 @@
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/admin-navbar.ejs') %>
 
+<div class="col-lg-9 col-md-8 col-sm-12" style="width: 100%;">
+    <span class="welcome-text">Product details</span>
+    <a href="/admin/test">button</a>
 
-<div class="col-lg-9 col-md-8 col-sm-12">   
-<span class="welcome-text">Product details </span>
+    <button type="button" id="btn-addProducts" class="btn btn-primary " onclick="openModalforAdd(0)">ADD PRODUCTS</button>
 
-
-
-<button type="button" id="btn-addProducts" class="login-button" onclick="openModalforAdd(0)">ADD
-    PRODUCTS</button>
-
-
-
-
-        <!-- Page content -->
-
-            <% if (products.length === 0) { %>
-            <p>No products available</p>
-            <% } else { %>
-                <div class="d-flex justify-content-center">
-
-                    <table class="tableAdmin">
-                        <thead  class="table-header" >
-        
-                            <tr>
-                                <th>images</th>
-                                <th>Name</th>
-                                <th>Category</th>
-                                <th>Registration Date</th>
-                                <th>Coupon</th>
-                                <th>Description</th>
-                                <th>Price</th>
-        
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% products.forEach(function(x) { %>
-                                <tr class="<%=x.deleted?'disabled':''%> ">
-                                    <td>
+    <div class="table-responsive">
+        <table class="table table-striped tableAdmin">
+            <thead class="table-header">
+                <tr>
+                    <th>Images</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Registration Date</th>
+                    <th>Coupon</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (products.length === 0) { %>
+                    <tr>
+                        <td colspan="8" class="text-center">No products available</td>
+                    </tr>
+                <% } else { %>
+                    <% products.forEach(function(x) { %>
+                        <tr>
+                            <td>
                                 <% x.productImages.forEach(function(image) { %>
-                                <img src="/fileupload/files/<%= image.imageName %>" alt="<%= image.imageName %>"
-                                    style="width: 100px; height: 100px;">
+                                    <img src="/fileupload/files/<%= image.imageName %>" alt="<%= image.imageName %>"
+                                        style="width: 100px; height: 100px;">
                                 <% }); %>
                             </td>
-                          
                             <td><%= x.productName %></td>
                             <td><%= x.productCategory %></td>
                             <td><%= (new Date(x.date)).toLocaleDateString("en-US") %></td>
                             <td><%= x.productCoupon %></td>
                             <td><%= x.productDescription %></td>
                             <td><%= x.productPrice %></td>
-        
                             <td>
-        
-                                <!--delete button-->
-                                <button onclick="confirmDelete('<%= x.productNumber %>')" class="<%=x.deleted? 'd-none':''%> btn btn-primary admin-btn" role="button"><i class="fa-solid fa-trash"></i></button>
-        
-        
-                                <!-- Edit button -->
-                                <button class="<%=x.deleted? 'd-none':''%> btn btn-primary admin-btn"
-                                    onclick=" return openModalforAdd('<%=  x.productNumber %>')"><i class="fa-regular fa-pen-to-square"></i></button>
-        
-                                    <% if (x.deleted) { %>
-                                       <span>Deleted</i></span>
-                                        
-                                          
-        
-                                        <% } %>
+                                <button onclick="confirmDelete('<%= x.productNumber %>')" class="btn btn-danger admin-btn" role="button">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                                <button class="btn btn-primary admin-btn" onclick="return openModalforAdd('<%= x.productNumber %>')">
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                </button>
                             </td>
-        
-        
-        
-                        
-        
-                            <% }); %>
                         </tr>
-                        </tbody>
-                    </table>
-                    </div>
+                    <% }); %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-            <% } %>
-
-
-        </div>   
-
-
+ 
 
 
-<!-- Modal HTML for add product -->
-
-
-<!-- Extra large modal -->
+<!-- open model for add product -->
 <div id="addProductModal" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog"
     aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -104,10 +73,8 @@
                 method="POST" enctype="multipart/form-data">
                 <div class="row">
                     <div id="imgPreview" class="text-center d-flex ">
-                        <!-- Image preview content goes here -->
                     </div>
 
-                    <!-- Centered File Input Icon with Label -->
                     <div class="text-center p-5">
                         <label for="photos" class="file-upload-label">
                             <i class="fas fa-plus-circle fa-3x"></i>
@@ -118,12 +85,9 @@
                         </label>
                     </div>
 
-
                 </div>
                 <div class="row">
-                    <!-- First Column (6 columns wide on medium and larger screens) -->
                     <div class="col-md-6">
-                        <!-- Add input fields for product details -->
                         <div class="form-group" id="divProductNumber" >
                             <label for="productNumber ">Product Number:</label>
                             <input type="text" id="productNumber" name="productNumber" class="form-control" >
@@ -146,14 +110,13 @@
                         </div>
                     </div>
 
-                    <!-- Second Column (6 columns wide on medium and larger screens) -->
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="productCategory">Product Category:</label>
                             <select id="productCategory" name="productCategory" class="form-control" required>
-                                <option value="Category 1">Category 1</option>
-                                <option value="Category 2">Category 2</option>
-                                <option value="Category 3">Category 3</option>
+                                <% categories.forEach(function(x) { %>
+                                    <option value="<%= x.categoryName %>"><%= x.categoryName %></option>
+                                <% }); %>
                             </select>
                         </div>
                         <div class="form-group">
@@ -170,6 +133,13 @@
                 <button type="submit" id="addButton" class="btn btn-primary">Add Product</button>
 
             </form>
+            <!-- Modal for displaying selected images -->
+<div id="imageModal" class="modalForImages">
+    <div class="Imagemodal-content">
+        <span onclick="closeModal()" style="cursor: pointer;">&times;</span>
+        <div id="modalContentForImages"></div>
+    </div>
+</div>
             <button type="button" id="cancelButton" onclick="cancelAddProduct()">Cancel</button>
 
         </div>
@@ -186,7 +156,6 @@
 
 <script>
     var getimages=[];
-    // adding products
     function openModalforAdd(productNumber) {
 
         if (!productNumber) {
@@ -239,6 +208,8 @@
 
                         });
                     } else {
+
+
                         response.json().then((data) => {
                             alert(data.error)
                         })
@@ -304,28 +275,79 @@
   });
 }
     
-    function readURL(input) {
+function readURL(input) {
+    if (input.files && input.files.length > 0) {
+      var max = input.files.length;
 
-        if (input.files && input.files.length > 0) {
+      if (input.files.length > 5) {
+        max = 5;
+        alert("Maximum upload count is restricted to Five", input.files.length);
+      }
 
-            var max = input.files.length;
-            if (input.files.length > 5) {
-                max = 5;
-                alert("Maximum upload count is restricted to Five", input.files.length)
-            }
-            for (let i = 0; i < max; i++) {
-                var reader = new FileReader();
-                const img = document.createElement("img")
-                img.className = "img-fluid imgPreview-img";
-                reader.onload = function (e) {
-                    img.setAttribute('src', e.target.result);
-                    document.getElementById('imgPreview').appendChild(img);
-                };
+      var previewContainer = document.getElementById('imgPreview');
+      previewContainer.innerHTML = ''; // Clear previous content
 
-                reader.readAsDataURL(input.files[i]);
-            }
-        }
+      for (let i = 0; i < max; i++) {
+        var reader = new FileReader();
+        const img = document.createElement("img");
+        img.className = "img-fluid";
+        reader.onload = function (e) {
+             // Show the modal after loading images
+      showModal();
+          img.setAttribute('src', e.target.result);
+          previewContainer.appendChild(img);
+        };
+
+        reader.readAsDataURL(input.files[i]);
+      }
+
+     
     }
-</script>
+  }
+  
+    function showModal() {
+    var modal = document.getElementById('imageModal');
+    modal.style.display = 'block';
 
+    // Copy images from preview container to modal content
+    var previewContainer = document.getElementById('imgPreview');
+    var modalContent = document.getElementById('modalContentForImages');
+    var clonedImages = previewContainer.cloneNode(true);
+    clonedImages.style.display = 'block';
+    modalContent.innerHTML = '';
+    modalContent.appendChild(clonedImages);
+  }
+
+  function closeModal() {
+    var modal = document.getElementById('imageModal');
+    modal.style.display = 'none';
+  }
+</script>
+<style>
+    /* Add your styling for the modal */
+.modalForImages {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 9999; /* Make sure the modal is on top of other elements */
+}
+
+.imagemodal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.img-fluid {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+  </style>
 <%- include('./partials/adminfooter.ejs') %>

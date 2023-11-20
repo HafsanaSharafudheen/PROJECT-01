@@ -14,13 +14,13 @@
             <div class="col-lg-7 right-side-div py-5 ">
                 <h1 class="animate__animated animate__heartBeat">WELCOME BACK</h1>
                 <!-- login form for login of user -->
-                <form id="login-form" action="/sent-otp" method="POST" onsubmit="return loginUser(this)">
+                <form id="login-form" onsubmit="return loginUser(this)">
 
 
-                    <div class="form-row ">
+                    <div class="form-row">
                         <label class="form-label">Email</label>
                         <div class="col-lg-10">
-                            <p id="error-message" style="color: red;"></p> <!-- Add this error message element -->
+                            <p id="error-message" style="color: rgb(255, 255, 255);"></p> <!-- Add this error message element -->
 
                             <input type="email" placeholder="Email" name="email" class="inp px-3" id="Email">
                         </div>
@@ -36,7 +36,11 @@
                     </div>
 
                     <div class="form-row " id="login-otp" style="display: none">
-                        <label for="otp" class="form-label">Enter the OTP send to your number</label>
+                        <label for="otp" class="form-label">Enter the OTP send to your number
+                            <a class="text-center pt-3" style="display: none;" href="#" onclick="return resend()"
+                            id="resendLink">Resend OTP</a>
+                        </label>
+                        
                         <div class="col-lg-10">
                             <input type="text" class="otp-input inp px-3" name="digits" maxlength="4">
                         </div>
@@ -47,12 +51,11 @@
     Time left: <span id="minutes">00</span>:<span id="seconds">00</span>
   </div>
                     <!-- send otp button -->
-                    <div class="form-row py-3 pt-5">
-                        <div class="offset-1 col-lg-10">
+                    <div class="form-row pt-5">
+                        <div class="col-lg-10">
                             <button type="submit" id="btn-sendOTP" class="login-button">Send OTP</button>
 
-                            <a class="text-center pt-3" style="display: none;" href="#" onclick="return resend()"
-                                id="resendLink">Resend OTP</a>
+                           
                         </div>
                     </div>
                     <!-- login button -->
@@ -63,7 +66,7 @@
                         </div>
                     </div>
 
-                    <div class="register-link">
+                    <div class="register-link text-center mt-3">
                         <p>Didn't Have an Account?<a href="/signup">Sign Up</a></p>
                     </div>
 
@@ -107,7 +110,6 @@
 
 
     function loginUser(form) {
-      
     // Start the OTP timer with a duration of 5 minutes (300 seconds)
     startOTPTimer(100);
 
@@ -125,8 +127,8 @@
             "password":form.elements.password.value,
             "otp": form.elements.digits.value,
         };
-        fetch(form.action, {
-                method: form.method,
+        fetch("/sent-otp", {
+                method: "POST",
                 body: JSON.stringify(userDetails),
                 headers: {
                     'Content-Type': 'application/json',
@@ -236,4 +238,4 @@
 </script>
 
 
-<%- include('./partials/footer.ejs') %>
+<%- include('./partials/common.ejs') %>

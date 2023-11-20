@@ -2,12 +2,16 @@ const mongoose = require('mongoose');
 
 
 const orderProductSchema = new mongoose.Schema({
-   amount:Number,
-product_id:String
+    amount: Number,
+    product_id: String,
+    orderStatus: String,
+    DeliveryDate: Date,
+    deliveryStatus: String,
+    canecelled: Boolean,
 });
 
 const orderSchema = new mongoose.Schema({
-  
+
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -24,18 +28,9 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    cancelled: {
-        type: Boolean,
-        default: false
-    },
-
-    orderStatus: {
-        type: String,
-        default: "pending"
-    },
-    deliveryStatus: {
-        type: String,
-        default: "pending"
+    deleted:{
+        type:String,
+        default:false,
     },
     orderProducts: [orderProductSchema]
 

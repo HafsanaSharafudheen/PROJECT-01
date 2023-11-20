@@ -1,0 +1,45 @@
+<%- include('./partials/header.ejs') %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.css"
+    integrity="sha512-bs9fAcCAeaDfA4A+NiShWR886eClUcBtqhipoY5DM60Y1V3BbVQlabthUBal5bq8Z8nnxxiyb1wfGX2n76N1Mw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"
+    integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- Wrap the image or canvas element with a block element (container) -->
+
+<!-- Your original image element -->
+<img id="image" src="/fileupload/files/4adc78144627449.Y3JvcCwyNTYyLDIwMDQsNDMxLDE3MQ.webp-1699473299283.webp"
+    alt="Image">
+
+<!-- Button to trigger crop -->
+<button id="cropButton">Crop Image</button>
+
+<script>
+    // Your Cropper initialization code
+    const image = document.getElementById('image');
+    const cropper = new Cropper(image, {
+        aspectRatio: 16 / 9,
+        crop(event) {
+            console.log(event.detail.x);
+            console.log(event.detail.y);
+            console.log(event.detail.width);
+            console.log(event.detail.height);
+            console.log(event.detail.rotate);
+            console.log(event.detail.scaleX);
+            console.log(event.detail.scaleY);
+        },
+    });
+
+    // Button click event handler
+    document.getElementById('cropButton').addEventListener('click', function () {
+        // Get the cropped canvas
+        const croppedCanvas = cropper.getCroppedCanvas();
+
+        // Set the source of the original image to the data URL of the cropped canvas
+        image.src = croppedCanvas.toDataURL('image/jpeg');
+    });
+</script>
+
+<%- include('./partials/footer.ejs') %>
+
+

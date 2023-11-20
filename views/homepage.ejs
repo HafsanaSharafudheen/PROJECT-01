@@ -3,19 +3,20 @@
 
 
 <!-- hompepage content -->
-    <div class="row" style="background-color: #E1E9F0;">
-        
-        <div class="col-md-6 mt-5 text-center p-5" >
-<h1 style="font-weight: 500;">New Arrivals</h1>
-<h5>
-  Explore our latest collection of baby products. Each item is thoughtfully designed to provide comfort and style for your little one.
-</h5>
-</div>
-        <div class="col-md-6">
-            <img class="img-fluid" src="/images/pexels-photo-1973270.webp">
+<div class="row" style="background-color: #E1E9F0;">
 
-        </div>
-    </div>
+  <div class="col-md-6 mt-5 text-center p-5">
+    <h1 style="font-weight: 500;">New Arrivals</h1>
+    <h5>
+      Explore our latest collection of baby products. Each item is thoughtfully designed to provide comfort and style
+      for your little one.
+    </h5>
+  </div>
+  <div class="col-md-6">
+    <img class="img-fluid" src="/images/pexels-photo-1973270.webp">
+
+  </div>
+</div>
 
 
 
@@ -26,217 +27,105 @@
 
 <!--card view-->
 <div class="container">
-    <div class="row justify-content-center text-center p-5">
-<h1>FOR NEW BORN</h1>
-       
+  <div class="row justify-content-center text-center p-5">
+    <h1>FOR NEW BORN</h1>
 
-<div class="row">
-  
-    <% products.forEach(function(item) { %>
+
+    <div class="row">
+
+      <% products.forEach(function(item) { %>
 
       <div class="col-md-4 pt-5">
         <div class="row">
-        <a href="/home/productViewPage?productNumber=<%=item.productNumber %>">
+        
 
-        <div class="card shadow" style="width: 18rem;">
-          <div class="inner">
-            <img src="/fileupload/files/<%= item.productImages[0]?.imageName %>" alt="<%= item.imageName %>">
-            
-               </div>
-          <div class="card-body">
-            <h5 class="card-title"><%= item.productName %></h5>
-            <h6>Rs.<%= item.productPrice %></h6>
-           
+            <div class="card shadow" style="width: 18rem;">
+              <div class="inner">
+                <img src="/fileupload/files/<%= item.productImages[0]?.imageName %>" alt="<%= item.imageName %>">
 
-            <% if (!isWishListed) { %>
-              <button id="wishlistButton" type="button" onclick="addToWishlist('<%= item.productNumber %>')">
-                <i class="fa-regular fa-heart"></i> 
-              </button>
-            <% } else { %>
-              <button  id="wishlistButtonfilled" type="button" onclick="addToWishlist('<%= item.productNumber %>')">
-                <i class="fa-heart fa-heart-filled"></i>
-              </button>
-            <% } %>
-            </a>
-          </div>
+              </div>
+              <div class="card-body">
+                <a href="/home/productViewPage?productNumber=<%=item.productNumber %>">
+                <h5 class="card-title"><%= item.productName %></h5>
+                <h6>Rs.<%= item.productPrice %></h6>
+
+              </a>
+                <% if (!item.isWishListed) { %>
+                <i id="wishlistButton" class="fa-regular fa-heart"
+                  onclick="addToWishlist('<%= item.productNumber %>')"></i>
+                <% } else { %>
+                <i id="wishlistButtonfilled" class="fa-solid fa-heart" style="color: red;"
+                  onclick="addToWishlist('<%= item.productNumber %>')"></i>
+                <% } %>
+              
+          
         </div>
-        </a>
       </div>
-      </div>
-   
-    <% }); %>
-  </div>
-  
-      
-
-       
+ 
     </div>
+  </div>
+
+  <% }); %>
+</div>
+
+
+
+
+</div>
 </div>
 <section>
 
-        <div class="row" style="background-color: #F4F6F8;">
-            <div class="col-md-6">
-                <h1>everything your baby needs</h1>
-                <h5>
-                    we understand the importance of quality
-                     and safety when it comes to your baby.
-                      Our products are carefully selected to meet
-                       the highest safety standards and are designed 
-                       for your baby's comfort and well-being
-                </h5>
-            </div>
-            <div class="col-md-6">
-                <img class="img-fluid" src="/images/pexels-photo-914253.webp">
-            </div>
-        </div>
+  <div class="row" style="background-color: #E8DCF0;">
+      <div class="col-md-6">
+      <img class="img-fluid" src="/images/baby-sleeping-baby-baby-girl.webp">
+    </div>
+    <div class="col-md-6">
+      <h1>everything your baby needs</h1>
+      <h6>
+        we understand the importance of quality
+        and safety when it comes to your baby.
+        Our products are carefully selected to meet
+        the highest safety standards and are designed
+        for your baby's comfort and well-being
+      </h6>
+    </div>
   
+  </div>
+
 </section>
 
 
 
 
 
-<section style="background-color: #eee;">
-    <div class="container py-5">
-      <div class="row">
-        <div class="col-md-12 col-lg-4 mb-4 mb-lg-0">
-          <div class="card">
-            <div class="d-flex justify-content-between p-3">
-              <p class="lead mb-0">Today's Combo Offer</p>
-              
-            </div>
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/4.webp"
-              class="card-img-top" alt="Laptop" />
-            <div class="card-body">
-              <div class="d-flex justify-content-between">
-                <p class="small"><a href="#!" class="text-muted">Laptops</a></p>
-                <p class="small text-danger"><s>$1099</s></p>
-              </div>
-  
-              <div class="d-flex justify-content-between mb-3">
-                <h5 class="mb-0">HP Notebook</h5>
-                <h5 class="text-dark mb-0">$999</h5>
-              </div>
-  
-              <div class="d-flex justify-content-between mb-2">
-                <p class="text-muted mb-0">Available: <span class="fw-bold">6</span></p>
-                <div class="ms-auto text-warning">
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4 mb-4 mb-md-0">
-          <div class="card">
-            <div class="d-flex justify-content-between p-3">
-              <p class="lead mb-0">Today's Combo Offer</p>
-              <div
-                class="bg-info rounded-circle d-flex align-items-center justify-content-center shadow-1-strong"
-                style="width: 35px; height: 35px;">
-                <p class="text-white mb-0 small">x2</p>
-              </div>
-            </div>
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/7.webp"
-              class="card-img-top" alt="Laptop" />
-            <div class="card-body">
-              <div class="d-flex justify-content-between">
-                <p class="small"><a href="#!" class="text-muted">Laptops</a></p>
-                <p class="small text-danger"><s>$1199</s></p>
-              </div>
-  
-              <div class="d-flex justify-content-between mb-3">
-                <h5 class="mb-0">HP Envy</h5>
-                <h5 class="text-dark mb-0">$1099</h5>
-              </div>
-  
-              <div class="d-flex justify-content-between mb-2">
-                <p class="text-muted mb-0">Available: <span class="fw-bold">7</span></p>
-                <div class="ms-auto text-warning">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="far fa-star"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4 mb-4 mb-md-0">
-          <div class="card">
-            <div class="d-flex justify-content-between p-3">
-              <p class="lead mb-0">Today's Combo Offer</p>
-              <div
-                class="bg-info rounded-circle d-flex align-items-center justify-content-center shadow-1-strong"
-                style="width: 35px; height: 35px;">
-                <p class="text-white mb-0 small">x3</p>
-              </div>
-            </div>
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/5.webp"
-              class="card-img-top" alt="Gaming Laptop" />
-            <div class="card-body">
-              <div class="d-flex justify-content-between">
-                <p class="small"><a href="#!" class="text-muted">Laptops</a></p>
-                <p class="small text-danger"><s>$1399</s></p>
-              </div>
-  
-              <div class="d-flex justify-content-between mb-3">
-                <h5 class="mb-0">Toshiba B77</h5>
-                <h5 class="text-dark mb-0">$1299</h5>
-              </div>
-  
-              <div class="d-flex justify-content-between mb-2">
-                <p class="text-muted mb-0">Available: <span class="fw-bold">5</span></p>
-                <div class="ms-auto text-warning">
-                  <i class="fa fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star-half-alt"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <script>
-      async function addToWishlist(productNumber) {
+<script>
+  function addToWishlist(productNumber) {
 
-try {
-  fetch('/cartPage/addToWishlist', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        productNumber: productNumber,
-      })
-    }).then(response => {
-      // Check if the response is successful
-      if (response.ok) {
-        getWishListCount();
-        document.getElementById('wishlistButton').style.display = 'none';
-        document.getElementById('wishlistButtonfilled').style.display = 'block';
-        getWishListCount();
+    try {
+      
+      fetch('/wishlist/addToWishlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          productNumber: productNumber,
+        })
+      }).then(response => {
+        // Check if the response is successful
+        if (response.ok) {
+          window.location.reload()
+        } else {
+          // Handle errors
+          alert('Failed to add product to cart.');
+        }
+      });
 
-      } else {
-        // Handle errors
-        alert('Failed to add product to cart.');
-      }
-    });
+    } catch (error) {
+      // Handle errors
+      console.log('Error adding product to cart:', error);
+    }
+  }
+</script>
 
-} catch (error) {
-  // Handle errors
-  console.error('Error adding product to cart:', error);
-}
-}
-
-  </script>
 <%- include('./partials/footer.ejs') %>

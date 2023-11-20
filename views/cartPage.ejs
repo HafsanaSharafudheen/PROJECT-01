@@ -29,7 +29,7 @@
                             <a href="#" onclick="updateQuantity('<%= x.cartCount %>','<%=x.cartId %>','decrease')">-</a>
                             <a href="#" class="border" id="quantityValue"><%= x.cartCount %></a>
                             <a href="#"
-                                onclick="updateQuantity('<%= x.cartCount %>','<%=x.cartId %>', 'increase')">+</a>
+                                onclick="updateQuantity('<%= x.cartCount %>','<%=x.cartId %>', 'increase',)">+</a>
                         </div>
                     </div>
                     <div class="col">RS. <%= x.productPrice %>
@@ -99,17 +99,14 @@
                     action: action
                 })
             }).then(response => {
-                // Check if the response is successful
                 if (response.ok) {
                     window.location.reload();
                 } else {
-                    // Handle errors
                     alert('Failed to add product to cart.');
                 }
             });
 
         } catch (error) {
-            // Handle errors
             console.error('Error adding product to cart:', error);
         }
 

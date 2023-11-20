@@ -12,8 +12,7 @@ function JWTVerify(req,res, next){
         console.error('JWT verification failed:', err);
         res.send(401, "Unauthorized")
       } else {
-        // JWT verification successful
-        console.log('Decoded JWT payload:', decoded);
+        // JWT verification successful        
         req.userDetails=decoded;
         next();
       }

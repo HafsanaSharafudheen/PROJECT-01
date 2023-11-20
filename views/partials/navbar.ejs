@@ -34,12 +34,19 @@
                 </li>
 
                 <li>
-                    <a href="/cartPage/wishlist">
+                    <a href="/wishlist/wishlist">
                         <i class="fa-regular fa-heart"></i>
                     </a>
                     <span id="wishlistCount" class="badge" style="display: none;">0</span>
 
                 </li>
+                
+                <!-- <li>
+                    <a href="/order/viewOrderPage">
+                        <i class="fa-regular fa-heart"></i>
+                    </a>                    
+
+                </li> -->
                 <li>
                     <a href="#">
                         <i class="fa-solid fa-wallet"></i>
@@ -119,10 +126,10 @@
     }
 
 
-    function getWhishlistCount() {
+    function getWishlistCount() {
         const wishlistCountElement = document.getElementById('wishlistCount');
 
-        fetch('/cartPage/getWishListCount', {
+        fetch('/wishlist/getWishListCount', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -150,7 +157,7 @@
 
     setTimeout(() => {
         getCartCount();
-        getWhishlistCount();
+        getWishlistCount();
         getCategories();
     }, 1000);
 

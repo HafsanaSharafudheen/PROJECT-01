@@ -14,6 +14,7 @@ var signupRouter = require('./server/routes/signup');
 var adminRouter=require('./server/routes/admin');
 var uploadRouter=require('./server/routes/upload')
 var cartPageRouter=require('./server/routes/cartPage');
+ var wishlistRouter=require('./server/routes/wishlist');
 var profileRouter=require('./server/routes/profile');
 var orderRouter=require('./server/routes/order');
 var app = express();
@@ -49,6 +50,7 @@ app.use('/signup', signupRouter);
 app.use('/admin',adminRouter);
 app.use('/fileupload',uploadRouter);
 app.use('/cartPage',cartPageRouter);
+app.use('/wishlist',wishlistRouter);
 app.use('/profile',profileRouter);
 app.use('/order',orderRouter);
 // Start the server
