@@ -137,7 +137,11 @@
 <div id="imageModal" class="modalForImages">
     <div class="Imagemodal-content">
         <span onclick="closeModal()" style="cursor: pointer;">&times;</span>
-        <div id="modalContentForImages"></div>
+        <div id="cropImage">
+        <img id="image" src="" alt="Image">
+        </div>
+        <button id="cropButton" class="btn btn-primary">Crop Image</button>
+
     </div>
 </div>
             <button type="button" id="cancelButton" onclick="cancelAddProduct()">Cancel</button>
@@ -290,14 +294,15 @@ function readURL(input) {
       for (let i = 0; i < max; i++) {
         var reader = new FileReader();
         const img = document.createElement("img");
+        img.id = "uploadImg"+i;
         img.className = "img-fluid";
-        reader.onload = function (e) {
-             // Show the modal after loading images
-      showModal();
+        reader.onload = function (e) {         
           img.setAttribute('src', e.target.result);
           previewContainer.appendChild(img);
+          img.onclick = function() {
+            showModal(e.target.result, img);           
         };
-
+        };
         reader.readAsDataURL(input.files[i]);
       }
 
@@ -305,19 +310,49 @@ function readURL(input) {
     }
   }
   
-    function showModal() {
-    var modal = document.getElementById('imageModal');
-    modal.style.display = 'block';
-
-    // Copy images from preview container to modal content
-    var previewContainer = document.getElementById('imgPreview');
-    var modalContent = document.getElementById('modalContentForImages');
-    var clonedImages = previewContainer.cloneNode(true);
-    clonedImages.style.display = 'block';
-    modalContent.innerHTML = '';
-    modalContent.appendChild(clonedImages);
+    function showModal(imageSource, imgElement) {
+        var modal = document.getElementById('imageModal');
+        modal.style.display = 'block';
+        $("#cropImage").empty();
+        const image = document.createElement("img");
+        image.id="image";
+        image.src = imageSource;
+        document.getElementById('cropImage').appendChild(image);        
+        setTimeout(() => {
+            imagePreview(image, imgElement)
+        }, 100);
+        
+        
   }
 
+  function imagePreview(image,imgElement){
+    const cropper = new Cropper(image, {
+            aspectRatio: 16 / 9,
+            crop(event) {
+                console.log(event.detail.x);
+                console.log(event.detail.y);
+                console.log(event.detail.width);
+                console.log(event.detail.height);
+                console.log(event.detail.rotate);
+                console.log(event.detail.scaleX);
+                console.log(event.detail.scaleY);
+            },
+        });
+
+        // Button click event handler
+        document.getElementById('cropButton').addEventListener('click', function () {
+            // Get the cropped canvas
+            const croppedCanvas = cropper.getCroppedCanvas();
+            if(croppedCanvas){
+                imgElement.src = croppedCanvas.toDataURL('image/jpeg');
+            } else{
+                Swal("Error","croppedCanvas null")
+            }
+            // Set the source of the original image to the data URL of the cropped canvas
+            closeModal();
+        });
+        // Copy images from preview container to modal content
+  }
   function closeModal() {
     var modal = document.getElementById('imageModal');
     modal.style.display = 'none';
@@ -350,4 +385,13 @@ function readURL(input) {
 }
 
   </style>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.css"
+    integrity="sha512-bs9fAcCAeaDfA4A+NiShWR886eClUcBtqhipoY5DM60Y1V3BbVQlabthUBal5bq8Z8nnxxiyb1wfGX2n76N1Mw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"
+    integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <%- include('./partials/adminfooter.ejs') %>
