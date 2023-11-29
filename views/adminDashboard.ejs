@@ -1,15 +1,239 @@
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/admin-navbar.ejs') %>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-     
-
-    <!-- Page content -->
-    <div class="col-lg-9 col-md-8 col-sm-12">
-        <span class="welcome-text">WELCOME </span>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="mb-4">Admin Dashboard</h1>
+      <label for="dateDropdown">Select Date:</label>
+      <select id="dateDropdown" name="date" class="form-control" onchange="salesChart(); categoryChart();">
+        <option value="1">Today</option>
+        <option value="30">Last 30 Days</option>
+        <option value="7">This Week</option>
+        <option value="365">This Year</option>
+      </select>
+    </div>
+  </div>
+    <div class="row mt-4">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body" id="canvasContainer">
+          <h5 class="card-title">Sales Chart</h5>
+          <div id="salesChartContainer">
+            <!-- Sales Chart Canvas will be placed here -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body" id="canvasContainerForCategory">
+          <h5 class="card-title">Category Chart</h5>
+          <div id="categoryChartContainer">
+            <!-- Category Chart Canvas will be placed here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Table Data</h5>
+          <div id="tableContainer"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
+<style>
+   .card {
+    margin-bottom: 20px;
+  }
+
+  table {
+      border-collapse: collapse;
+      width: 50%;
+      margin: 20px;
+    }
+    th, td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+</style>
+
 
 
 <%- include('./partials/adminfooter.ejs') %>
+<script>
+  $(document).ready(function () {
+    salesChart();
+    categoryChart();
+  })
+
+
+  function salesChart() {
+    var canvasContainer=document.getElementById('canvasContainer')
+    $(canvasContainer).empty();
+    var canvas=document.createElement("canvas")
+   // canvas.setAttribute("height",300)
+    //canvas.setAttribute("width",300)
+    canvas.id="salesBarChart";
+    canvasContainer.appendChild(canvas);
+    var selectedValue = document.getElementById('dateDropdown').value;
+    fetch("/admin/adminDashboardGetChart?selectedValue=" + selectedValue + "&type=sales", {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        if (response.status == 200) {
+
+          response.json().then((res_data) => {
+            const ctx = canvas.getContext('2d');
+          const count = res_data.count
+          const labels = res_data.labels
+          const salesData=res_data.salesData
+          var barColors = ["#3498db", "#2ecc71", "#e74c3c", "#f39c12", "#9b59b6"];
+
+            const salesBarChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: labels,
+                datasets: [{
+                  label: 'Sales Report',
+                  data: count,
+                  backgroundColor: barColors,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                }]
+              },
+              options: {
+                scales: {
+                  xAxes: [{
+                    type: 'category',
+                    labels: labels,
+
+                  }],
+                  yAxes: [{
+                    ticks: {
+                      beginAtZero: true,
+                      stepSize: 10,
+                      max: 100,
+                    },
+                  }],
+                },
+                
+              },
+            });
+
+            const tableContainer = document.getElementById('tableContainer');
+            tableContainer.appendChild(generateTable(salesData));
+   
+          });
+
+      
+    
+        }
+
+      })
+
+  }
+
+
+
+  function generateTable(data) {
+      const table = document.createElement('table');
+      const headerRow = table.createTHead().insertRow();
+      //const
+      // // Create header cells
+      // Object.keys(data[0]).forEach(key => {
+      //   const th = document.createElement('th');
+      //   th.textContent = key;
+      //   headerRow.appendChild(th);
+      // });
+
+      // // Create rows and cells
+      // data.forEach(item => {
+      //   const row = table.insertRow();
+      //   Object.values(item).forEach(value => {
+      //     const cell = row.insertCell();
+      //     cell.textContent = value;
+      //   });
+      // });
+
+      return table;
+    }
+
+  function categoryChart() {
+    var canvasContainer=document.getElementById('canvasContainerForCategory')
+    $(canvasContainer).empty();
+    var canvas=document.createElement("canvas")
+    //canvas.setAttribute("height",300)
+    //canvas.setAttribute("width",300)
+    canvas.id="categoryBarChart";
+    canvasContainer.appendChild(canvas);
+    var selectedValue = document.getElementById('dateDropdown').value;
+    fetch("/admin/adminDashboardGetChart?selectedValue=" + selectedValue + "&type=category", {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        if (response.status == 200) {
+
+          response.json().then((res_data) => {
+            const ctx = canvas.getContext('2d');
+            
+           const count = res_data.count
+            const labels = res_data.labels
+           
+
+            var barColors = ["red", "green", "blue", "orange", "brown"];
+
+            const salesBarChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: labels,
+                datasets: [{
+                  label: 'Category Report',
+                  data: count,
+                  backgroundColor: barColors,
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1,
+                }]
+              },
+              options: {
+                scales: {
+                  xAxes: [{
+                    type: 'category',
+                    labels: labels,
+                  }],
+                  yAxes: [{
+                    ticks: {
+                      beginAtZero: true,
+                    },
+                  }],
+                },
+              },
+            });
+
+
+          })
+        }
+      })
+  }
+
+    
+</script>
+
+

@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/product');
+const Razorpay = require('razorpay');
+
 const Cart = require('../models/Cart');
 const Order = require('../models/order');
 const Address = require('../models/address')
@@ -49,53 +51,23 @@ router.post('/saveAddress', jwtVerifyModule.JWTVerify, async (req, res) => {
 
 router.post('/orderConfirmation', jwtVerifyModule.JWTVerify, async (req, res) => {
   try {
-    const cartItems = await Cart.find({
-      "user_id": req.userDetails.user_id,
-      "deleted": {
-        $ne: true
-      }
-    });
-    const productIds = cartItems.map(x => {
-      return x.product_id
-    })
-    // Use the productIds to fetch product details
-    var products = await Product.find({
-      "_id": {
-        $in: productIds
-      }
-    });
-    const productDetails = products.map(x => {
-      return {
-        amount: x.productPrice,
-        deliveyStatus: "pending",
-        orderStatus: "pending",
-        product_id: x._id
-      };
-    })
-    console.log(productDetails);
 
-    const order = new Order({
+    // create order in razorpay 
 
-      user_id: req.userDetails.user_id,
-      address_id: req.body.address_id,
-      paymentMethod: req.body.paymentMethod,
-      amount: req.body.amount,
-      totalPrice: req.body.totalPrice,
-      date: new Date(),
-      orderProducts: productDetails
-
+    const Razorpay = require('razorpay');
+    var instance = new Razorpay({ key_id:process.env.RAZORPAY_API_KEY, key_secret: process.env.RAZORPAY_API_SECRET_KEY})
+    
+    var options = {
+      amount: req.body.amount,  // amount in the smallest currency unit
+      currency: "INR",
+      receipt: "order_rcptid_11"
+    };
+    instance.orders.create(options, function(err, order) {
+      console.log(order);
+      OrderSave(req,res,order);
     });
 
-    const savedOrder = await order.save();
 
-
-
-    //delete all the cart items
-    var resultDelete = await Cart.deleteMany({
-      user_id: req.userDetails.user_id
-    })
-
-    res.redirect("/order/confirmation");
 
   } catch (error) {
     console.error('Error saving order:', error);
@@ -105,52 +77,111 @@ router.post('/orderConfirmation', jwtVerifyModule.JWTVerify, async (req, res) =>
   }
 });
 
-router.get('/confirmation', jwtVerifyModule.JWTVerify, async (req, res) => {
 
-
-  res.render("orderConfirmationPage")
-});
-// to get the order page
-
-router.get('/viewOrderPage', jwtVerifyModule.JWTVerify, async (req, res) => {
-  var orders = await Order.find({
-    "user_id": req.userDetails.user_id
-  })
-  console.log(orders)
-
-  // Use the productIds to fetch product details
-  console.log(products, "products")
-  var result = orders.flatMap(order => order.orderProducts.map(x => ({
-    orderStatus: x.orderStatus,
-    amount: x.amount,
-    DeliveryDate: x.DeliveryDate,
-    product_id: x.product_id,
-    orderid: order._id
-  })));
-  const productIds = result.map(x => {
+ async function OrderSave(req,res,razorObj){
+  
+    
+  const cartItems = await Cart.find({
+    "user_id": req.userDetails.user_id,
+    "deleted": {
+      $ne: true
+    }
+  });
+  const productIds = cartItems.map(x => {
     return x.product_id
   })
+  // Use the productIds to fetch product details
   var products = await Product.find({
     "_id": {
       $in: productIds
     }
   });
-
-
-  for (let i = 0; i < result.length; i++) {
-    var product = products.find(x => x._id == result[i].product_id)
-    if (product) {
-      result[i].productImage = product.productImages[0].imageName;
-      result[i].productName = product.productName
-
-    }
-  }
-
-  console.log(result, "result");
-  res.render('orderPage', {
-    orders: result
+  const productDetails = products.map(x => {
+    return {
+      amount: x.productPrice,
+      deliveyStatus: "pending",
+      orderStatus: "pending",
+      product_id: x._id
+    };
   })
-})
+  console.log(productDetails);
+
+  const order = new Order({
+
+    user_id: req.userDetails.user_id,
+    address_id: req.body.address_id,
+    paymentMethod: req.body.paymentMethod,
+    amount: req.body.amount,
+    totalPrice: req.body.totalPrice,
+    date: new Date(),
+    orderProducts: productDetails,
+    orderCreatedByRazorPay:razorObj
+
+  });
+
+  const savedOrder = await order.save();
+
+
+
+  //delete all the cart items
+  var resultDelete = await Cart.deleteMany({
+    user_id: req.userDetails.user_id
+  })
+var userDetails=await User.findOne({id: req.userDetails.user_id})
+
+  res.status(200).json({ orderId: razorObj.id });
+}
+
+router.get('/confirmation', jwtVerifyModule.JWTVerify, async (req, res) => {
+  res.render("orderConfirmationPage")
+});
+// to get the order page
+
+router.get('/viewOrderPage', jwtVerifyModule.JWTVerify, async (req, res) => {
+  try {
+    // Fetch orders for the user
+    const orders = await Order.find({
+      "user_id": req.userDetails.user_id
+    });
+
+    // Flatten orderProducts and extract relevant information
+    const result = orders.flatMap(order => order.orderProducts.map(x => ({
+      orderStatus: x.orderStatus,
+      amount: x.amount,
+      DeliveryDate: x.DeliveryDate,
+      product_id: x.product_id,
+      orderid: order._id
+    })));
+
+    // Use the productIds to fetch product details
+    const productIds = result.map(x => x.product_id);
+    const products = await Product.find({
+      "_id": {
+        $in: productIds
+      }
+    });
+
+   
+
+    // Match products with result
+    for (let i = 0; i < result.length; i++) {
+      const product = products.find(x => x._id == result[i].product_id);
+      if (product) {
+        result[i].productImage = product.productImages[0].imageName;
+        result[i].productName = product.productName;
+        result[i].productCategory=product.productCategory;
+      }
+    }
+
+    res.render('orderPage', {
+      orders: result
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 router.post('/cancelOrder', jwtVerifyModule.JWTVerify, async (req, res) => {
   try {
   

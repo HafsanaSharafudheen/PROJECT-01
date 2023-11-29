@@ -1,5 +1,4 @@
-
-.card{
+#cartDiv .card {
     margin: auto;
     max-width: 950px;
     width: 90%;
@@ -7,80 +6,98 @@
     border-radius: 1rem;
     border: transparent;
 }
-@media(max-width:767px){
-    .card{
+
+@media (max-width: 767px) {
+    #cartDiv .card {
         margin: 3vh auto;
     }
 }
-.cart{
+
+#cartDiv .cart {
     background-color: #fff;
     padding: 4vh 5vh;
     border-bottom-left-radius: 1rem;
     border-top-left-radius: 1rem;
 }
-@media(max-width:767px){
-    .cart{
+
+@media (max-width: 767px) {
+    #cartDiv .cart {
         padding: 4vh;
         border-bottom-left-radius: unset;
         border-top-right-radius: 1rem;
     }
 }
-.summary{
+
+#cartDiv .summary {
     background-color: #ddd;
     border-top-right-radius: 1rem;
     border-bottom-right-radius: 1rem;
     padding: 4vh;
     color: rgb(65, 65, 65);
 }
-@media(max-width:767px){
-    .summary{
-    border-top-right-radius: unset;
-    border-bottom-left-radius: 1rem;
+
+@media (max-width: 767px) {
+    #cartDiv .summary {
+        border-top-right-radius: unset;
+        border-bottom-left-radius: 1rem;
     }
 }
-.summary .col-2{
+
+#cartDiv .summary .col-2,
+#cartDiv .summary .col-10 {
     padding: 0;
 }
-.summary .col-10
-{
-    padding: 0;
-}.row{
+
+#cartDiv .row {
     margin: 0;
 }
-.title b{
+
+#cartDiv .title b {
     font-size: 1.5rem;
 }
-.main{
+
+#cartDiv .main {
     margin: 0;
     padding: 2vh 0;
     width: 100%;
 }
-.col-2, .col{
+
+#cartDiv .col-2,
+#cartDiv .col {
     padding: 0 1vh;
 }
-a{
+
+#cartDiv a {
     padding: 0 1vh;
 }
-.close{
+
+#cartDiv .close {
     margin-left: auto;
     font-size: 0.7rem;
 }
-img{
+
+#cartDiv img {
     width: 3.5rem;
 }
-.back-to-shop{
+
+#cartDiv .back-to-shop {
     margin-top: 4.5rem;
 }
-h5{
+
+#cartDiv h5 {
     margin-top: 4vh;
 }
-hr{
+
+#cartDiv hr {
     margin-top: 1.25rem;
 }
-form{
-    padding: 2vh 0;
+
+#cartDiv form {
+    padding: 2vh 14px;
+    margin: 2px;
 }
-select{
+
+#cartDiv select {
     border: 1px solid rgba(0, 0, 0, 0.137);
     padding: 1.5vh 1vh;
     margin-bottom: 4vh;
@@ -88,7 +105,8 @@ select{
     width: 100%;
     background-color: rgb(247, 247, 247);
 }
-input{
+
+#cartDiv input[type="text"] {
     border: 1px solid rgba(0, 0, 0, 0.137);
     padding: 1vh;
     margin-bottom: 4vh;
@@ -96,13 +114,15 @@ input{
     width: 100%;
     background-color: rgb(247, 247, 247);
 }
-input:focus::-webkit-input-placeholder
-{
-      color:transparent;
+
+#cartDiv input[type="text"]:focus::-webkit-input-placeholder {
+    color: transparent;
 }
-.btn{
+
+
+#cartDiv .btn {
     border-color: rgb(255, 255, 255);
-background-color: #D7A2A2;
+    background-color: #D7A2A2;
     color: white;
     width: 100%;
     font-size: 0.7rem;
@@ -111,40 +131,44 @@ background-color: #D7A2A2;
     border-radius: 0;
 }
 
-.btn:hover{
-    background-color:#af665e;
-    color: white;   
+#cartDiv .btn:hover {
+    background-color: #af665e;
+    color: white;
 }
-a{
-    color: rgb(255, 255, 255); 
+
+#cartDiv a {
+    color: rgb(255, 255, 255);
     text-decoration: none;
 }
-a:hover{
-    color:#ffffff;
+
+#cartDiv a:hover {
+    color: #ffffff;
     text-decoration: none;
 }
- #code{
-    background-image: linear-gradient(to left, rgba(255, 255, 255, 0.253) , rgba(255, 255, 255, 0.185)), url("https://img.icons8.com/small/16/000000/long-arrow-right.png");
+
+#cartDiv #code {
+    background-image: linear-gradient(to left, rgba(255, 255, 255, 0.253), rgba(255, 255, 255, 0.185)),
+        url("https://img.icons8.com/small/16/000000/long-arrow-right.png");
     background-repeat: no-repeat;
     background-position-x: 95%;
     background-position-y: center;
 }
 
-.deleteBtn{
+#cartDiv .deleteBtn {
     background-color: #131212;
-     color: #fff; 
-     border: none; 
-     width: 25px; 
-     height: 25px; 
-      cursor: pointer;
+    color: #fff;
+    border: none;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
 }
-.quantity-control {
+
+#cartDiv .quantity-control {
     display: flex;
     align-items: center;
+}
 
-  }
-
-  .quantity-control a {
+#cartDiv .quantity-control a {
     text-decoration: none;
     padding: 8px 12px;
     background-color: #eee;
@@ -153,19 +177,18 @@ a:hover{
     cursor: pointer;
     user-select: none;
     border-radius: 50%;
+}
 
-  }
-
-  .quantity-control a:hover {
+#cartDiv .quantity-control a:hover {
     background-color: #ddd;
-  }
+}
 
-  #quantityValue {
+#cartDiv #quantityValue {
     margin: 0 10px;
     font-size: 16px;
-  }
- .address-section{
+}
+
+#cartDiv .address-section {
     overflow-y: scroll;
     max-height: 90vh;
- } 
-  
+}

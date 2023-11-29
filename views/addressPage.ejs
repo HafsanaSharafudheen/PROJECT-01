@@ -1,118 +1,138 @@
 <%- include('./partials/header.ejs') %>
+<%- include('./partials/navbar.ejs') %>
+
 <link rel="stylesheet" type="text/css" href="/cartPage.css">
-
-<body>
-    <div class="container mt-5 row">
-      
-  <div class="col-md-8 address-section">
-      <h2>Select Addresses</h2>
-  <button class="btn btn-primary mb-3" id="newAddressModel" onclick="newAddressModel()" >+Add New Address</button>
-      
-
-<% if (addressList.length === 0) { %>
-    <p>No addresses available.</p>
-  <% } else { %>
-    <% addressList.forEach((address, index) => { %>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="address" id="address<%= index + 1 %>" <%= index === 0 ? 'checked' : '' %>>
-        <label class="form-check-label" for="address<%= index + 1 %>">
-           Full Name: <%= address.fullName %><br>
-           pincode:<%= address.pincode %><br>
-
-          Address: <%= address.address %><br>
-          landmark: <%= address.landmark %><br>
-          city: <%= address.city %><br>
-          state: <%= address.state %><br>
-          mobile: <%= address.mobile %><br>
+<!-- //razorpay -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 
-          <button onclick="orderConfirmation('<%= summary.amount%>','<%= summary.totalPrice%>','<%= summary.paymentMethod%>','<%= address._id %>')" class="btn btn-success">Deliver to this address</button>
-        </label>
-      </div>
-    <% }) %>
-  <% } %>
-  </div>
-  
-  <div class="col summary">
-    <form action="/order/addressPage" method="POST">
-    <div>
-        <h5><b>Summary</b></h5>
-    </div>
-    <hr>
+<div id="cartDiv" class="container-fluid mt-5 mb-3 row">
     <div class="row">
-        <div class="col" style="padding-left:0;">AMOUNT:</div>
-        <div class="col text-right">Rs.<span ><%= summary.amount%></span></div>
+        <div class="col-md-8 address-section">
+            <div class="col-md-8">
+            <h2>Select Addresses</h2>
+            <button class="btn btn-primary mb-3 d-flex align-items-center justify-content-center" id="newAddressModel" onmouseover="changeIcon('fa-plus-circle')" onmouseout="changeIcon('fa-plus')" onclick="newAddressModelShow()">
+                <i class="fa fa-plus fs-5" aria-hidden="true" style="margin-right: 5px;"></i>
+                <span>Add New Address</span>
+            </button>
+            
+            
+            <% if (addressList.length === 0) { %>
+            <p>No addresses available.</p>
+            <% } else { %>
+            <% addressList.forEach((address, index) => { %>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="address" id="address<%= index + 1 %>"
+                    <%= index === 0 ? 'checked' : '' %>>
+                <label class="form-check-label" for="address<%= index + 1 %>">
+                    Full Name: <%= address.fullName %><br>
+                    pincode:<%= address.pincode %><br>
+
+                    Address: <%= address.address %><br>
+                    landmark: <%= address.landmark %><br>
+                    city: <%= address.city %><br>
+                    state: <%= address.state %><br>
+                    mobile: <%= address.mobile %><br>
+
+
+                    <button
+                        onclick="orderConfirmation('<%= summary.amount%>','<%= summary.totalPrice%>','<%= summary.paymentMethod%>','<%= address._id %>')"
+                        class="btn btn-success" id="rzp-button1" >Deliver to this address</button>
+
+                </label>
+            </div>
+            <% }) %>
+            <% } %>
+        </div>
+        </div>
+        <div class="col summary">
+            <form action="/order/addressPage" method="POST">
+                <div>
+                    <h5><b>Summary</b></h5>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col">AMOUNT:</div>
+                    <div class="col text-right">Rs.<span><%= summary.amount%></span></div>
+                </div>
+                <div class="row">
+                    <div class="col">Payment Method:</div>
+                    <div class="col"><span><%= summary.paymentMethod%></span></div>
+                </div>
+                <div class="row">
+                    <div class="col">CODE:</div>
+                    <div class="col"><span><%= summary.code%></span></div>
+                </div>                
+                
+                <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                    <div class="col">TOTAL PRICE</div>
+                    <div class="col text-right">Rs.<span id="totalPrice"
+                            name="totalPrice"><%= summary.totalPrice%></span></div>
+                </div>
+
+
+            </form>
+        </div>
     </div>
-    
-        <p>Selected Payment Method</p>          
-        <span ><%= summary.paymentMethod%></span>
-        <p>CODE</p>
-        <span ><%= summary.code%></span>    
-    <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
-        <div class="col">TOTAL PRICE</div>
-        <div class="col text-right">Rs.<span id="totalPrice" name="totalPrice"><%= summary.totalPrice%></span></div>
-    </div>
-    
-    
-</form>
+
 </div>
-    </div>
-   
-  <!-- popup for new address -->
-  <div id="addressModal" class="modal">
+
+
+<!-- popup for new address -->
+<div id="addressModal" class="modal">
     <div class="modal-content">
-      
-      <!-- Your form content goes here -->
-      <link rel="stylesheet" type="text/css" href="/checkOutPage.css">
-      <div class="col-md-12 " >
-        <form action="/order/saveAddress" method="POST" onsubmit="return saveAddress(this)">
-            <h3>Add Your New Address</h3>
-            <label for="fullName">Full Name:</label>
-            <input type="text" id="fullName" name="fullName" required>
-    
-            <label for="pincode">Pincode:</label>
-            <input type="text" id="pincode" name="pincode" required>
-    
-            <label for="address">Address:</label>
-            <textarea id="address" name="address" rows="4" required></textarea>
-    
-            <label for="landmark">Landmark:</label>
-            <input type="text" id="landmark" name="landmark">
-    
-            <label for="city">City:</label>
-            <input type="text" id="city" name="city" required>
-    
-            <label for="state">State:</label>
-            <input type="text" id="state" name="state" required>
-    
-            <label for="mobile">Mobile:</label>
-            <input type="text" id="mobile" name="mobile" required>
+
+        <!-- Your form content goes here -->
+        <link rel="stylesheet" type="text/css" href="/checkOutPage.css">
+        <div class="col-md-12 ">
+            <form action="/order/saveAddress" method="POST" onsubmit="return saveAddress(this)">
+                <h3>Add Your New Address</h3>
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" required>
+
+                <label for="pincode">Pincode:</label>
+                <input type="text" id="pincode" name="pincode" required>
+
+                <label for="address">Address:</label>
+                <textarea id="address" name="address" rows="4" required></textarea>
+
+                <label for="landmark">Landmark:</label>
+                <input type="text" id="landmark" name="landmark">
+
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" required>
+
+                <label for="state">State:</label>
+                <input type="text" id="state" name="state" required>
+
+                <label for="mobile">Mobile:</label>
+                <input type="text" id="mobile" name="mobile" required>
 
 
-            <button type="submit">SAVE</button>
-            <button onclick="window.location.reload();" type="button">CANCEL</button>
+                <button type="submit">SAVE</button>
+                <button onclick="window.location.reload();" type="button">CANCEL</button>
 
-        </form>
-      </div>
+            </form>
+        </div>
     </div>
-  </div>
+</div>
 <script>
-function newAddressModel(){
-    document.getElementById('addressModal').style.display="block";
-}
+    function newAddressModelShow() {
+        document.getElementById('addressModal').style.display = "block";
+    }
 
-function saveAddress(form) {
-    var body = {
-             "user_id":form.elements._id.value,        
-            "fullName":form.elements.fullName.value,
-            "pincode":form.elements.pincode.value,
-            "landmark":form.elements.landmark.value,
-            "city":form.elements.city.value,
-            "state":form.elements.state.value,
-            "address":form.elements.address.value,
-            "mobile":form.elements.mobile.value
+    function saveAddress(form) {
+        var body = {
+            "user_id": form.elements._id.value,
+            "fullName": form.elements.fullName.value,
+            "pincode": form.elements.pincode.value,
+            "landmark": form.elements.landmark.value,
+            "city": form.elements.city.value,
+            "state": form.elements.state.value,
+            "address": form.elements.address.value,
+            "mobile": form.elements.mobile.value
         };
-        
+
         fetch(form.action, {
                 method: form.method,
                 body: JSON.stringify(body),
@@ -121,12 +141,12 @@ function saveAddress(form) {
                 },
             })
             .then(response => {
-            
+
                 if (response.status == 200) {
-                   window.location.reload();
+                    window.location.reload();
                 } else {
-                    response.json().then((data)=>{
-                        alert(data.message)                    
+                    response.json().then((data) => {
+                        alert(data.message)
                     });
                 }
                 return false;
@@ -139,36 +159,82 @@ function saveAddress(form) {
         return false;
     }
 
-   function orderConfirmation(amount,totalPrice,paymentMethod,address_id) {
-    try {
-        fetch('/order/orderConfirmation', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                amount:amount,
-                totalPrice:totalPrice,
-                paymentMethod:paymentMethod,
-                address_id:address_id
-            }),
-        }).then(response => {
-            // Check if the response is successful
-            if (response.ok) {
-                // Handle success, e.g., redirect to a confirmation page
-                window.location.href = '/order/confirmation';
-            } else {
-                // Handle errors
-                alert('Failed to confirm order.');
-            }
-        });
+    function orderConfirmation(amount, totalPrice, paymentMethod, address_id) {
+        try {
+            fetch('/order/orderConfirmation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    amount: amount,
+                    totalPrice: totalPrice,
+                    paymentMethod: paymentMethod,
+                    address_id: address_id
+                }),
+            }).then(response => {
+                // Check if the response is successful
+                if (response.ok) {                 
 
-    } catch (error) {
-        // Handle errors
-        console.error('Error confirming order:', error);
+
+                    window.location.href = '/order/';
+                }
+                else {
+                    // Handle errors
+                    alert('Failed to confirm order.');
+                }
+            });
+
+        } catch (error) {
+            // Handle errors
+            console.error('Error confirming order:', error);
+        }
     }
-}
+    function changeIcon(iconClass) {
+        $('#newAddressModel i').removeClass('fa-plus fa-plus-circle').addClass(iconClass);
+    }
+    function initiateOrder(order_id, orderDetails){
+        var options = {
+            "key": "YOUR_KEY_ID", // Enter the Key ID generated from the Dashboard
+            "amount": orderDetails.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Baby bundle",
+            "description": "Baby bundle item(s) order",
+            "image": "",
+            "order_id": order_id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response){
+                alert(response.razorpay_payment_id);
+                alert(response.razorpay_order_id);
+                alert(response.razorpay_signature)
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9000090000"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response){
+                alert(response.error.code);
+                alert(response.error.description);
+                alert(response.error.source);
+                alert(response.error.step);
+                alert(response.error.reason);
+                alert(response.error.metadata.order_id);
+                alert(response.error.metadata.payment_id);
+        });
+        document.getElementById('rzp-button1').onclick = function(e){
+            rzp1.open();
+            e.preventDefault();
+        }
 
+    }
 </script>
 
 

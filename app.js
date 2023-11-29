@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 const { v4: uuidv4 } = require('uuid');
 require('./server/models/databse');
 const multer = require('multer');
-
+const Razorpay=require('razorpay')
 
 var userRouter = require('./server/routes/userlogin');
 var homeRouter = require('./server/routes/home');
@@ -17,6 +17,7 @@ var cartPageRouter=require('./server/routes/cartPage');
  var wishlistRouter=require('./server/routes/wishlist');
 var profileRouter=require('./server/routes/profile');
 var orderRouter=require('./server/routes/order');
+var footerRouter=require('./server/routes/footer')
 var app = express();
 
 // view engine setup
@@ -41,6 +42,10 @@ app.use(
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+const  instance = new Razorpay({
+  key_id: process.env.RAZORPAY_API_KEY,
+  key_secret: process.env.RAZORPAY_API_SECRET_KEY,
+});
 
 
 
@@ -53,6 +58,7 @@ app.use('/cartPage',cartPageRouter);
 app.use('/wishlist',wishlistRouter);
 app.use('/profile',profileRouter);
 app.use('/order',orderRouter);
+app.use('/footer',footerRouter);
 // Start the server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

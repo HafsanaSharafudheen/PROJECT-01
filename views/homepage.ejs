@@ -3,102 +3,167 @@
 
 
 <!-- hompepage content -->
-<div class="row" style="background-color: #E1E9F0;">
+<% if (!selectedCategory) { %>
+  <div class="row" id="Homepage-mainImage" style="background-color: #E1E9F0;">
 
-  <div class="col-md-6 mt-5 text-center p-5">
-    <h1 style="font-weight: 500;">New Arrivals</h1>
-    <h5>
-      Explore our latest collection of baby products. Each item is thoughtfully designed to provide comfort and style
-      for your little one.
-    </h5>
-  </div>
-  <div class="col-md-6">
-    <img class="img-fluid" src="/images/pexels-photo-1973270.webp">
+      <div class="col-md-6 mt-5 text-center p-5">
+          <h1 style="font-weight: 500;">Welcome to Baby Bundles</h1>
+          <h5>At Baby Bundles, we offer a curated selection of adorable and high-quality baby products, carefully bundled to bring joy and comfort to your little ones. Explore our collection and find the perfect bundles for your baby's needs.
 
-  </div>
-</div>
-
-
-
-
-
-
-
-
-<!--card view-->
-<div class="container">
-  <div class="row justify-content-center text-center p-5">
-    <h1>FOR NEW BORN</h1>
-
-
-    <div class="row">
-
-      <% products.forEach(function(item) { %>
-
-      <div class="col-md-4 pt-5">
-        <div class="row">
-        
-
-            <div class="card shadow" style="width: 18rem;">
-              <div class="inner">
-                <img src="/fileupload/files/<%= item.productImages[0]?.imageName %>" alt="<%= item.imageName %>">
-
-              </div>
-              <div class="card-body">
-                <a href="/home/productViewPage?productNumber=<%=item.productNumber %>">
-                <h5 class="card-title"><%= item.productName %></h5>
-                <h6>Rs.<%= item.productPrice %></h6>
-
-              </a>
-                <% if (!item.isWishListed) { %>
-                <i id="wishlistButton" class="fa-regular fa-heart"
-                  onclick="addToWishlist('<%= item.productNumber %>')"></i>
-                <% } else { %>
-                <i id="wishlistButtonfilled" class="fa-solid fa-heart" style="color: red;"
-                  onclick="addToWishlist('<%= item.productNumber %>')"></i>
-                <% } %>
-              
-          
-        </div>
+          </h5>
       </div>
- 
-    </div>
+      <div class="col-md-6">
+          <img class="img-fluid" src="/images/pexels-photo-1973270.webp">
+
+      </div>
   </div>
-
-  <% }); %>
-</div>
-
-
-
-
-</div>
-</div>
-<section>
-
+<% } %>
+<% if (selectedCategory==="Newborn Essentials") { %>
   <div class="row" style="background-color: #E8DCF0;">
       <div class="col-md-6">
-      <img class="img-fluid" src="/images/baby-sleeping-baby-baby-girl.webp">
-    </div>
-    <div class="col-md-6">
-      <h1>everything your baby needs</h1>
-      <h6>
-        we understand the importance of quality
-        and safety when it comes to your baby.
-        Our products are carefully selected to meet
-        the highest safety standards and are designed
-        for your baby's comfort and well-being
-      </h6>
-    </div>
-  
+          <img class="img-fluid" src="/images/baby-sleeping-baby-baby-girl.webp">
+      </div>
+      <div class="col-md-6">
+          <h1>everything your baby needs</h1>
+          <h6>
+              we understand the importance of quality
+              and safety when it comes to your baby.
+              Our products are carefully selected to meet
+              the highest safety standards and are designed
+              for your baby's comfort and well-being
+          </h6>
+      </div>
   </div>
+<% } %>
+<% if (selectedCategory==="New Arrivals") { %>
+  <div class="row" id="Homepage-mainImage" style="background-color: #F1E5DC;">
 
-</section>
+      <div class="col-md-6 mt-5 text-center p-5">
+          <h1 style="font-weight: 500;">New Arrivals</h1>
+          <h5>
+              Explore our latest collection of baby products. Each item is thoughtfully designed to provide comfort and style
+              for your little one.
+          </h5>
+      </div>
+      <div class="col-md-6">
+          <img class="img-fluid" src="/images/28726a178995707.Y3JvcCw1NjQ3LDQ0MTcsNTE3LDE5MDE.webp">
+
+      </div>
+  </div>
+<% } %>
+
+<!-- card view -->
+<div class="container">
+  <div class="row justify-content-center text-center p-5">
+      <% if (selectedCategory) { %>
+          <h1><%= selectedCategory %></h1>
+          <% if (!products || products.length === 0) { %>
+              <p>No Products available</p>
+          <% } else { %>
+              <% products.forEach(function(item) { %>
+                  <div class="col-md-4 pt-5">
+                      <div class="row">
+                          <div class="card shadow" style="width: 18rem;">
+                              <div class="inner">
+                                  <img src="/fileupload/files/<%= item.productImages[0]?.imageName %>" alt="<%= item.imageName %>">
+                              </div>
+                              <div class="card-body">
+                                  <a href="/home/productViewPage?productNumber=<%= item.productNumber %>">
+                                      <h5 class="card-title"><%= item.productName %></h5>
+                                      <h6>Rs.<%= item.productPrice %></h6>
+                                  </a>
+                                  <% if (!item.isWishListed) { %>
+                                      <i id="wishlistButton" class="fa-regular fa-heart" onclick="addToWishlist('<%= item.productNumber %>')"></i>
+                                  <% } else { %>
+                                      <i id="wishlistButtonfilled" class="fa-solid fa-heart" style="color: red;" onclick="addToWishlist('<%= item.productNumber %>')"></i>
+                                  <% } %>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              <% }); %>
+          <% } %>
+
+      <% } else { %>
+          <% if (searchTerm) { %>
+              <h1>Searched for '<%= searchTerm %>'</h1>
+
+          <% } else { %>
+              <h1>Explore The Baby World</h1>
+          <% } %>
+          <% if (!products || products.length === 0) { %>
+              <p>No Products available</p>
+          <% } else { %>
+              <% products.forEach(function(item, index) { %>
+                  <div class="col-md-4 pt-5 product-item <% if (index >= 6) { %>hidden<% } %>">
+                      <div class="row card-box">
+                          <div class="card shadow" style="width: 18rem;">
+                              <div class="inner">
+                                  <img src="/fileupload/files/<%= item.productImages[0]?.imageName %>" alt="<%= item.imageName %>">
+                              </div>
+                              <div class="card-body">
+                                  <a href="/home/productViewPage?productNumber=<%= item.productNumber %>">
+                                      <h5 class="card-title"><%= item.productName %></h5>
+                                      <h6>Rs.<%= item.productPrice %></h6>
+                                  </a>
+                                  <% if (!item.isWishListed) { %>
+                                      <i id="wishlistButton" class="fa-regular fa-heart" onclick="addToWishlist('<%= item.productNumber %>')"></i>
+                                  <% } else { %>
+                                      <i id="wishlistButtonfilled" class="fa-solid fa-heart" style="color: red;" onclick="addToWishlist('<%= item.productNumber %>')"></i>
+                                  <% } %>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              <% }); %>
+          <% } %>
+
+      <% } %>
+  </div>
+</div>
+<div class="col-md-12 col-lg-12 text-center">
+  <button class="login-button btn-lg" id="showMoreButton" onclick="showMoreProducts()">More</button>
+</div>
+<style>
+  .hidden {
+    display: none;
+    
+}
+.login-button {
+  width: 10rem;
+
+    border: none;
+    border-radius: 60px;
+    font-weight: 900;
+    background-color: #D38E87;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.login-button:active {
+    background-color: white;
+    color: #D38E87;
+}
+</style>
 
 
 
 
 
 <script>
+
+function showMoreProducts() {
+        // Toggle the 'hidden' class on additional product items
+        document.querySelectorAll('.product-item.hidden').forEach(function(item) {
+            item.classList.remove('hidden');
+        });
+
+        // Hide the "More" button when all products are visible
+        var moreButton = document.getElementById('showMoreButton');
+        if (!document.querySelector('.product-item.hidden')) {
+            moreButton.style.display = 'none';
+        }
+    }
   function addToWishlist(productNumber) {
 
     try {

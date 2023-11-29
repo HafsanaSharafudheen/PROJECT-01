@@ -54,7 +54,6 @@
       confirmButtonText: "Yes, Cancel Order!"
     }).then((result) => {
       if (result.isConfirmed) {
-        //   window.location.href = "/order/cancelOrder?_id=" + _id;
         fetch("/order/cancelOrder", {
             method: 'POST',
             headers: {

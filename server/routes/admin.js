@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/adminController')
 const adminWorks = require('../controllers/adminWorks/adminProduct')
+const adminOrders=require('../controllers/adminWorks/adminOders')
 const userDetails = require('../controllers/adminWorks/userDetails')
 const upload = require('../middileware/fileUploader')
 const jwtVerifyModule = require('../middileware/JWTverify')
@@ -9,6 +10,7 @@ const Product = require('../models/product')
 const Category = require('../models/Category')
 const Order=require('../models/order')
 const User=require('../models/userdb');
+const dashboardController=require('../controllers/dashboardController')
 const { render } = require('../../app');
 
 router.get('/', (req, res) => {
@@ -19,10 +21,21 @@ router.post('/', (req, res) => {
   adminController.adminLogin(req, res);
 })
 
-router.get('/adminDashboard', jwtVerifyModule.JWTVerify, (req, res) => {
-
+router.get('/adminDashboard', jwtVerifyModule.JWTVerify,(req, res) => {
   res.render('adminDashboard')
-})
+ 
+});
+
+router.get('/adminDashboardGetChart', jwtVerifyModule.JWTVerify,(req, res) => {
+  const type = req.query.type;
+  if (type === 'sales') {
+    dashboardController.chart(req, res);
+  } else if (type === 'category') {
+    dashboardController.categoryChart(req, res);
+  }
+});
+
+
 
 
 router.get('/adminCustomers', jwtVerifyModule.JWTVerify, (req, res) => {
@@ -57,9 +70,6 @@ router.get('/adminProducts', jwtVerifyModule.JWTVerify, async (req, res) => {
   }
 });
 
-router.get('/test',async (req,res)=>{
-  res.render('test')
-})
 
 router.post('/getProductByProductNumber', jwtVerifyModule.JWTVerify, async (req, res) => {
   try {
@@ -172,52 +182,16 @@ router.get('/adminTransactions', jwtVerifyModule.JWTVerify, (req, res) => {
 });
 
 router.get('/adminOrders', jwtVerifyModule.JWTVerify, async (req, res) => {
-  var orders = await Order.find({})
-  var users=await User.find({})
-  console.log(orders)
-
-  // Use the productIds to fetch product details
-  console.log(products, "products")
-  var result = orders.flatMap(order => order.orderProducts.map(x => ({
-    orderStatus: x.orderStatus,
-    amount: x.amount,
-    DeliveryDate: x.DeliveryDate,
-    product_id: x.product_id,
-
-    orderid: order._id,
-    paymentMethod:order.paymentMethod
-  })));
-  console.log(result,"reeeeeeeeeeee")
-  const productIds = result.map(x => {
-    return x.product_id
-  })
-  var products = await Product.find({
-    "_id": {
-      $in: productIds
-    }
+  adminOrders.adminOrders(req,res);
   });
-  // const userIds = users.map(x => {
-  //   return x.user_id
-  // })
-  // var users = await Product.find({
-  //   "_id": {
-  //     $in: userIds
-  //   }
-  // });
-
-  for (let i = 0; i < result.length; i++) {
-    var product = products.find(x => x._id == result[i].product_id)
-    if (product) {
-      result[i].productImage = product.productImages[0].imageName;
-      result[i].productName = product.productName;
-      result[i],productCategory=product.productCategory;
-    
-    result[i].productPrice=product.productPrice
-  }
-
-}
-  res.render('adminOrders',{orders:result});
+ 
+router.post('/shipOrder', jwtVerifyModule.JWTVerify, (req, res) => {
+  adminOrders.shipOrders(req, res);
 });
+router.post('/deliveryOrder', jwtVerifyModule.JWTVerify, (req, res) => {
+  adminOrders.deliveryOrder(req, res);
+})
+
 router.get('/adminReviews', jwtVerifyModule.JWTVerify, (req, res) => {
   res.render('adminReviews');
 });

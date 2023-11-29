@@ -1,0 +1,44 @@
+.main-container{
+padding: 30px;
+margin-top: 30px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.main-container h1 {
+    font-weight: 600;
+
+
+}
+.main-container hr{
+    color: brown;
+}
+.main-container h4{
+    font-weight: 400;
+}
+.main-container p{
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;}
+.card{
+    background-color: #fbeacb;
+    /* background-color: #ffc107; */
+    padding: 20px;
+    margin: 42px 40px 27px 10px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+}
+
+.card span{
+    font-weight: 800;
+}
+.card p{
+    margin-top: 20px;
+}
+.commitment h3{
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.commitment p{
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+}

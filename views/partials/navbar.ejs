@@ -1,29 +1,19 @@
 <div class="row navbar">
-
-
     <div class="col-lg-2">
-        <span class="baby-b" style="color: white ; margin-left: 10px;">Baby Bundles</span>
-
+        <span class="baby-b" style="color: white; margin-left: 10px;">Baby Bundles</span>
     </div>
-    <div class="col-4">
-
+    <div class="col-8 col-lg-4">
         <div class="input-group">
-            <div class="form-outline d-flex gap-1">
-                <input type="search" class="form-control" />
-
-                <button type="button" class="btn btn-light ">
-                    <i class="fa-solid fa-magnifying-glass icon-color fs-5"></i>
-            </div>
+            <input id="searchInput" type="search" class="form-control" />
+            <button type="button" class="btn btn-light" onclick="searchProducts()">
+                <i class="fa-solid fa-magnifying-glass icon-color fs-5"></i>
+            </button>
         </div>
-
-
     </div>
-
-
-
-    <div class="col-6">
-        <div class="right-side-nav">
-            <ul class="button-list">
+    
+    <div class="col-4 col-lg-6">
+        <!-- Your right-side navigation here -->
+  <ul class="button-list">
 
                 <li>
                     <a href="/cartPage/cartPage">
@@ -58,17 +48,13 @@
                     </a>
                 </li>
             </ul>
-        </div>
     </div>
-
-
-</div>
-
+    
 <nav class="navbar navbar-expand-lg row">
-
     <div class="col-lg-12">
         <div class="row">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            <!-- Your existing navigation code -->
+ <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -87,15 +73,27 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About Us</a>
+                        <a class="nav-link" href="/footer/about">About Us</a>
                     </li>
                 </ul>
             </div>
         </div>
+        </div>
     </div>
-
 </nav>
+</div>
+
+
+
+
 <script>
+  function searchProducts() {
+    var searchTerm = document.getElementById("searchInput").value;
+
+    window.location.href='/home/searchProducts?searchTerm='+searchTerm;
+   
+  }
+
     function getCartCount() {
         const cartCountElement = document.getElementById('cartCount');
 

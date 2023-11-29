@@ -3,9 +3,8 @@
 
 <div class="col-lg-9 col-md-8 col-sm-12" style="width: 100%;">
     <span class="welcome-text">Product details</span>
-    <a href="/admin/test">button</a>
 
-    <button type="button" id="btn-addProducts" class="btn btn-primary " onclick="openModalforAdd(0)">ADD PRODUCTS</button>
+    <button type="button" id="btn-addProducts" class="btn btn-primary" onclick="openModalforAdd(0)">ADD PRODUCTS</button>
 
     <div class="table-responsive">
         <table class="table table-striped tableAdmin">
@@ -289,7 +288,7 @@ function readURL(input) {
       }
 
       var previewContainer = document.getElementById('imgPreview');
-      previewContainer.innerHTML = ''; // Clear previous content
+      previewContainer.innerHTML = '';    
 
       for (let i = 0; i < max; i++) {
         var reader = new FileReader();

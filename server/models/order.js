@@ -32,8 +32,10 @@ const orderSchema = new mongoose.Schema({
         type:String,
         default:false,
     },
-    orderProducts: [orderProductSchema]
-
+    orderProducts: [orderProductSchema],
+    orderCreatedByRazorPay: {
+        type: Object
+    },
 
 });
 
