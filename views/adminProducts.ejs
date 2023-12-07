@@ -15,6 +15,8 @@
                     <th>Category</th>
                     <th>Registration Date</th>
                     <th>Coupon</th>
+                    <th>Stock</th>
+
                     <th>Description</th>
                     <th>Price</th>
                     <th>Actions</th>
@@ -38,6 +40,8 @@
                             <td><%= x.productCategory %></td>
                             <td><%= (new Date(x.date)).toLocaleDateString("en-US") %></td>
                             <td><%= x.productCoupon %></td>
+                            <td><%= x.stock %></td>
+
                             <td><%= x.productDescription %></td>
                             <td><%= x.productPrice %></td>
                             <td>
@@ -132,16 +136,19 @@
                 <button type="submit" id="addButton" class="btn btn-primary">Add Product</button>
 
             </form>
+
             <!-- Modal for displaying selected images -->
 <div id="imageModal" class="modalForImages">
+    <button id="cropButton" class="btn btn-primary">Crop Image</button>
+
     <div class="Imagemodal-content">
         <span onclick="closeModal()" style="cursor: pointer;">&times;</span>
         <div id="cropImage">
         <img id="image" src="" alt="Image">
         </div>
-        <button id="cropButton" class="btn btn-primary">Crop Image</button>
 
     </div>
+
 </div>
             <button type="button" id="cancelButton" onclick="cancelAddProduct()">Cancel</button>
 
@@ -151,9 +158,6 @@
 </div>
 
 
-<style>
-    
-</style>
 
 
 

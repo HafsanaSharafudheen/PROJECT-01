@@ -144,6 +144,7 @@ async function deleteProduct(req,res){
 
 
 async function addCategory(req, res) {
+  
   const categoryExists = await Category.findOne({
     'categoryName': req.body.categoryName
   })
@@ -154,17 +155,19 @@ async function addCategory(req, res) {
   } 
 
   const newCategory = new Category({
-    
+    "categoryImage":req.file?.filename,
     "categoryName": req.body.categoryName,
     "categoryDescription": req.body.categoryDescription,
     date: new Date(),
   });
+  console.log('111')
 
   await newCategory.save()
   return res.status(200).json({
     message: 'category  added successful'
   })
 }
+
 async function editCategory(req, res) {
 
   try {
@@ -172,6 +175,7 @@ async function editCategory(req, res) {
     const updatedCategory = await Category.findOne({
       '_id': req.body._id
     })
+    console.log('1111')
 
     if (!updatedCategory) {
       return res.status(400).json({
@@ -183,11 +187,15 @@ async function editCategory(req, res) {
         _id: req.body._id
       }, {
         $set: {
+          categoryImage:req.file?.filename,
           categoryName: req.body.categoryName,
           categoryDescription: req.body.categoryDescription,
           date: new Date()
         }
       });
+      
+      console.log('11111')
+
       console.log('Category updated successfully');
       res.status(200).json({
         message: 'Category updated successfully'

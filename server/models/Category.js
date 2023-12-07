@@ -14,6 +14,9 @@ categoryDescription: {
     type: String,
      required: true,
 },
+categoryImage: {
+  type: String, 
+},
 deleted: { type: Boolean,
      default: false }, 
 

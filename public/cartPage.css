@@ -192,3 +192,15 @@
     overflow-y: scroll;
     max-height: 90vh;
 }
+
+.back-to-shop {
+    margin-top: 20px;
+}
+
+.back-to-shop button {
+    padding: 10px 20px;
+    background-color: #af665e;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}

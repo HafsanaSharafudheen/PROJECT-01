@@ -12,7 +12,7 @@
                       <th>Customer</th>
                       <th>Order Date</th>
                       <th>Order Id</th>
-
+<th>Stock</th>
                       <th>Category</th>
                       <th>Price</th>
                       <th>Payment Method</th>
@@ -31,7 +31,8 @@
                             <td><%= (new Date(order.date)).toLocaleString("en-US") %></td>
                         <td><%= order.orderid %></td>
 
-                        
+                        <td><%= order.stock %></td>
+
                         <td><%= order.productCategory %></td>
                         <td><%= order.productPrice %></td>
                         <td><%= order.paymentMethod %></td>

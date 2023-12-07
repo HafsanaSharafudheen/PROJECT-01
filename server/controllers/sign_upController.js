@@ -34,6 +34,7 @@ async function signupVerification(req, res) {
         const dbOTP = new OTP({
           "'password":hashedPassword,
           "otp": otp,
+          "number":req.body.number,
           "email": req.body.email,
           "OTPType": "email",
           "date": new Date()
@@ -65,6 +66,7 @@ async function insertUser(req,res){
 
       "fullName": req.body.fullName,
       "password": hashedPassword,
+      "number":req.body.number,
 
       "email": req.body.email,
       "admin": false,

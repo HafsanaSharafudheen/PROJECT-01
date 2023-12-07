@@ -111,6 +111,7 @@ body {
       margin-left: 20px; }
   
   .add-to-cart, .like {
+    width: fit-content;
     background: #d7a2a2;
     padding: 1.2em 1.5em;
     border: blacknone;

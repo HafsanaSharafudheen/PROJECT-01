@@ -18,6 +18,7 @@
             <tr>
                
                 <th>Category Name</th>
+                <th>Image</th>
                 <th>Category</th>
                 <th>Actions</th>
             </tr>
@@ -27,14 +28,17 @@
             <% categories.forEach(function(x) { %>
            
                 <tr class="<%=x.deleted? 'd-none':''%>">
+
             <td><%= x.categoryName %></td>
+            <td>
+                <img src="/fileupload/files/<%=x.categoryImage %>" alt="<%= x.categoryImage %>" style="width: 100px; height: 100px;">
+            </td>
             <td><%= x.categoryDescription %></td>
-          
            
             <td>
                 <!--delete button-->
+                
                 <button onclick="confirmDelete('<%= x._id %>')"  class="<%=x.deleted? 'd-none':''%> btn btn-primary admin-btn" role="button"><i class="fa-solid fa-trash"></i></button>
-
   <!-- Edit button -->
   <button class="<%=x.deleted? 'd-none':''%> btn btn-primary admin-btn"
     onclick="openModalforAddCategory('<%=  x._id %>')">Edit</button>
@@ -62,44 +66,59 @@
 
 </div>
 </div>
-<!-- Modal HTML for add product -->
+
+
+
 
 
 <!-- Extra large modal -->
 <div id="addCategoryModal" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog"
-aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-<div class="modal-dialog modal-xl">
+    aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <h2 id="popupHeader">Add Category</h2>
 
-<div class="modal-content">
+            <form id="addCategoryForm" class="form-style" onsubmit="return addCategorySave(this)"
+                enctype="multipart/form-data">
 
-    <h2 id="popupHeader">Add Category</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Image preview -->
+                        <img id="previewImage" style="width: 10rem;">
 
-    <form id="addCategoryForm" class="form-style" onsubmit="return addCategorySave(this)" action="/admin/addCategory"
-        method="POST">
-        
-        <div class="row">
-            <!-- First Column (6 columns wide on medium and larger screens) -->
-            <div class="col-md-6">
-                <!-- Add input fields for product details -->
-                <input type="hidden" id="_id" name="_id" />
-                <div class="form-group">
-                    <label for="categoryName">Category Name:</label>
-                    <input type="text" id="categoryName" name="categoryName" class="form-control" required>
+                        <!-- Image upload -->
+                        <div class="text-center p-5">
+                            <label for="photos" class="file-upload-label">
+                                <i class="fas fa-plus-circle fa-3x"></i>
+                                <br>
+                                <span>Select image</span>
+                                <input type="file" id="photos" name="bannerImage" accept="image/*" size="2000000" multiple
+                                    onchange="readURL(this)" style="display: none;">
+                            </label>
+                        </div>
+
+                        <!-- Other input fields -->
+                        <input type="hidden" id="_id" name="_id" />
+                        <div class="form-group">
+                            <label for="categoryName">Category Name:</label>
+                            <input type="text" id="categoryName" name="categoryName" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="categoryDescription">Description:</label>
+                            <input type="text" id="categoryDescription" name="categoryDescription"
+                                class="form-control">
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="categoryDescription">Description:</label>
-                    <input type="text" id="categoryDescription" name="categoryDescription" class="form-control">
-                </div>
-            </div>
+
+                <button type="submit" id="addButton" class="btn btn-primary">Add Category</button>
+
+            </form>
+            <button type="button" id="cancelButton" onclick="cancelAddCategory()">Cancel</button>
+
         </div>
-
-        <button type="submit" id="addButton" class="btn btn-primary">Add Category</button>
-
-    </form>
-    <button type="button" id="cancelButton" onclick="cancelAddCategory()">Cancel</button>
-
-</div>
+    </div>
 </div>
 
 </div>
@@ -139,7 +158,7 @@ document.getElementById('addButton').innerHTML="Update"
                             document.getElementById("_id").value =result.data._id;                           
                             document.getElementById("categoryName").value =result.data.categoryName;                           
                             document.getElementById("categoryDescription").value = result.data.categoryDescription;
-
+document.getElementById('photos').value=result.data.categoryImage
 
                            
                         });
@@ -156,20 +175,29 @@ document.getElementById('addButton').innerHTML="Update"
 
     function addCategorySave(form) {
     
-        var body = {
-            "_id":form.elements._id.value,        
-            "categoryName":form.elements.categoryName.value,
-            "categoryDescription":form.elements.categoryDescription.value ,
-        };
+       // Create a FormData object
+                    var formData = new FormData();
+
+            // Append form data
+                formData.append("_id", form.elements._id.value);
+                formData.append("categoryName", form.elements.categoryName.value);
+                formData.append("categoryDescription", form.elements.categoryDescription.value);
+
+                // Append the file (photo) to FormData
+                var photoInput = form.elements.photos;
+                if (photoInput.files.length > 0) {
+                    formData.append("categoryImage", photoInput.files[0]);
+                }
         
-        fetch(form.action, {
-                method: form.method,
-                body: JSON.stringify(body),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+
+        fetch("/admin/addCategory", {
+                method: "POST",
+                body: formData,
+
+              
 
             })
+
             .then(response => {
             
                 if (response.status == 200) {
@@ -189,7 +217,6 @@ document.getElementById('addButton').innerHTML="Update"
                 console.error("Error:", error);
             });
 
-        // Prevent the form from performing its default submission behavior
         return false;
     }
 
@@ -197,8 +224,6 @@ document.getElementById('addButton').innerHTML="Update"
     function cancelAddCategory() {
         window.location.href = '/admin/adminCategories';
     }
-
-
 
 
     function confirmDelete(categoryId) {
@@ -219,6 +244,21 @@ document.getElementById('addButton').innerHTML="Update"
 
 
         })
+    }
+
+    //adding image to category.
+
+function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                // Update the src attribute of the previewImage
+                document.getElementById('previewImage').src = e.target.result;
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
     }
             </script>
 

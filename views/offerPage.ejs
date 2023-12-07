@@ -1,0 +1,190 @@
+<%- include('./partials/header.ejs') %>
+<%- include('./partials/admin-navbar.ejs') %>
+<div class="col-lg-9 col-md-8 col-sm-12" style="width: 100%;">
+    <span class="welcome-text">Offer details</span>
+
+    <button type="button" id="btn-addOffer" class="btn btn-primary" onclick="openModalforOffer(null)">NEW OFFER</button>
+    </div>
+
+
+
+<div id="addOfferModal" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog"
+    aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+
+        <div class="modal-content">
+
+            <h2 id="popupHeader">Add Offer</h2>
+
+            <form id="addCategoryForm" class="form-style" onsubmit="return addOfferSave(this)"
+            enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- Image preview -->
+                    <img id="previewImage" style="width: 10rem;">
+
+                    <!-- Image upload -->
+                    <div class="text-center p-5">
+                        <label for="photos" class="file-upload-label">
+                            <i class="fas fa-plus-circle fa-3x"></i>
+                            <br>
+                            <span>Select image</span>
+                            <input type="file" id="photos" name="photos" accept="image/*" size="2000000" multiple onchange="readURL(this)" style="display: none;">
+
+                        </label>
+                    </div>
+                    <input type="hidden" id="_id" name="_id" />
+
+                      
+                        <div class="form-group">
+                            <label for="offerName">Offer Name:</label>
+                            <input type="text" id="offerName" name="offerName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="DiscountValue">Discount Value</label>
+                            <input type="number" id="DiscountValue" name="DiscountValue" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="offerType">Offer Type:</label>
+                            <select id="offerType" name="offerType" class="form-control" required>
+                                <option value="amount">Amount</option>
+                                <option value="percentage">Percentage</option>
+                            </select>
+                        </div>
+                        
+                       
+                       
+                        <div class="form-group">
+                            <label for="offerDescription">Description:</label>
+                            <textarea id="offerDescription" name="offerDescription" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="offerStartDate">Offer Start Date:</label>
+                            <input type="date" id="offerStartDate" name="offerStartDate" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="offerEndDate">Offer End Date:</label>
+                            <input type="date" id="offerEndDate" name="offerEndDate" class="form-control" required>
+                        </div>
+                       
+                    </div>
+                </div>
+                
+
+                   
+                
+
+                <button type="submit" id="addButton" class="btn btn-primary">Add New Offer</button>
+
+            </form>
+
+    
+            <button type="button" id="cancelButton" onclick="cancelOffer()">Cancel</button>
+
+        </div>
+    </div>
+</div>
+<script>
+
+function openModalforOffer(_id) {
+    
+    if (!_id) {
+        document.getElementById("popupHeader").innerHTML = "Add OFFER";
+        $('#addOfferModal').modal('show');
+    } else {
+        fetch("/offer/getOfferDetails", {
+            method: "POST",
+            body: JSON.stringify({
+                "_id": _id
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+            if (response.status == 200) {
+               
+
+        result => {
+            document.getElementById("popupHeader").innerHTML = "Edit Offer";
+            document.getElementById('addButton').innerHTML = "Update";
+            $('#addOfferModal').modal('show');
+            document.getElementById("_id").value = result.data._id;
+            document.getElementById("offerEndDate").value = result.data.offerEndDate;
+            document.getElementById("offerStartDate").value = result.data.offerStartDate;
+            document.getElementById("offerType").value = result.data.offerType;
+
+            document.getElementById("DiscountValue").value = result.data.DiscountValue;
+            document.getElementById("offerName").value = result.data.offerName;
+            document.getElementById("offerDescription").value = result.data.offerDescription;
+            document.getElementById('photos').value = result.data.bannerImage;
+        }
+    
+        }
+    })
+
+        .catch(error => {
+            console.error("Error:", error);
+            alert('Error fetching offer details');
+        });
+    }
+}
+
+function addOfferSave(form) {
+     const formData = new FormData(form);
+    formData.append("offerName", form.elements.offerName.value);
+    formData.append("offerDescription", form.elements.offerDescription.value);
+    formData.append("offerStartDate", form.elements.offerStartDate.value);
+    formData.append("offerType", form.elements.offerType.value);
+    formData.append("offerEndDate", form.elements.offerEndDate.value);
+    var photoInput = form.elements.photos;
+
+
+ if (photoInput.files.length > 0) {
+    formData.append("photos", photoInput.files[0]);
+
+//    formData.append("bannerImage", photoInput.files[0]);
+}
+ fetch('/offer/addNewOffer', {
+        method: "POST",
+        body: formData,
+    })
+    .then(response => {
+        console.log(response); // Check the response in the console
+        return response.json();
+    })
+    .then(data => {
+        console.log(data);
+        alert(data.message);
+        cancelOffer();
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert('Error adding offer');
+        cancelOffer();
+    });
+
+
+    // Prevent the form from performing its default submission behavior
+    return false;
+}
+
+function cancelOffer() {
+    window.location.href = '/offer';
+}
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            // Update the src attribute of the previewImage
+            document.getElementById('previewImage').src = e.target.result;
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+</script>
+<%- include('./partials/adminfooter.ejs') %>

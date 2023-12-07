@@ -8,6 +8,7 @@ const orderProductSchema = new mongoose.Schema({
     DeliveryDate: Date,
     deliveryStatus: String,
     canecelled: Boolean,
+    stock:Number
 });
 
 const orderSchema = new mongoose.Schema({

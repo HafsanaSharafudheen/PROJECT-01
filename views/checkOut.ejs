@@ -37,7 +37,7 @@
 
                     <button
                         onclick="orderConfirmation('<%= summary.amount%>','<%= summary.totalPrice%>','<%= summary.paymentMethod%>','<%= address._id %>')"
-                        class="btn btn-success" id="rzp-button1" >Deliver to this address</button>
+                        class="btn btn-success" id="btnDeliver" >Deliver to this address</button>
 
                 </label>
             </div>
@@ -85,7 +85,7 @@
         <!-- Your form content goes here -->
         <link rel="stylesheet" type="text/css" href="/checkOutPage.css">
         <div class="col-md-12 ">
-            <form action="/order/saveAddress" method="POST" onsubmit="return saveAddress(this)">
+            <form onsubmit="return saveAddress(this)">
                 <h3>Add Your New Address</h3>
                 <label for="fullName">Full Name:</label>
                 <input type="text" id="fullName" name="fullName" required>
@@ -122,8 +122,8 @@
     }
 
     function saveAddress(form) {
+        debugger
         var body = {
-            "user_id": form.elements._id.value,
             "fullName": form.elements.fullName.value,
             "pincode": form.elements.pincode.value,
             "landmark": form.elements.landmark.value,
@@ -132,16 +132,17 @@
             "address": form.elements.address.value,
             "mobile": form.elements.mobile.value
         };
-
-        fetch(form.action, {
-                method: form.method,
+debugger
+        fetch("/order/saveAddress", {
+        
+                method: "POST",
                 body: JSON.stringify(body),
                 headers: {
                     'Content-Type': 'application/json',
                 },
             })
             .then(response => {
-
+debugger
                 if (response.status == 200) {
                     window.location.reload();
                 } else {
@@ -159,8 +160,15 @@
         return false;
     }
 
-    function orderConfirmation(amount, totalPrice, paymentMethod, address_id) {
+    function orderConfirmation(amount, totalPrice,paymentMethod,address_id) {
+        if(paymentMethod=="CASH ON DELIVERY"){
+window.location.href="/order/confirmation"
+        }
+        else{
+
+        
         try {
+
             fetch('/order/orderConfirmation', {
                 method: 'POST',
                 headers: {
@@ -172,16 +180,28 @@
                     paymentMethod: paymentMethod,
                     address_id: address_id
                 }),
-            }).then(response => {
-                // Check if the response is successful
-                if (response.ok) {                 
+            }) .then(response => {
+                    if (response.status == 200) {
+
+                        response.json().then((result) => {
+                            debugger
+                            $('#loaderOverlay').css('display', 'flex');
 
 
-                    window.location.href = '/order/';
+
+                            initiateOrder(result.orderId,result);
+ 
+                        });
                 }
                 else {
+                    response.json().then((err) => {
+                            debugger
+                            alert('Failed to confirm order. '+err);
+                           
+                        });
                     // Handle errors
-                    alert('Failed to confirm order.');
+                    $('#loaderOverlay').css('display', 'none');
+
                 }
             });
 
@@ -190,30 +210,37 @@
             console.error('Error confirming order:', error);
         }
     }
+    }
     function changeIcon(iconClass) {
         $('#newAddressModel i').removeClass('fa-plus fa-plus-circle').addClass(iconClass);
     }
-    function initiateOrder(order_id, orderDetails){
+
+    function initiateOrder(orderId,details){
+        debugger
         var options = {
-            "key": "YOUR_KEY_ID", // Enter the Key ID generated from the Dashboard
-            "amount": orderDetails.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "key": "rzp_test_cJwl1MG3ZLVx19",
+            "amount": details.amount, 
             "currency": "INR",
             "name": "Baby bundle",
             "description": "Baby bundle item(s) order",
             "image": "",
-            "order_id": order_id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "order_id": orderId,
             "handler": function (response){
+                $('#loaderOverlay').css('display', 'none');
+
                 alert(response.razorpay_payment_id);
                 alert(response.razorpay_order_id);
                 alert(response.razorpay_signature)
+
+verifySignature(response.razorpay_payment_id,orderId,response.razorpay_signature)
             },
             "prefill": {
-                "name": "Gaurav Kumar",
-                "email": "gaurav.kumar@example.com",
-                "contact": "9000090000"
+                "name": details.fullName,
+                "email": details.email,
+                "contact": details.number
             },
             "notes": {
-                "address": "Razorpay Corporate Office"
+                "address":  details.address
             },
             "theme": {
                 "color": "#3399cc"
@@ -221,6 +248,7 @@
         };
         var rzp1 = new Razorpay(options);
         rzp1.on('payment.failed', function (response){
+
                 alert(response.error.code);
                 alert(response.error.description);
                 alert(response.error.source);
@@ -228,13 +256,48 @@
                 alert(response.error.reason);
                 alert(response.error.metadata.order_id);
                 alert(response.error.metadata.payment_id);
-        });
-        document.getElementById('rzp-button1').onclick = function(e){
-            rzp1.open();
-            e.preventDefault();
-        }
+        });        
+
+        setTimeout(() => {
+            $('#loaderOverlay').css('display', 'none');
+            rzp1.open();            
+        }, 1000);
+        
 
     }
+ function   verifySignature(payment_id,orderId,signature){
+    fetch('/order/verifyRazorPaySignature', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    payment_id: payment_id,
+                    orderId:orderId,
+                    signature: signature
+                }),
+            })
+            .then(response => {
+                    if (response.status == 200) {
+
+                        response.json().then((result) => {
+                                        window.location.href = '/order/confirmation';    
+
+                        });
+                }
+                else {
+                    response.json().then((err) => {
+                            debugger
+                            alert('Failed to Payment. '+err);
+                           
+                        });
+
+                }
+            });
+
+                  
+ }
+
 </script>
 
 

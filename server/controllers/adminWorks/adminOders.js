@@ -44,12 +44,12 @@
   for (let i = 0; i < result.length; i++) {
     var product = products.find(x => x._id == result[i].product_id);
      var user = userDetails.find(x => x.fullName);
-  console.log(user,"userrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
     if (product) {
       result[i].productImage = product.productImages[0].imageName;
       result[i].productName = product.productName;
       result[i].productCategory = product.productCategory;
       result[i].productPrice = product.productPrice;
+      result[i].stock=product.stock;
 result[i].fullName=user.fullName;
 result[i].email=user.email;
     }
@@ -57,7 +57,6 @@ result[i].email=user.email;
   
   }
   
-console.log(result,"resultttt")
   res.render('adminOrders',{orders:result,userDetails:userDetails});
 }
 

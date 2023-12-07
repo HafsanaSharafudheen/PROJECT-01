@@ -5,6 +5,8 @@ const adminWorks = require('../controllers/adminWorks/adminProduct')
 const adminOrders=require('../controllers/adminWorks/adminOders')
 const userDetails = require('../controllers/adminWorks/userDetails')
 const upload = require('../middileware/fileUploader')
+const multer = require('multer');
+
 const jwtVerifyModule = require('../middileware/JWTverify')
 const Product = require('../models/product')
 const Category = require('../models/Category')
@@ -74,10 +76,10 @@ router.get('/adminProducts', jwtVerifyModule.JWTVerify, async (req, res) => {
 router.post('/getProductByProductNumber', jwtVerifyModule.JWTVerify, async (req, res) => {
   try {
     const product = await Product.findOne({
-      "productNumber": req.body.productNumber
+      "productNumber": req.body.productNumber,
     });
 
-    if (!product) {
+    if (!product &&stock===0) {
       return res.status(400).json({
         message: "No product available"
       });
@@ -160,9 +162,9 @@ router.post('/getCategoryBycategoryid', jwtVerifyModule.JWTVerify, async (req, r
   }
 });
 
-router.post('/addCategory',jwtVerifyModule.JWTVerify, (req, res) => {
-
-  console.log(req.body)
+router.post('/addCategory', upload.single('categoryImage'), jwtVerifyModule.JWTVerify, (req, res) => {
+console.log(req.body,"===============")
+console.log(req.files,"-------------",req.file)
   if (req.body._id) {
     adminWorks.editCategory(req, res)
   } else {
@@ -177,9 +179,7 @@ router.get('/deleteCategory',jwtVerifyModule.JWTVerify,  (req, res) => {
 })
 
 
-router.get('/adminTransactions', jwtVerifyModule.JWTVerify, (req, res) => {
-  res.render('adminTransactions');
-});
+
 
 router.get('/adminOrders', jwtVerifyModule.JWTVerify, async (req, res) => {
   adminOrders.adminOrders(req,res);
@@ -196,7 +196,16 @@ router.get('/adminReviews', jwtVerifyModule.JWTVerify, (req, res) => {
   res.render('adminReviews');
 });
 
-
+router.get('/logout', jwtVerifyModule.JWTVerify, (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+        console.error('Error destroying session:', err);
+    } else {
+     
+  res.redirect('/admin');
+    }
+  })
+});
 
 
 
