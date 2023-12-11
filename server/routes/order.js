@@ -101,7 +101,7 @@ if(req.body.paymentMethod==="CASH ON DELIVERY"){
 
 
  async function OrderSave(req,res,razorObj){
-  
+  console.log(req.body, "OrderSave")
     
   const cartItems = await Cart.find({
     "user_id": req.userDetails.user_id,
@@ -144,10 +144,10 @@ if(req.body.paymentMethod==="CASH ON DELIVERY"){
     }
   }
 
-  const productDetails = products.map(x => {
+  const productDetails = productsArray.map(x => {
     return {
       amount:x.discountedAmount?x.discountedAmount:x.productPrice,
-      deliveyStatus: "pending",
+      deliveryStatus: "pending",
       orderStatus: "pending",
       product_id: x._id,
     };  
@@ -246,7 +246,7 @@ console.log(orders.length,'oooorrrrrrrrrrrrdeeeersssssssssssssssss')
     const result = orders.flatMap(order => order.orderProducts.map(x => ({
       orderStatus: x.orderStatus,
       amount: x.amount,
-      DeliveryDate: x.DeliveryDate,
+      deliveryStatus: x.deliveryStatus,
       product_id: x.product_id,
       orderid: order._id,
       // DeliveryStatus:x.DeliveryStatus

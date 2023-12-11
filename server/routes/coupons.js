@@ -23,7 +23,7 @@ router.post('/getCouoponsByCouponId',(req,res)=>{
     couponsController.getCopouns(req,res);
 })
 router.post('/addCoupons',(req,res)=>{
-    console.log('addcounposn strattttt',req.body.discountType)
+    console.log('addcounposn strattttt',req.body)
 couponsController.addNewCoupons(req,res)
 })
 router.get('/viewCoupons',async (req,res)=>{

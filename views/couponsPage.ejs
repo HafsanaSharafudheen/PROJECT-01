@@ -44,13 +44,13 @@
 
             <h2 id="popupHeader">Add Coupons</h2>
 
-            <form id="addCouponsForm" class="form-style" onsubmit="return addCouponsSave(this)" action="/coupons/addCoupons"
-                method="POST">
+            <form id="addCouponsForm" class="form-style" onsubmit="return addCouponsSave(this)" >
                
                 <div class="row">
                     <div class="col-md-6">
                        
                         <div class="form-group">
+                            <input type="hidden" id="_id" name="_id">
                             <label for="couponCode">Coupon Code</label>
                             <input type="text" id="couponCode" name="couponCode" class="form-control" required>
                         </div>
@@ -137,27 +137,27 @@ document.getElementById('expiryDate').value=result.data.expiryDate;
 
 function addCouponsSave(form) {
 
-   // Create a FormData object
-                var formData = new FormData();
-
+    debugger;
+    try {
+   // Create a FormData object                
         // Append form data
-            formData.append("_id", form.elements._id.value);
-            formData.append("couponCode", form.elements.couponCode.value);
-            formData.append("discountType", form.elements.discountType.value);
-            formData.append("discountAmount", form.elements.discountAmount.value);
-            formData.append("expiryDate", form.elements.expiryDate.value);
-
-           
+        var obj = {
+            "_id": form.elements._id.value,
+            "couponCode": form.elements.couponCode.value,
+            "discountType": form.elements.discountType.value,
+            "discountAmount": form.elements.discountAmount.value,
+            "expiryDate": form.elements.expiryDate.value
+        };
 
     fetch("/coupons/addCoupons", {
             method: "POST",
-            body: formData,
-
-          
-
+            body: JSON.stringify(obj),
+            headers: {
+                    'Content-Type': 'application/json',
+                },
         })
         .then(response => {
-        
+            debugger;
             if (response.status == 200) {
                 response.json().then((data)=>{
                     alert(data.message)
@@ -166,13 +166,18 @@ function addCouponsSave(form) {
             } else {
                 response.json().then((data)=>{
                     alert(data.message)
-                    cancelAddCoupons();
+                    //cancelAddCoupons();
                 });
             }
         })
         .catch(error => {
             console.error("Error:", error);
         });
+    }
+    catch(ex){
+        console.error("Error:", ex);
+
+    }
 
     return false;
 }

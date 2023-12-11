@@ -10,7 +10,6 @@
   console.log(orders)
 
   // Use the productIds to fetch product details
-  console.log(products, "products")
   var result = orders.flatMap(order => order.orderProducts.map(x => ({
     orderStatus: x.orderStatus,
     amount: x.amount,
@@ -21,7 +20,7 @@
     orderid: order._id,
     paymentMethod:order.paymentMethod
   })));
-  console.log(result)
+  console.log(result,'---------------------------------------------------------------------------------------------1')
   const productIds = result.map(x => {
     return x.product_id
   })
