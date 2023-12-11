@@ -30,6 +30,7 @@ async function addProducts(req, res) {
               productCoupon: req.body.productCoupon,
               brandName: req.body.brandName,
               stock: req.body.stock,
+              offer_id: req.body.offer_id,
               productImages: newImageArray,
               date: new Date(),
           });
@@ -64,7 +65,7 @@ const getLastProductNumber = async () => {
 };
 
 async function editProducts(req, res) {
- 
+ console.log(req.body,'-------------------------edit strat')
   try {
 
     const updatedProduct= await Product.findOne({
@@ -97,11 +98,13 @@ async function editProducts(req, res) {
           "productCoupon": req.body.productCoupon,
           "brandName": req.body.brandName,
           "stock": req.body.stock,
+          offer_id:req.body.offer_id,
+
           "productImages": newImageArray,
           date: new Date(),
         }
       });
-      console.log('Category updated successfully');
+      console.log(req.body,'Category updated successfully');
       res.status(200).json({
         message: 'Category updated successfully'
       });

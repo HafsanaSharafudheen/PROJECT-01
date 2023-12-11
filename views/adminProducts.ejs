@@ -16,7 +16,7 @@
                     <th>Registration Date</th>
                     <th>Coupon</th>
                     <th>Stock</th>
-
+<th>offer</th>
                     <th>Description</th>
                     <th>Price</th>
                     <th>Actions</th>
@@ -41,7 +41,21 @@
                             <td><%= (new Date(x.date)).toLocaleDateString("en-US") %></td>
                             <td><%= x.productCoupon %></td>
                             <td><%= x.stock %></td>
-
+                            <td>
+                                <!-- Display offer details if available -->
+                                <% if (x.offer_id) { %>
+                                    <% Offers.forEach(function(offer) { %>
+                                            <p>Offer Name: <%= offer.offerName %></p>
+                                            <p>Offer Type: <%= offer.offerType %></p>
+                                            <p>Discount Value: <%= offer.DiscountValue %></p>
+                                            <!-- Add other offer details you want to display -->
+                                    <% }); %>
+                                <% } else { %>
+                                    <!-- Display blank space or any default text if no offer is available -->
+                                    &nbsp;
+                                <% } %>
+                            </td>
+                            
                             <td><%= x.productDescription %></td>
                             <td><%= x.productPrice %></td>
                             <td>
@@ -130,6 +144,15 @@
                             <label for="productDescription">Description:</label>
                             <input type="text" id="productDescription" name="productDescription" class="form-control">
                         </div>
+                        <div class="form-group">
+                            <label for="productOffer">Product Offer:</label>
+                            <select id="offer_id" name="offer_id" class="form-control" required>
+                                <% Offers.forEach(function(x) { %>
+                                    <option value="<%= x._id %>"><%= x.offerName %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        
                     </div>
                 </div>
 
@@ -284,34 +307,54 @@
     
 function readURL(input) {
     if (input.files && input.files.length > 0) {
-      var max = input.files.length;
+        var max = input.files.length;
 
-      if (input.files.length > 5) {
-        max = 5;
-        alert("Maximum upload count is restricted to Five", input.files.length);
-      }
+        if (input.files.length > 5) {
+            max = 5;
+            alert("Maximum upload count is restricted to Five", input.files.length);
+        }
+       
+        var previewContainer = document.getElementById('imgPreview');
+        previewContainer.innerHTML = '';
 
-      var previewContainer = document.getElementById('imgPreview');
-      previewContainer.innerHTML = '';    
+        for (let i = 0; i < max; i++) {
+            var reader = new FileReader();
+            const imgContainer = document.createElement("div");
+            imgContainer.className = "img-container"; // Add a class for styling
 
-      for (let i = 0; i < max; i++) {
-        var reader = new FileReader();
-        const img = document.createElement("img");
-        img.id = "uploadImg"+i;
-        img.className = "img-fluid";
-        reader.onload = function (e) {         
-          img.setAttribute('src', e.target.result);
-          previewContainer.appendChild(img);
-          img.onclick = function() {
-            showModal(e.target.result, img);           
-        };
-        };
-        reader.readAsDataURL(input.files[i]);
-      }
+            const img = document.createElement("img");
+            img.id = "uploadImg" + i;
+            img.className = "img-fluid";
+            imgContainer.appendChild(img);
 
-     
+            const closeIcon = document.createElement('i');
+            closeIcon.className = 'fas fa-times-circle close-icon';
+         closeIcon.setAttribute('data-index', i);
+            closeIcon.addEventListener('click', removeImage);
+
+            imgContainer.appendChild(closeIcon);
+
+            reader.onload = function (e) {
+                img.setAttribute('src', e.target.result);
+                previewContainer.appendChild(imgContainer);
+                img.onclick = function () {
+                    showModal(e.target.result, img);
+                };
+            };
+            
+            reader.readAsDataURL(input.files[i]);
+        }
     }
-  }
+}
+
+function removeImage(event) {
+    const imgPreview = document.getElementById('imgPreview');
+ const indexToRemove = event.target.getAttribute('data-index');
+
+    // Remove the image container (including the image and close icon)
+    imgPreview.removeChild(imgPreview.childNodes[indexToRemove]);
+}
+
   
     function showModal(imageSource, imgElement) {
         var modal = document.getElementById('imageModal');

@@ -1,0 +1,58 @@
+<%- include('./partials/header.ejs') %>
+
+<style>
+    body {
+        background-color: #f8f9fa; /* Set a light background color for the body */
+    }
+
+    
+    .card {
+        border: 1px solid #dee2e6; /* Add a light border to the card */
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow to the card */
+        transition: transform 0.2s ease-in-out; /* Add a smooth transition effect for hover */
+    }
+
+    .card:hover {
+        transform: scale(1.02); /* Scale up the card slightly on hover */
+    }
+
+    .card-title {
+        color: #007bff; /* Set a primary blue color for the card title */
+    }
+
+    .card-text {
+        color: #495057; /* Set a dark text color for the card content */
+    }
+</style>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Available Coupons</h1>
+
+    <% if (validCoupons.length === 0) { %>
+        <p class="text-center">No valid coupons available at the moment.</p>
+    <% } else { %>
+        <div class="row">
+            <% validCoupons.forEach(coupon => { %>
+                <div class="col-md-6 mb-4 p-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><strong>Coupon Code:</strong> <%= coupon.couponCode %></h5>
+                            <p class="card-text">
+                                <strong>Discount Amount:</strong>
+                                <% if (coupon.discountType === 'percentage') { %>
+                                    <%= coupon.discountAmount %>% off
+                                <% } else if (coupon.discountType === 'fixed') { %>
+                                    Rs <%= coupon.discountAmount %> off
+                                <% } %>
+                            </p>
+                            <p class="card-text"><strong>Expiry Date:</strong> <%= coupon.expiryDate.toDateString() %></p>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    <% } %>
+</div>
+
+<%- include('./partials/footer.ejs') %>

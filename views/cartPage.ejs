@@ -39,8 +39,16 @@
                                     <a href="#" onclick="updateQuantity('<%= x.cartCount %>','<%=x.cartId %>', 'increase',)">+</a>
                                 </div>
                             </div>
-                            <div class="col">RS. <%= x.productPrice %></div>
-                            <div class="col delete">
+                          
+                            <% if (x.discountedAmount) { %>
+                                <p>
+                                    <span style="text-decoration: line-through;">Rs.<%= x.discountedAmount %> </span>
+                                    Rs.<%= x.productPrice %>
+                                </p>
+                            <% } else { %>
+                                <p>No Discount. Price: Rs.<%= x.originalPrice %></p>
+                            <% } %>
+                                                        <div class="col delete">
                                 <button class="deleteBtn" onclick="removeCartItem('<%= x.cartId %>')">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
@@ -65,8 +73,10 @@
                     <hr>
                     <div class="row">
                         <div class="col" style="padding-left:0;">AMOUNT:</div>
-                        <div class="col text-right">Rs.<span><%= amount%></span></div>
+                        
+                        <div class="col text-right">Rs.<span><%=amount %></span></div>
                     </div>
+                    
 
                     <p>Select Your Payment Method</p>
                     <select id="paymentMethod" name="paymentMethod">
@@ -76,14 +86,24 @@
 
                     <p>GIVE CODE</p>
                     <input id="code" type="text" name="code" placeholder="Enter your code">
+                    <input id="amount"  type="hidden" name="amount" value="<%= amount %>" >
+
+                    <button id="applyCodeBtn" onclick="applyCode('<%= amount%>')" class="btn btn-light">Apply Code</button>
+                    <button id="appliedCodeBtn" style="display: none;"  class="btn btn-light">Code Applied</button>
 
                     <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
-                        <div class="col">TOTAL PRICE</div>
-                        <div class="col text-right">Rs.<span id="totalPrice" name="totalPrice"><%= amount%></span></div>
-                    </div>
+                        <div class="col text-right">
+                            
+                            <ul>
 
-                    <input type="hidden" name="amount" value="<%= amount%>" />
-                    <input type="hidden" name="totalPrice" value="<%= amount%>" />
+                                <li>Original Amount: Rs.<span id="originalAmount"><%= amount %></span></li>
+                                    <li>Final Amount: Rs.<span id="finalAmount"><%= updatedAmount? updatedAmount :amount %></span></li>
+                                </ul>
+                                
+                        </div>
+                    </div>
+                    
+
                     <button type="submit" class="btn btn-light">CHECKOUT</button>
                 </form>
             </div>
@@ -141,7 +161,37 @@
         });
     }
 
-   
+  
+    function applyCode(amount) {
+    try {
+        debugger
+        fetch('/coupons/applyCoupon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                amount: amount,
+            })
+        }).then(data => {
+            // Update the displayed amount
+            document.getElementById('displayedAmount').innerHTML=data.updatedAmount;
+
+            // Show/hide the code buttons
+            document.getElementById('appliedCodeBtn').style.display = 'block';
+             document.getElementById('applyCodeBtn').style.display = 'none';
+            window.location.reload();
+        }).catch(error => {
+            console.error('Error applying Coupon:', error);
+            alert('Failed to apply Coupon');
+        });
+
+    } catch (error) {
+        console.error('Error applying Coupon:', error);
+        alert('Failed to apply Coupon');
+    }
+}
+
 </script>
 
 <%- include('./partials/footer.ejs') %>

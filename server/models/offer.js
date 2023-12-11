@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const offerSchema = new mongoose.Schema({
- 
+
   bannerImage:{
       type:String,
       required:true
@@ -31,6 +31,10 @@ offerDescription: {
     type: String,
     required: true,
 },
+deleted:
+ { type: Boolean,
+    default: false 
+}, 
 
 });
 

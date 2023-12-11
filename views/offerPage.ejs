@@ -6,7 +6,45 @@
     <button type="button" id="btn-addOffer" class="btn btn-primary" onclick="openModalforOffer(null)">NEW OFFER</button>
     </div>
 
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Offer Name</th>
+                <th>Banner Image</th>
+                <th>Offer Start Date</th>
+                <th>OfferEnd date</th>
+                <th>Discount</th>
+                <th>Discount Type</th>
+                <th>Offer Description</th>
 
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% offers.forEach(function(offer) { %>
+                <tr class="<%= offer.deleted ? 'd-none' : '' %>">
+                    <td><%= offer.offerName %></td>
+                    <td>
+                        <img src="/fileupload/files/<%= offer.bannerImage %>" alt="<%= offer.offerName %>" style="width: 100px; height: 100px;">
+                    </td>
+                    <td><%= (new Date(offer.offerStartDate)).toLocaleDateString("en-US") %></td>
+                    <td><%= (new Date( offer.offerEndDate)).toLocaleDateString("en-US") %></td>
+
+                    
+                    <td><%= offer.DiscountValue %></td>
+                    <td><%= offer.offerType %></td>
+                    <td><%= offer.offerDescription %></td>
+                    <td>
+                        <!-- Delete button -->
+                        <button onclick="confirmDelete('<%= offer._id %>')" class="<%= offer.deleted ? 'd-none' : '' %> btn btn-primary admin-btn" role="button"><i class="fa-solid fa-trash"></i></button>
+                        <!-- Edit button -->
+                        <button class="<%= offer.deleted ? 'd-none' : '' %> btn btn-primary admin-btn" onclick="openModalforOffer('<%= offer._id %>')">Edit</button>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    
 
 <div id="addOfferModal" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog"
     aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
@@ -16,7 +54,7 @@
 
             <h2 id="popupHeader">Add Offer</h2>
 
-            <form id="addCategoryForm" class="form-style" onsubmit="return addOfferSave(this)"
+            <form id="addofferForm" class="form-style" onsubmit="return addOfferSave(this)"
             enctype="multipart/form-data">
             <div class="row">
                 <div class="col-md-6">
@@ -29,7 +67,8 @@
                             <i class="fas fa-plus-circle fa-3x"></i>
                             <br>
                             <span>Select image</span>
-                            <input type="file" id="photos" name="photos" accept="image/*" size="2000000" multiple onchange="readURL(this)" style="display: none;">
+                            <input type="file" id="photos" name="photos" accept="image/*"
+                             size="2000000" multiple onchange="readURL(this)" style="display: none;">
 
                         </label>
                     </div>
@@ -104,65 +143,73 @@ function openModalforOffer(_id) {
         .then(response => {
             if (response.status == 200) {
                
+                response.json().then((result) => {
 
-        result => {
+        
             document.getElementById("popupHeader").innerHTML = "Edit Offer";
             document.getElementById('addButton').innerHTML = "Update";
             $('#addOfferModal').modal('show');
+           // document.getElementById('photos').value = result.data.bannerImage;
+
             document.getElementById("_id").value = result.data._id;
-            document.getElementById("offerEndDate").value = result.data.offerEndDate;
-            document.getElementById("offerStartDate").value = result.data.offerStartDate;
-            document.getElementById("offerType").value = result.data.offerType;
-
-            document.getElementById("DiscountValue").value = result.data.DiscountValue;
             document.getElementById("offerName").value = result.data.offerName;
+            document.getElementById("DiscountValue").value = result.data.DiscountValue;
+            document.getElementById("offerType").value = result.data.offerType;
             document.getElementById("offerDescription").value = result.data.offerDescription;
-            document.getElementById('photos').value = result.data.bannerImage;
-        }
-    
-        }
-    })
 
-        .catch(error => {
-            console.error("Error:", error);
-            alert('Error fetching offer details');
+            document.getElementById("offerStartDate").value = result.data.offerStartDate;
+            document.getElementById("offerEndDate").value = result.data.offerEndDate;
+
         });
     }
+        else {
+                        response.json().then((data) => {
+                            alert(data.error)
+                        })
+                    }
+                });
+
 }
+}
+
+       
+
+
 
 function addOfferSave(form) {
      const formData = new FormData(form);
-    formData.append("offerName", form.elements.offerName.value);
-    formData.append("offerDescription", form.elements.offerDescription.value);
-    formData.append("offerStartDate", form.elements.offerStartDate.value);
-    formData.append("offerType", form.elements.offerType.value);
-    formData.append("offerEndDate", form.elements.offerEndDate.value);
-    var photoInput = form.elements.photos;
-
-
- if (photoInput.files.length > 0) {
-    formData.append("photos", photoInput.files[0]);
-
-//    formData.append("bannerImage", photoInput.files[0]);
-}
+    // formData.append("offerName", form.elements.offerName.value);
+    // formData.append("offerDescription", form.elements.offerDescription.value);
+    // formData.append("offerStartDate", form.elements.offerStartDate.value);
+    // formData.append("offerType", form.elements.offerType.value);
+    // formData.append("offerEndDate", form.elements.offerEndDate.value);
+    // // Append the file (photo) to FormData
+    // var photoInput = form.elements.photos;
+    //             if (photoInput.files.length > 0) {
+    //                 formData.append("bannerImage", photoInput.files[0]);
+    //             }
  fetch('/offer/addNewOffer', {
         method: "POST",
         body: formData,
     })
     .then(response => {
-        console.log(response); // Check the response in the console
-        return response.json();
-    })
-    .then(data => {
-        console.log(data);
-        alert(data.message);
-        cancelOffer();
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        alert('Error adding offer');
-        cancelOffer();
-    });
+            
+            if (response.status == 200) {
+                response.json().then((data)=>{
+                    console.log(data)
+                    alert(data.message)
+                    cancelOffer();
+                });
+            } else {
+                response.json().then((data)=>{
+                    alert(data.message)
+                    cancelOffer();
+                });
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
 
 
     // Prevent the form from performing its default submission behavior
@@ -173,18 +220,38 @@ function cancelOffer() {
     window.location.href = '/offer';
 }
 
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
+function confirmDelete(offerId) {
+        // Use SweetAlert for confirmation
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/offer/deleteOffer?_id="+offerId;
+             
+            }
 
-        reader.onload = function (e) {
-            // Update the src attribute of the previewImage
-            document.getElementById('previewImage').src = e.target.result;
-        };
 
-        reader.readAsDataURL(input.files[0]);
+        })
     }
-}
+
+function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                // Update the src attribute of the previewImage
+                document.getElementById('previewImage').src = e.target.result;
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 
 </script>
 <%- include('./partials/adminfooter.ejs') %>

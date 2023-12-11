@@ -53,10 +53,7 @@
 result[i].fullName=user.fullName;
 result[i].email=user.email;
     }
-  
-  
   }
-  
   res.render('adminOrders',{orders:result,userDetails:userDetails});
 }
 

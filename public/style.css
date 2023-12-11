@@ -439,8 +439,8 @@ input[type="file"]+label::before {
     /* Custom CSS  for carousal*/
     .carousel-control-prev-icon,
     .carousel-control-next-icon {
-      background-color: black; /* Set the button background color */
-      color: white; /* Set the button icon color */
+      /* background-color: black; */ /* Set the button background color */
+      /* color: white; */ /* Set the button icon color */
     }
     
     /* If you want to change the button shape to a circle, you can add these styles */

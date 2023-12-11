@@ -52,7 +52,10 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    
+    offer_id:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'offer'
+    },
     deleted: { type: Boolean,
         default: false }, 
    

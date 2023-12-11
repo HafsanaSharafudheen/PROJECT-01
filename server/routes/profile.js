@@ -4,13 +4,15 @@ const jwtVerifyModule = require('../middileware/JWTverify')
 const User=require('../models/userdb');
 const upload = require('../middileware/fileUploader')
 const Address=require('../models/address')
-
+// const Coupons=require('../models/coupons')
 router.get('/', jwtVerifyModule.JWTVerify,async (req,res)=>{
   
     const user = await User.findOne({"_id": req.userDetails.user_id});
     const addressList = await Address.find({
         "user_id": req.userDetails.user_id
       })  
+      // const currentDate = new Date();
+      // const validCoupons = await Coupons.find({ expiryDate: { $gt: currentDate } });
     if (!user) {
         return res.status(404).send('User not found');
       }

@@ -6,7 +6,7 @@ const adminOrders=require('../controllers/adminWorks/adminOders')
 const userDetails = require('../controllers/adminWorks/userDetails')
 const upload = require('../middileware/fileUploader')
 const multer = require('multer');
-
+const Offer=require('../models/offer')
 const jwtVerifyModule = require('../middileware/JWTverify')
 const Product = require('../models/product')
 const Category = require('../models/Category')
@@ -58,10 +58,19 @@ router.post('/unblockUser', jwtVerifyModule.JWTVerify, (req, res) => {
 router.get('/adminProducts', jwtVerifyModule.JWTVerify, async (req, res) => {
   try {
     const products = await Product.find({});
+    const offerIds = products.map(x => {
+      return x.offer_id
+    })
+    var Offers = await Offer.find({
+      "_id": {
+        $in: offerIds
+      }
+      })
+console.log(Offers,'ooooooooo')
     const categories=await Category.find({})
-
       res.render('adminProducts', {
-        products: products,categories:categories
+        products: products,categories:categories,Offers:Offers
+      
       });
     
   } catch (error) {

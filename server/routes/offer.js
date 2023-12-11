@@ -21,22 +21,40 @@ router.get('/',async(req,res)=>{
       }
     });
 
-router.post('/addNewOffer',  upload.single("bannerImage"), jwtVerifyModule.JWTVerify,async(req,res)=>{
-     console.log(req.body,'reqbody')
-     console.log(req.files,'----------------',req.file)
-     offerController.addNewOffer(req,res);
- })
+router.post('/addNewOffer',  upload.single("photos"), jwtVerifyModule.JWTVerify,async(req,res)=>{
+    
+    if (req.body._id) {
+        offerController.editOffer(req, res)
+      } else {
+        offerController.addNewOffer(req, res)
+      } })
+
  router.post('/getOfferDetails', async (req, res) => {
     try {
-        const allOffers = await Offer.find({ "_id": req.body._id }); // Use req.query instead of req.body for a GET request
-
-        return res.status(200).json({ message: 'Successfully fetched data', data: allOffers });
-    } catch (error) {
-        console.error("Error:", error);
-        return res.status(500).json({
-            error: 'Internal server error'
+        const offer = await Offer.findOne({
+          "_id": req.body._id
         });
-    }
-});
+    
+        if (!offer) {
+          return res.status(400).json({
+            message: "No offer available"
+          });
+        } else {
+          return res.status(200).json({
+            data: offer
+          });
+        }
+      } catch (error) {
+        console.error('Error while fetching offer:', error);
+        return res.status(500).json({
+          error: 'Internal server error'
+        });
+      }
+    });
  
-module.exports=router;
+router.get('/deleteOffer',jwtVerifyModule.JWTVerify,  (req, res) => {
+    offerController.deleteOffer(req, res)
+  })
+
+  
+  module.exports=router;

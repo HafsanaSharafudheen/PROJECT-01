@@ -9,6 +9,11 @@ const cartSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
+  discountedAmount: { type: Number, default: 0 }, // Ensure this field is present
+
+  originalPrice:{
+    type:Number
+  },
   cartCount: {
     type: Number,    
     default: 0, 

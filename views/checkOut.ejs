@@ -53,6 +53,7 @@
                 <hr>
                 <div class="row">
                     <div class="col">AMOUNT:</div>
+                    
                     <div class="col text-right">Rs.<span><%= summary.amount%></span></div>
                 </div>
                 <div class="row">
@@ -67,7 +68,7 @@
                 <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
                     <div class="col">TOTAL PRICE</div>
                     <div class="col text-right">Rs.<span id="totalPrice"
-                            name="totalPrice"><%= summary.totalPrice%></span></div>
+                            name="totalPrice"><%= summary.amount%></span></div>
                 </div>
 
 
@@ -161,10 +162,7 @@ debugger
     }
 
     function orderConfirmation(amount, totalPrice,paymentMethod,address_id) {
-        if(paymentMethod=="CASH ON DELIVERY"){
-window.location.href="/order/confirmation"
-        }
-        else{
+       
 
         
         try {
@@ -182,20 +180,19 @@ window.location.href="/order/confirmation"
                 }),
             }) .then(response => {
                     if (response.status == 200) {
+                        if(paymentMethod.toLowerCase() == "cash on delivery"){
+                            window.location.href = "/order/confirmation";
+                            return;
+                        }
 
                         response.json().then((result) => {
-                            debugger
                             $('#loaderOverlay').css('display', 'flex');
-
-
-
-                            initiateOrder(result.orderId,result);
+                                initiateOrder(result.orderId,result);
  
-                        });
+                            });
                 }
                 else {
                     response.json().then((err) => {
-                            debugger
                             alert('Failed to confirm order. '+err);
                            
                         });
@@ -210,7 +207,7 @@ window.location.href="/order/confirmation"
             console.error('Error confirming order:', error);
         }
     }
-    }
+    
     function changeIcon(iconClass) {
         $('#newAddressModel i').removeClass('fa-plus fa-plus-circle').addClass(iconClass);
     }

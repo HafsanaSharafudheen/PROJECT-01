@@ -19,6 +19,7 @@ var profileRouter=require('./server/routes/profile');
 var orderRouter=require('./server/routes/order');
 var footerRouter=require('./server/routes/footer')
 var offerRouter=require('./server/routes/offer');
+var couponsRouter=require('./server/routes/coupons');
 var app = express();
 
 // view engine setup
@@ -61,6 +62,7 @@ app.use('/profile',profileRouter);
 app.use('/order',orderRouter);
 app.use('/footer',footerRouter);
 app.use('/offer',offerRouter);
+app.use('/coupons',couponsRouter);
 // Start the server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

@@ -8,11 +8,14 @@ const Order = require('../models/order');
 const Address = require('../models/address')
 const jwtVerifyModule = require('../middileware/JWTverify')
 const { ObjectId } = require('mongodb');
+const Offer=require('../models/offer');
 
 router.post('/addressPage', jwtVerifyModule.JWTVerify, async (req, res) => {
   const addressList = await Address.find({
     "user_id": req.userDetails.user_id
   })
+  
+  console.log(req.body,'cccccccccccccccccccc')
   return res.render('checkOut', {
     addressList: addressList,
     summary: req.body
@@ -51,8 +54,10 @@ router.post('/saveAddress', jwtVerifyModule.JWTVerify, async (req, res) => {
 
 router.post('/orderConfirmation', jwtVerifyModule.JWTVerify, async (req, res) => {
  
-
-  
+if(req.body.paymentMethod==="CASH ON DELIVERY"){
+  OrderSave(req,res,null);
+  return
+}
   
   try {
 
@@ -108,18 +113,44 @@ router.post('/orderConfirmation', jwtVerifyModule.JWTVerify, async (req, res) =>
     return x.product_id
   })
   // Use the productIds to fetch product details
+  
   var products = await Product.find({
     "_id": {
       $in: productIds
     }
   });
+  let productsArray = [];
+  for (let i = 0; i < products.length; i++) {
+  
+    const cartOfProduct = cartItems.find(x => x.product_id.equals(products[i]._id));
+
+    const offer = await Offer.findOne({
+      _id: products[i].offer_id
+    });
+    if (offer) {
+      if (offer.offerType.toLowerCase() === 'percentage') {
+
+        products[i].discountedAmount = (offer.DiscountValue / 100) * products[i].productPrice;
+      } else if (offer.offerType === 'Amount') {
+        products[i].discountedAmount = products[i].productPrice - offer.DiscountValue;
+      }
+    }
+    if(cartOfProduct){
+      for(let j=0;j<cartOfProduct.cartCount;j++){
+        productsArray.push(products[i]);
+
+    }
+
+    }
+  }
+
   const productDetails = products.map(x => {
     return {
-      amount: x.productPrice,
+      amount:x.discountedAmount?x.discountedAmount:x.productPrice,
       deliveyStatus: "pending",
       orderStatus: "pending",
       product_id: x._id,
-    };
+    };  
   })
   console.log(productDetails);
 
@@ -149,10 +180,14 @@ var address= await Address.findOne({"_id": req.body.address_id})
 if (userDetails) {
   userDetails.password = "";
   userDetails.address=address;
+if(razorObj){
   const orderId = razorObj ? razorObj.id : null;
-
   res.status(200).json({ orderId: orderId, amount: parseInt(req.body.totalPrice), userDetails:userDetails });
+}
+else{
+  res.status(200).json({ amount: parseInt(req.body.totalPrice), userDetails:userDetails });
 
+}
 }
 else {
   console.error("User not found");
@@ -196,7 +231,7 @@ router.post('/verifyRazorPaySignature', jwtVerifyModule.JWTVerify, async (req, r
 
 router.get('/confirmation', jwtVerifyModule.JWTVerify, async (req, res) => {
   
-  res.render("orderConfirmationPage")
+ res.render('orderConfirmationPage')
 });
 // to get the order page
 
@@ -206,14 +241,15 @@ router.get('/viewOrderPage', jwtVerifyModule.JWTVerify, async (req, res) => {
     const orders = await Order.find({
       "user_id": req.userDetails.user_id
     });
-
+console.log(orders.length,'oooorrrrrrrrrrrrdeeeersssssssssssssssss')
     // Flatten orderProducts and extract relevant information
     const result = orders.flatMap(order => order.orderProducts.map(x => ({
       orderStatus: x.orderStatus,
       amount: x.amount,
       DeliveryDate: x.DeliveryDate,
       product_id: x.product_id,
-      orderid: order._id
+      orderid: order._id,
+      // DeliveryStatus:x.DeliveryStatus
     })));
 
     // Use the productIds to fetch product details

@@ -7,7 +7,7 @@ const orderProductSchema = new mongoose.Schema({
     orderStatus: String,
     DeliveryDate: Date,
     deliveryStatus: String,
-    canecelled: Boolean,
+    cancelled: Boolean,
     stock:Number
 });
 
