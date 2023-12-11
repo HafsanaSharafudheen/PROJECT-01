@@ -1,6 +1,7 @@
 <%- include('./partials/header.ejs') %>
 <link rel="stylesheet" type="text/css" href="/cartPage.css">
 
+  
 <div id="cartDiv" class="card">
     <div class="row">
         <div class="col-md-8 cart">
@@ -74,7 +75,7 @@
                     <div class="row">
                         <div class="col" style="padding-left:0;">AMOUNT:</div>
                         
-                        <div class="col text-right">Rs.<span><%=amount %></span></div>
+                        <div class="col text-right">Rs.<span><%=amount+discountedCouponAmount %></span></div>
                     </div>
                     
 
@@ -85,19 +86,23 @@
                     </select>
 
                     <p>GIVE CODE</p>
-                    <input id="code" type="text" name="code" placeholder="Enter your code">
+                    <input id="coupounCode" type="text" name="coupounCode" value="<%= couponData.couponCode %>"  placeholder="Enter your code">
                     <input id="amount"  type="hidden" name="amount" value="<%= amount %>" >
-
-                    <button id="applyCodeBtn" onclick="applyCode('<%= amount%>')" class="btn btn-light">Apply Code</button>
-                    <button id="appliedCodeBtn" style="display: none;"  class="btn btn-light">Code Applied</button>
-
+                    <% if(couponData) {%>
+                        <span class="coupon-applied-label">Coupon Applied</span>
+                    
+                    <% } else { %> 
+                        <button type="button" id="applyCodeBtn" onclick="applyCode()" class="btn btn-light">Apply Code</button>
+                        <% } %>
                     <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
                         <div class="col text-right">
                             
                             <ul>
 
-                                <li>Original Amount: Rs.<span id="originalAmount"><%= amount %></span></li>
-                                    <li>Final Amount: Rs.<span id="finalAmount"><%= updatedAmount? updatedAmount :amount %></span></li>
+                                <li>Original Amount: Rs.<span id="originalAmount"><%= amount +discountedCouponAmount%></span></li>
+                                <li>Coupoun Amount: Rs.<span id="CouponAmount"><%= discountedCouponAmount %></span></li>
+
+                                    <li>Final Amount: Rs.<span id="finalAmount"><%= amount %></span></li>
                                 </ul>
                                 
                         </div>
@@ -162,34 +167,10 @@
     }
 
   
-    function applyCode(amount) {
-    try {
-        debugger
-        fetch('/coupons/applyCoupon', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                amount: amount,
-            })
-        }).then(data => {
-            // Update the displayed amount
-            document.getElementById('displayedAmount').innerHTML=data.updatedAmount;
-
-            // Show/hide the code buttons
-            document.getElementById('appliedCodeBtn').style.display = 'block';
-             document.getElementById('applyCodeBtn').style.display = 'none';
-            window.location.reload();
-        }).catch(error => {
-            console.error('Error applying Coupon:', error);
-            alert('Failed to apply Coupon');
-        });
-
-    } catch (error) {
-        console.error('Error applying Coupon:', error);
-        alert('Failed to apply Coupon');
-    }
+    function applyCode() {
+       var coupounCode= document.getElementById('coupounCode').value
+   window.location.href="/cartPage/cartPage?coupounCode="+coupounCode;
+  
 }
 
 </script>

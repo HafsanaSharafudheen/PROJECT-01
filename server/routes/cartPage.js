@@ -47,26 +47,30 @@ products[i].productPrice=tempDiscountedAmount;
           amount = products.reduce((acc, curr) => {
               return acc + (curr.productPrice * curr.cartCount);
           }, 0);
-      
+  
+   let discountedCouponAmount=0;
 
-      const coupon = await Coupons.findOne({});
+if(req.query.coupounCode){
+   couponData = await Coupons.findOne({ couponCode :req.query.coupounCode});   
 
-      let discountedCouponAmount = 0;
+      if (couponData && couponData.discountType.toLowerCase() === 'percentage') {        
+          discountedCouponAmount = (amount * couponData.discountAmount) / 100;
+      } else if (couponData && couponData.discountType.toLowerCase() === 'fixed') {
+          discountedCouponAmount = couponData.discountAmount;          
 
-      if (coupon && coupon.discountType === 'Percentage') {
-          discountedCouponAmount = (coupon.discountAmount / 100) * amount;
-      } else if (coupon && coupon.discountType === 'Fixed Amount') {
-          discountedCouponAmount = coupon.discountedCouponAmount;
       }
+}
 
-      const updatedAmount = amount - discountedCouponAmount;
+amount = amount-discountedCouponAmount;
+
+console.log(amount,"*********************",discountedCouponAmount)
 
       res.render('cartPage', {
           products: products,
           cartItems: cartItems,
           amount:Math.floor(amount),
-          coupon: coupon,
-          updatedAmount:Math.floor(updatedAmount) 
+         couponData: couponData,
+         discountedCouponAmount:Math.floor(discountedCouponAmount) 
       });
   } catch (error) {
       console.error('Error fetching product details from cart:', error);

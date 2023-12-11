@@ -204,3 +204,12 @@
     border: none;
     cursor: pointer;
 }
+.coupon-applied-label {
+    display: inline-block;
+    background-color: #4CAF50; /* Green color */
+    color: #fff; /* White text color */
+    padding: 8px 12px; /* Adjust padding as needed */
+    font-weight: bold;
+    border-radius: 4px; /* Optional: Add rounded corners */
+    box-shadow: 0 0 10px rgba(0, 128, 0, 0.5); /* Optional: Add a subtle glow effect */
+  }
