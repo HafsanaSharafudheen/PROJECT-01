@@ -1,12 +1,13 @@
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/admin-navbar.ejs') %>
-<div class="col-lg-9 col-md-8 col-sm-12" style="width: 100%;">
-    <span class="welcome-text">Offer details</span>
+<div class="col-lg-9 col-md-8 col-sm-12 mt-5 p-2">
+    <span class="welcome-text">OFFER DETAILS</span>
 
-    <button type="button" id="btn-addOffer" class="btn btn-primary" onclick="openModalforOffer(null)">NEW OFFER</button>
-    </div>
+    <button type="button" id="btn-addOffer" class="addBtn" onclick="openModalforOffer(null)">NEW OFFER</button>
+    <div class="d-flex justify-content-center">
 
-    <table class="table">
+
+    <table class="table mt-5">
         <thead>
             <tr>
                 <th>Offer Name</th>
@@ -44,7 +45,7 @@
             <% }); %>
         </tbody>
     </table>
-    
+    </div>
 
 <div id="addOfferModal" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog"
     aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">

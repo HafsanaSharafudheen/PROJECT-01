@@ -31,6 +31,13 @@ profileImage: {
   type: String, 
 },
 
+referralCode:{
+  type:String,
+
+},
+refferalCodeByUser:{
+  type:String,
+}
 },{collection:"User"});
 
 module.exports =  mongoose.model('User', UserSchema)

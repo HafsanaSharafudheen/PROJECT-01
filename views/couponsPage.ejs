@@ -2,10 +2,10 @@
 <%- include('./partials/admin-navbar.ejs') %>
 
 
-<div class="col-lg-9 col-md-8 col-sm-12" style="width: 100%;">
-    <span class="welcome-text">coupons details</span>
+<div class="col-lg-10 col-md-10 col-sm-12 text-center">
+    <span class="welcome-text">COUPONS DETAILS</span>
 
-    <button type="button" id="btn-addProducts" class="btn btn-primary" onclick="openModalforCoupons(0)">ADD COUPONS</button>
+    <button type="button" id="btn-addProducts" class="addBtn" onclick="openModalforCoupons(0)">ADD COUPONS</button>
 
     <div class="table-responsive">
         <table class="table table-striped tableAdmin">
@@ -16,6 +16,7 @@
                   <td>Discount Amount</td>
                   <td>Expiry Date</td>
                   <td>Start Date</td>
+                  <td>Actions</td>
 
                 </tr>
             </thead>
@@ -28,7 +29,17 @@
 
                         <td><%= (new Date(coupon.expiryDate)).toLocaleDateString("en-US") %></td>
                         <td><%= (new Date(coupon.date)).toLocaleDateString("en-US") %></td>
-                    </tr>
+                   
+               
+                <td>
+                    <button onclick="confirmDelete('<%= coupon._id %>')" class="btn btn-danger admin-btn" role="button">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                    <button class="btn btn-primary admin-btn" onclick="return openModalforCoupons('<%= coupon._id %>')">
+                        <i class="fa-regular fa-pen-to-square"></i>
+                    </button>
+                </td>
+            </tr>
                 <% }); %>
             </tbody>
         </table>
@@ -137,7 +148,6 @@ document.getElementById('expiryDate').value=result.data.expiryDate;
 
 function addCouponsSave(form) {
 
-    debugger;
     try {
    // Create a FormData object                
         // Append form data

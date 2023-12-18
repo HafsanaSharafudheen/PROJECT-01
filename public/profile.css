@@ -2,9 +2,17 @@ body {
     background-color: #f8f9fa;
     padding: 20px;
 }
-input{
+input {  width: 80%;
+padding: 10px;
+margin: 8px 0;
+box-sizing: border-box;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
+textarea{
     width: 80%;
 }
+
 a{
     text-decoration: none;
     color: white;
@@ -34,10 +42,18 @@ a{
 .main-div{
     background-color: #D7A2A2;
 color: white;
+padding: 15px;
+margin-bottom: 20px; /* Add some space between cards */
 font-weight: 600;
 border-radius: 20px;
+transition: transform 0.3s ease-in-out; /* Add a smooth transition effect */
+
+margin-top: 6rem;
 
 
+}
+.main-div:hover {
+    transform: scale(1.05); /* Enlarge the card on hover */
 }
 button {
     background-color: #ffffff;
@@ -55,5 +71,40 @@ button {
 button:hover {
     background-color: #af665e;
     color: white;
+}
+.profile-container {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f8f9fa; /* Set your desired background color */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+}
+
+
+.main-divCards:hover {
+    transform: scale(1.05); /* Enlarge the card on hover */
+}
+
+
+/* Additional styling for the links */
+.main-divCards a {
+    text-decoration: none;
+    color: #007bff; /* Set the link color */
+    font-weight: bold;
+}
+
+.main-divCards a:hover {
+    color: #0056b3; /* Set the link color on hover */
+}
+.main-divCards{
+    background-color: #D7A2A2;
+    color: white;
+    padding: 10px;
+    margin-bottom: 20px; /* Add some space between cards */
+    font-weight: 600;
+    border-radius: 20px;
+    transition: transform 0.3s ease-in-out; /* Add a smooth transition effect */
+    width: 15rem;
+    margin-left: 6rem;
 }
 

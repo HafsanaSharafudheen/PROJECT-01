@@ -12,7 +12,9 @@ router.get('/contact',jwtVerifyModule.JWTVerify,(req, res)=>{
     res.render('contactUs')
 })
 router.post('/submitForm',jwtVerifyModule.JWTVerify,(req, res)=>{
-    console.log(req.body,'iiiiiiiiiiiiiiiiiiiiiii');
     footerController.messageSending(req,res);
+})
+router.get('/FAQs',jwtVerifyModule.JWTVerify,(req, res)=>{
+    res.render('FAQsPage');
 })
 module.exports = router;

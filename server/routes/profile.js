@@ -11,8 +11,7 @@ router.get('/', jwtVerifyModule.JWTVerify,async (req,res)=>{
     const addressList = await Address.find({
         "user_id": req.userDetails.user_id
       })  
-      // const currentDate = new Date();
-      // const validCoupons = await Coupons.find({ expiryDate: { $gt: currentDate } });
+     
     if (!user) {
         return res.status(404).send('User not found');
       }

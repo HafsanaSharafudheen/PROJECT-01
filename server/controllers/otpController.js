@@ -43,8 +43,9 @@ async function OTPVerificationEmail(req, res,callbackFunc) {
     const userOTP = req.body.otp;
     const dbOTP = await OTPSchema.findOne({
         "email": req.body.email
-    })
-    const otpExpiration = dbOTP.date+ 60 * 1000
+    });
+    
+    const otpExpiration = dbOTP ? (dbOTP.date+ 60 * 1000 ): 0;
 
     if (!dbOTP || Date.now() > otpExpiration) {
         res.status(401).json({

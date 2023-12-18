@@ -9,8 +9,10 @@
                 <div class="row">
                     <% if (cartItems.length === 0) { %>
                         <div class="col">
-                            <h4><b>Shopping Cart</b></h4>
-                            <p style="padding: 3rem;">NO PRODUCTS IN YOUR CART</p>
+                            <div class="empty-cart">
+                                <h4><b>Shopping Cart</b></h4>
+                                <p style="padding: 3rem;">NO PRODUCTS IN YOUR CART</p>
+                            </div>
                         </div>
                     <% } else { %>
                         <div class="col">
@@ -60,7 +62,7 @@
             <% } %>
             <div class="back-to-shop">
                 <a href="/home">
-                    <button>Back to shop</button>
+                    <button>Continue Shopping</button>
                 </a>
             </div>
         </div>
@@ -81,16 +83,22 @@
 
                     <p>Select Your Payment Method</p>
                     <select id="paymentMethod" name="paymentMethod">
-                        <option class="text-muted">CASH ON DELIVERY</option>
-                        <option class="text-muted">RAZORPAY</option>
+                      <option value="CASH ON DELIVERY">CASH ON DELIVERY</option>
+                      <option value="RAZORPAY">RAZORPAY</option>
+                      <option value="WALLET">WALLET</option>
                     </select>
-
+                    
+                    <div id="walletInfo">
+                        <p>Your Wallet Balance: Rs.<span id="walletBalance"><%=walletAmount %></span></p>
+                       
+                    </div>
                     <p>GIVE CODE</p>
-                    <input id="coupounCode" type="text" name="coupounCode" value="<%= couponData.couponCode %>"  placeholder="Enter your code">
+                    <input id="coupounCode" type="text" name="coupounCode" value="<%= couponData?.couponCode %>"  placeholder="Enter your code">
                     <input id="amount"  type="hidden" name="amount" value="<%= amount %>" >
                     <% if(couponData) {%>
                         <span class="coupon-applied-label">Coupon Applied</span>
-                    
+                        <button type="button" onclick="removeCoupon()" class="btn btn-light">Remove Coupon</button>
+
                     <% } else { %> 
                         <button type="button" id="applyCodeBtn" onclick="applyCode()" class="btn btn-light">Apply Code</button>
                         <% } %>
@@ -107,7 +115,10 @@
                                 
                         </div>
                     </div>
-                    
+                    <label>
+                        Use Wallet
+                        <input type="checkbox" id="useWalletCheckbox" onchange="updatePaymentOptions('<%= amount %>')">
+                    </label>
 
                     <button type="submit" class="btn btn-light">CHECKOUT</button>
                 </form>
@@ -119,38 +130,40 @@
 
 <script>
 
-    function updateQuantity(cartCount, cartId, action) {
-
-        if(cartCount==1 && action === 'decrease'){
-            return
-        }
-
-        try {
-            fetch('/cartPage/updateQuantity', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    cartCount: cartCount,
-                    cartId: cartId,
-                    action: action
-                })
-            }).then(response => {
-                if (response.ok) {
-                    window.location.reload();
-                } else {
-                    alert('Failed to add product to cart.');
-                }
-            });
-
-        } catch (error) {
-            console.error('Error adding product to cart:', error);
-        }
-
+function updateQuantity(cartCount, cartId, action) {
+    if (cartCount == 1 && action === 'decrease') {
+        return;
     }
 
-
+    try {
+        fetch('/cartPage/updateQuantity', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                cartCount: cartCount,
+                cartId: cartId,
+                action: action
+            })
+        }).then(response => response.json())  // Parse the JSON response
+          .then(data => {
+              if (data.message === 'Cart count updated successfully') {
+                  window.location.reload();
+              } else if (data.message === 'Out of Stock') {
+                  // Use SweetAlert to display a custom alert
+                  Swal.fire({
+                      title: 'Out of Stock',
+                      confirmButtonText: 'OK'
+                  });
+              } else {
+                  alert('Failed to add product to cart.');
+              }
+          });
+    } catch (error) {
+        console.error('Error adding product to cart:', error);
+    }
+}
 
     function removeCartItem(cartItemId) {
         Swal.fire({
@@ -171,6 +184,42 @@
        var coupounCode= document.getElementById('coupounCode').value
    window.location.href="/cartPage/cartPage?coupounCode="+coupounCode;
   
+}
+
+function removeCoupon() {
+        window.location.href = "/cartPage/cartPage";
+    }
+    function updatePaymentOptions(amount) {
+      
+    const useWalletCheckbox = document.getElementById('useWalletCheckbox');
+    if (useWalletCheckbox.checked) {
+        const paymentMethodSelect = document.getElementById('paymentMethod');
+
+paymentMethodSelect.value = useWalletCheckbox.checked ? 'WALLET' : paymentMethodSelect.options[0].value;
+
+        try {
+            fetch('/order/orderConfirmation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                // You can pass any necessary data in the body, like user details or payment amount
+                body: JSON.stringify({
+                    amount: amount
+                }),
+            })
+            .then(response => response.json())  // Parse the JSON response
+            .then(data => {
+               alert(data.message)
+                
+            })
+            .catch(error => {
+                console.error('Error adding product to cart:', error);
+            });
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 }
 
 </script>

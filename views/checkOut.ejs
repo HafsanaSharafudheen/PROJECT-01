@@ -36,7 +36,7 @@
 
 
                     <button
-                        onclick="orderConfirmation('<%= summary.amount%>','<%= summary.totalPrice%>','<%= summary.paymentMethod%>','<%= address._id %>')"
+                        onclick="orderConfirmation('<%= summary.amount%>','<%= summary.coupounCode %>','<%= summary.totalPrice%>','<%= summary.paymentMethod%>','<%= address._id %>')"
                         class="btn btn-success" id="btnDeliver" >Deliver to this address</button>
 
                 </label>
@@ -143,7 +143,6 @@ debugger
                 },
             })
             .then(response => {
-debugger
                 if (response.status == 200) {
                     window.location.reload();
                 } else {
@@ -161,7 +160,7 @@ debugger
         return false;
     }
 
-    function orderConfirmation(amount, totalPrice,paymentMethod,address_id) {
+    function orderConfirmation(amount,coupounCode, totalPrice,paymentMethod,address_id) {
        
 
         
@@ -174,13 +173,14 @@ debugger
                 },
                 body: JSON.stringify({
                     amount: amount,
+                    coupounCode:coupounCode,
                     totalPrice: totalPrice,
                     paymentMethod: paymentMethod,
                     address_id: address_id
                 }),
             }) .then(response => {
                     if (response.status == 200) {
-                        if(paymentMethod.toLowerCase() == "cash on delivery"){
+                        if(paymentMethod.toLowerCase() == "cash on delivery" || paymentMethod.toLowerCase() == "wallet"){
                             window.location.href = "/order/confirmation";
                             return;
                         }
@@ -296,6 +296,11 @@ verifySignature(response.razorpay_payment_id,orderId,response.razorpay_signature
  }
 
 </script>
-
+<style>
+    .form-check-input:checked{
+        background-color: black;
+        border-color: black;
+    }
+</style>
 
 <%- include('./partials/footer.ejs') %>

@@ -1,23 +1,41 @@
 <%- include('./partials/header.ejs') %>
+<%- include('./partials/navbar.ejs') %>
 
-<div class="container ">
-  <h1 class="mt-4 mb-4 text-center">Order Details</h1>
+<div class="container mt-5">
+  <h1 class="mb-5 text-center">YOUR ORDERS </h1>
+
+  <% if (orders.length === 0) { %>
+      <div class="card-body p-5">
+        <h4> Oops! It seems you haven't placed any orders yet. </h4>
+        <p> Browse our amazing collection and add items to your cart. </p>
+        <div class="button-container">
+        
+        </div>
+      </div>
+      <a href="/home">
+        <button class="continue-btn">Start Shopping</button>
+      </a>
+  
+  <% } %>
+  
+  
+</div>
+  }
 
   <% orders.forEach(function(order) { %>
   <div class="card mb-4">
     <div class="card-body">
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 mt-3 p-1">
 
           <img src="/fileupload/files/<%=order.productImage%>" alt="Product Image" class="img-fluid">
         </div>
-        <div class="col-md-8">
-          <h3><%= order.productName %></h3>
-        </div>
-      </div>
+        <div class="col-md-8 mt-3">
+          <h4><%= order.productName %></h4>
+          <h6><%= order.productCategory %></h6>
 
-      <div class="row mt-4">
-        <div class="col-md-12">
+          <p><strong>Amount:</strong> <%= order.amount %></p>
+
           <% if (order.deliveryStatus !== 'delivered') { %>
             <p><strong>Order Status:</strong> <%= order.orderStatus %></p>
 
@@ -28,12 +46,9 @@
           <% } %>
         </div>
       </div>
-      
-      <div class="row mt-4">
-        <div class="col-md-12">
-          <p><strong>Amount:</strong> <%= order.amount %></p>
-        </div>
-      </div>
+
+     
+     
       <button class="backButton" onclick="window.location.href='/cartPage/cartPage'">Back To Cart</button>
       <% if (order.orderStatus !== "Cancelled") { %>
         <button class="backButton" onclick="cancelOrders('<%= order.orderid %>','<%= order.product_id %>')">Cancel Order</button>
@@ -105,5 +120,25 @@
     background-color: #af665e;
     color: white;
   }
+  .continue-btn  {
+    border-color: rgb(255, 255, 255);
+    background-color: #D7A2A2;
+    color: black;
+    width: 40%;
+    font-size: 1rem;
+    margin-top: 4vh;
+    padding: 1vh;
+    border-radius: 30px;
+    
+}
+
+.continue-btn:hover {
+    background-color: #af665e;
+    color: white;
+}
+.container{
+  margin-bottom: 9rem;
+}
+
 </style>
 <%- include('./partials/footer.ejs') %>

@@ -1,6 +1,6 @@
 const Product = require('../../models/product');
 const Category = require('../../models/Category')
-
+const Offer=require('../../models/offer')
 async function addProducts(req, res) {
   try {
       // Check if the product name is a string
@@ -238,13 +238,61 @@ async function deleteCategory(req,res){
   }
 }
 
+async function adminProducts(req,res){
+  try {
+    const products = await Product.find({});
+    const offerIds = products.map(x => {
+      return x.offer_id
+    })
+    var Offers = await Offer.find({
+      "_id": {
+        $in: offerIds
+      }
+      })
+console.log(Offers,'ooooooooo')
+    const categories=await Category.find({})
+      res.render('adminProducts', {
+        products: products,categories:categories,Offers:Offers
+      
+      });
+    
+  } catch (error) {
+    console.error('Error while fetching products:', error);
+    return res.status(500).json({
+      error: 'Internal server error'
+    });
+  }
+}
+async function getProductByProductNumber(req,res){
+  try {
+    const product = await Product.findOne({
+      "productNumber": req.body.productNumber,
+    });
 
-
+    if (!product &&stock===0) {
+      return res.status(400).json({
+        message: "No product available"
+      });
+    } else {
+      console.log(product)
+      return res.status(200).json({
+        product: product
+      });
+    }
+  } catch (error) {
+    console.error('Error while fetching products:', error);
+    return res.status(500).json({
+      error: 'Internal server error'
+    });
+  }
+}
 
 module.exports = {
+  adminProducts:adminProducts,
   addProducts: addProducts,
   editProducts: editProducts,
   editCategory: editCategory,
+  getProductByProductNumber:getProductByProductNumber,
   addCategory: addCategory,
   deleteCategory:deleteCategory,
   deleteProduct:deleteProduct,

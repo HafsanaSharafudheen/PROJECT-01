@@ -1,12 +1,12 @@
 <%- include('./partials/header.ejs') %>
-<section class="login py-3 ">
+<section class="login py-5">
     <div class="container login-container-div">
         <div class="row">
             <div class="col-lg-5  text-center pt-5">
                 <span class="welcome-text mt-5">Welcome to <span class="baby-b">Baby Bundles</span> !</span>
                 <br>
                 <span class="welcome-text">Your One-Stop Shop for All Things Baby</span>
-                <img src="/images/bottle.avif" class="img-fluid mt-5" alt="">
+                <img src="/images/bottle.avif" class="img-fluid mt-3" alt="">
 
             </div>
             <div class="col-lg-7 right-side-div">
@@ -42,16 +42,30 @@
                             <input type="password" placeholder="password" name="password" class="inp px-3" id="password">
                         </div>
                     </div>
+                    <div id="referral-code-section" style="display: none;">
+                        <div class="form-row">
+                            <label class="form-label">Referral Code</label>
+                            <div class="col-lg-10">
+                                <input type="text" placeholder="Enter Referral Code" name="refferalCodeByUser" class="inp px-3" id="referralCode">
+                            </div>
+                        </div>
+                    </div>
 
-                    <p class="text-center pt-3" style="color: white;">Verify your number to create your Account</p>
+                   <div class="register-link pt-5">
+    <p style="padding-right: 4rem;">Do You Have A Referral Code?<a href="#" class="referral-link" onclick="OpenReferralLabel(event)">Click Here</a></p>
+</div>
+
+
+                    <!-- <p class="text-center pt-3" style="color: white; padding-right: 8rem;">Verify your number to create your Account</p> -->
                     <div class="form-row py-3 ">
-                        <div class=" offset-1 col-lg-10">
+                        <div class="col-lg-10">
                             <button type="submit" class="login-button">Send OTP</button>
 
                         </div>
                     </div>
+                  
                     <div class="register-link">
-                        <p>Already Have an Account?<a href="/">login</a></p>
+                        <p style="padding-right: 4rem;">Already Have an Account?<a href="/">login</a></p>
                     </div>
 
 
@@ -65,8 +79,7 @@
     <div class="modal" id="myModal">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                </div>
+                
                 <div class="modal-body">
                     <form id="myModel" action="/signup/verify-otp" method="POST" onsubmit="return otpform(this)">
                         <div class="form-group">
@@ -74,10 +87,10 @@
                             <input type="text" class="form-control otp-input" name="digits" maxlength="4" required>
                             <small id="error-message" class="text-danger"></small>
                         </div>
-                        <button type="submit" class="btn btn-primary">Verify OTP</button>
+                        <button type="submit" class="btn btn-primary" style="margin: 11px 6px 5px 11px;">Verify OTP</button>
                     </form>
             
-                    <br>
+                   
             
                     <button class="btn btn-link text-center pt-3" onclick="return resend()" id="resendLink">Resend OTP</button>
                 
@@ -90,15 +103,21 @@
 
 
 
+
 </section>
-<style>
-</style>
+
 <%- include('./partials/common.ejs') %>
 
 <script>
+    function OpenReferralLabel(event) {
+    event.preventDefault();
+    
+    var referralCodeSection = document.getElementById('referral-code-section');
+    referralCodeSection.style.display = referralCodeSection.style.display === 'none' ? 'block' : 'none';
+}
+
     // JavaScript function to open the modal of otp popup
     submitForm = (form) => {
-        debugger
         event.preventDefault(); // Prevent the default form submission
 
         $('#loaderOverlay').css('display', 'flex');
@@ -108,6 +127,7 @@
             "password":form.elements.password.value,
             "email": form.elements.email.value,
             "number":form.elements.number.value,
+            "refferalCodeByUser":form.elements.refferalCodeByUser.value,
         };
 
         fetch("/signup/send-otp", {
@@ -132,6 +152,7 @@
 
             });
         } else {
+            
             throw new Error('Network response was not ok.');
             $('#loaderOverlay').css('display', 'none');
 
@@ -152,6 +173,7 @@
     }
 
    
+  
 
     function otpform(form) {
         $('#loaderOverlay').css('display', 'flex');
@@ -163,6 +185,7 @@
             "email": signupForm.elements.email.value,
             "number":signupForm.elements.number.value,
             "otp": form.elements.digits.value,
+            "refferalCodeByUser":signupForm.elements.refferalCodeByUser.value,
 
         }
         fetch(form.action, {
@@ -198,6 +221,7 @@
         return false;
     }
 
+  
     function closeModal() {
         $('#myModal').modal('hide');
     }
@@ -214,6 +238,14 @@
 
         return false;
     }
+    
+
+    function referralCodeForm(referralCode) {
+   window.location.href="/signup/verify-otp?referralCode="+ referralCode;
+}
+
+
+  
 </script>
 
 

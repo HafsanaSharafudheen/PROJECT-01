@@ -1,10 +1,10 @@
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/admin-navbar.ejs') %>
 
-<div class="col-lg-9 col-md-8 col-sm-12" style="width: 100%;">
+<div class="col-lg-10 col-md-10 col-sm-12 text-center">
     <span class="welcome-text">Product details</span>
 
-    <button type="button" id="btn-addProducts" class="btn btn-primary" onclick="openModalforAdd(0)">ADD PRODUCTS</button>
+    <button type="button" id="btn-addProducts" class="addBtn" onclick="openModalforAdd(0)">ADD PRODUCTS</button>
 
     <div class="table-responsive">
         <table class="table table-striped tableAdmin">
@@ -313,11 +313,25 @@ function readURL(input) {
             max = 5;
             alert("Maximum upload count is restricted to Five", input.files.length);
         }
-       
+
         var previewContainer = document.getElementById('imgPreview');
         previewContainer.innerHTML = '';
 
         for (let i = 0; i < max; i++) {
+            const file = input.files[i];
+
+            // Validate image type
+            if (!isImage(file)) {
+                alert("File " + file.name + " is not a valid image.");
+                continue;
+            }
+
+            // Validate image size
+            if (file.size > 1024 * 1024) {
+                alert("File " + file.name + " exceeds the maximum size of 1MB.");
+                continue;
+            }
+
             var reader = new FileReader();
             const imgContainer = document.createElement("div");
             imgContainer.className = "img-container"; // Add a class for styling
@@ -329,7 +343,7 @@ function readURL(input) {
 
             const closeIcon = document.createElement('i');
             closeIcon.className = 'fas fa-times-circle close-icon';
-         closeIcon.setAttribute('data-index', i);
+            closeIcon.setAttribute('data-index', i);
             closeIcon.addEventListener('click', removeImage);
 
             imgContainer.appendChild(closeIcon);
@@ -341,10 +355,14 @@ function readURL(input) {
                     showModal(e.target.result, img);
                 };
             };
-            
-            reader.readAsDataURL(input.files[i]);
+
+            reader.readAsDataURL(file);
         }
     }
+}
+
+function isImage(file) {
+    return file.type.startsWith('image/');
 }
 
 function removeImage(event) {
@@ -399,6 +417,7 @@ function removeImage(event) {
         });
         // Copy images from preview container to modal content
   }
+
   function closeModal() {
     var modal = document.getElementById('imageModal');
     modal.style.display = 'none';

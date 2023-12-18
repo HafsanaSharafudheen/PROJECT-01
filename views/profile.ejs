@@ -1,4 +1,5 @@
 <%- include('./partials/header.ejs') %>
+<%- include('./partials/navbar.ejs') %>
 <link rel="stylesheet" type="text/css" href="/profile.css">
 
 
@@ -40,7 +41,12 @@
 
               
                 <% if (addressList.length === 0) { %>
-                    <p>No addresses available.</p>
+                    <!-- Display form for entering a new address -->
+                    <form id="addressForm" action="/saveAddress" method="POST">
+                        <textarea id="address" name="address" placeholder="Enter your address Here..." required></textarea><br>
+                
+                
+                    </form>
                 <% } else { %>
                     <% const address = addressList[0]; %>
                     Full Name: <%= address.fullName %><br>
@@ -52,8 +58,12 @@
                     Mobile: <%= address.mobile %><br>
                 <% } %>
                 
+                
                
                                 <button  type="submit">Update Profile</button>
+                                <label>Your Referral Code:
+                                <span id="referralCode"> <%=user.referralCode %></span></label>
+                                
                             </div>
             </form>
         </div>
@@ -62,19 +72,19 @@
 
 <div class="profile-container pt-5">
     <div class="row">
-        <div class="col-md-3 p-3 text-center main-div">
+        <div class="col-md-3 p-3 text-center main-divCards">
 <h3>WISHLIST</h3>
 <a href="/wishlist/wishlist">View wishlist</a>
         </div>
-        <div class="col-md-3 text-center p-3 main-div">
+        <div class="col-md-3 text-center p-3 main-divCards">
             <h3>CART</h3>
             <a href="/cartPage/cartPage">View Cart Items</a>
         </div>
-        <div class="col-md-3 p-3 text-center main-div">
+        <div class="col-md-3 p-3 text-center main-divCards">
             <h3>ORDERS</h3>
             <a href="order/viewOrderPage">View Orders</a>
         </div>
-        <div class="col-md-3 p-3 text-center main-div">
+        <div class="col-md-3 p-3 text-center main-divCards">
             <h3>COUPONS</h3>
             <a href="/coupons/viewCoupons">View available Coupouns</a>
 
@@ -101,5 +111,6 @@
     .profile-container{
         padding-bottom: 4rem;
     }
+    
 </style>
 <%- include('./partials/footer.ejs') %>

@@ -33,6 +33,14 @@ const orderSchema = new mongoose.Schema({
         type:String,
         default:false,
     },
+    coupounCode:{
+        type:String
+        
+    },
+    wallet_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Wallet',
+    },
     orderProducts: [orderProductSchema],
     orderCreatedByRazorPay: {
         type: Object

@@ -1,5 +1,6 @@
 <%- include('./partials/header.ejs') %>
 <%- include('./partials/navbar.ejs') %>
+<link rel="stylesheet" type="text/css" href="/carousal.css">
 
 <!-- hompepage content -->
 <% if (!selectedCategory &&!offerId) { %>
@@ -13,6 +14,19 @@
                             <div class="carousel-caption">
                                 <h1><%= offer.offerName %></h1>
                                 <p><%= offer.offerDescription %></p>
+                                <div class="offer-details">
+                                    <h2>Special Offer</h2>
+                                    <p class="offer-period">
+                                      <span class="label">Offer Period:</span>
+                                      <span class="date">From <%= (new Date(offer.offerStartDate)).toLocaleString("en-US") %> to <%= (new Date(offer.offerEndDate)).toLocaleString("en-US") %></span>
+                                    </p>
+                                    <p class="discount-info">
+                                      <span class="label">Discount:</span>
+                                      <span class="value"><%= offer.DiscountValue %></span>
+                                      <span class="type"><%= offer.offerType %></span>
+                                    </p>
+                                  </div>
+
                                 <button onclick="showOfferProducts('<%= offer._id %>')">Explore</button>
                             </div>
                         </div>
@@ -79,25 +93,27 @@
         <% if (!products || products.length === 0) { %>
             <p>No Products available</p>
         <% } else { %>
-            <% products.forEach(function (item) { %>
-                <div class="col-md-4 pt-5">
+            <% products.forEach(function (item,index) { %>
+                <div class="col-md-4 pt-5 product-item <%= index >= 6 ? 'hidden' : '' %>">
                     <div class="row">
                         <div class="card shadow" style="width: 18rem;">
+                            <a href="/home/productViewPage?productNumber=<%= item.productNumber %>">
+
                             <div class="inner">
                                 <img src="/fileupload/files/<%= item.productImages[0]?.imageName %>" alt="<%= item.imageName %>">
                             </div>
                             <div class="card-body">
-                                <a href="/home/productViewPage?productNumber=<%= item.productNumber %>">
-                                    <% if (item.discountedAmount) { %>
-                                        <h6>
+                                    <h6>
+                                        <% if (item.discountedAmount) { %>
                                             <span style="text-decoration: line-through;">Rs.<%= item.productPrice %></span>
                                             <span style="color: green;">Rs.<%= item.discountedAmount %></span>
-                                        </h6>
-                                    <% } else { %>
-                                        <h5 class="card-title"><%= item.productName %></h5>
+                                        <% } else { %>
+                                            Rs.<%= item.productPrice %>
                                         <% } %>
+                                    </h6>
+                                    <h5 class="card-title"><%= item.productName %></h5>
                                 </a>
-                                <p><%=item.productName %></p>
+                                
                                 <% if (!item.isWishListed) { %>
                                     <i id="wishlistButton" class="fa-regular fa-heart" onclick="addToWishlist('<%= item.productNumber %>')"></i>
                                 <% } else { %>
@@ -117,35 +133,11 @@
 
 
 
+
 <div class="col-md-12 col-lg-12 text-center">
     <button class="login-button btn-lg" id="showMoreButton" onclick="showMoreProducts()">More</button>
 </div>
 
-<style>
-    .hidden {
-        display: none;
-    }
-    .carousel-item img {
-  width: 100%;
-  object-fit: cover;
-  height: 60vh;
-}
-
-    .login-button {
-        width: 10rem;
-        border: none;
-        border-radius: 60px;
-        font-weight: 900;
-        background-color: #D38E87;
-        color: white;
-        margin-bottom: 20px;
-    }
-
-    .login-button:active {
-        background-color: white;
-        color: #D38E87;
-    }
-</style>
 
 <script>
     function showMoreProducts() {

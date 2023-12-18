@@ -1,8 +1,24 @@
 const Coupons=require('../models/coupons')
+//to show the  coupouns page.take all the  coupons from the db.
+async function getCouponsPage(req,res){
+  try {
 
-
+    const coupons = await Coupons.find({});
+   
+      res.render('couponsPage', {
+        coupons: coupons
+      
+      });
+    
+  } catch (error) {
+    console.error('Error while fetching coupons:', error);
+    return res.status(500).json({
+      error: 'Internal server error'
+    });
+  }
+}
+//take the coupon depend on the req body id.
 async function getCopouns(req,res){
-    console.log('gercoupopns')
     try {
         const coupons = await Coupons.findOne({
           "_id": req.body._id
@@ -24,9 +40,8 @@ async function getCopouns(req,res){
         });
       }
 }
-
+//adding new coupon and save it in the  db
 async function addNewCoupons(req, res) {
-    console.log('addnewcoupopuns 1',req.body.discountType)
     try {
         const newCoupon = new Coupons({
             couponCode: req.body.couponCode,
@@ -36,7 +51,6 @@ async function addNewCoupons(req, res) {
         });
 
         await newCoupon.save();
-        console.log('addnewcoupopuns 2')
 
         return res.status(200).json({
             message: 'Coupon added successfully'
@@ -48,10 +62,9 @@ async function addNewCoupons(req, res) {
         });
     }
 }
+
 async function applyCoupon(req, res) {
     try {
-console.log(req.body,'applycoupoun start ')
-        // Find the coupon by code
         const currentDate = new Date();
 
         const coupon = await Coupons.findOne({
@@ -61,7 +74,6 @@ console.log(req.body,'applycoupoun start ')
         if (!coupon) {
             return res.status(404).json({ error: 'Coupon not found or expired' });
         }
-console.log(coupon,'-----------coupon')
         let discountedAmount;
 
         // Check the discount type and calculate the discounted amount
@@ -73,7 +85,6 @@ console.log(coupon,'-----------coupon')
 
         // Calculate the updated total amount after applying the discount
         const updatedAmount = parseFloat(req.body.amount- discountedAmount);
-console.log(updatedAmount,'-----------------------')
         // Update the response with the discounted amount and updated total amount
         return res.status(200).json({
             coupon: coupon,
@@ -86,9 +97,80 @@ console.log(updatedAmount,'-----------------------')
     }
 }
 
+async function deleteCoupons(req,res){
+
+  try{
+    const CoupounExist = await Coupons.findOne({
+      '_id':req.query._id
+    })
+    if(!CoupounExist){
+      return res.status(400).json({
+        message: 'no such coupon avialable'
+      });
+    }
+    else{
+      const updatedCoupons= await Coupons.updateOne({ '_id': req.query._id}, { $set: { deleted: true } })
+      res.redirect('/coupons');
+
+    }
+
+  }catch (error) {
+    console.error('Errorwhile deleting products:', error);
+    return res.status(500).json({
+      error: 'Internal server error'
+    });
+
+  }
+}
+async function editCoupon(req,res){
+  
+  try {
+
+    const updatedCoupons = await Coupons.findOne({
+      '_id': req.body._id
+    })
+    console.log('1111')
+
+    if (!updatedCoupons) {
+      return res.status(400).json({
+        message: 'no such Coupons avialable'
+      });
+    } else {
+
+      const result = await Coupons.updateOne({
+        _id: req.body._id
+      }, {
+        $set: {
+          couponCode:req.body.couponCode,
+          discountType: req.body.discountType,
+          discountAmount: req.body.discountAmount,
+          expiryDate:req.body.expiryDate,
+          date: new Date()
+        }
+      });
+      
+      console.log('11111')
+
+      console.log('Coupons updated successfully');
+      res.status(200).json({
+        message: 'Coupons updated successfully'
+      });
+    }
+
+  } catch (error) {
+    console.error('Errorwhile adding Coupons:', error);
+    return res.status(500).json({
+      error: 'Internal server error'
+    });
+
+  }
+}
 
 module.exports = {
+  getCouponsPage:getCouponsPage,
     getCopouns:getCopouns,
     addNewCoupons:addNewCoupons,
     applyCoupon:applyCoupon,
+    deleteCoupons:deleteCoupons,
+    editCoupon:editCoupon,
   }

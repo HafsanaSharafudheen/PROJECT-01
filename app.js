@@ -16,6 +16,7 @@ var uploadRouter=require('./server/routes/upload')
 var cartPageRouter=require('./server/routes/cartPage');
  var wishlistRouter=require('./server/routes/wishlist');
 var profileRouter=require('./server/routes/profile');
+var walletRouter=require('./server/routes/wallet');
 var orderRouter=require('./server/routes/order');
 var footerRouter=require('./server/routes/footer')
 var offerRouter=require('./server/routes/offer');
@@ -59,6 +60,7 @@ app.use('/fileupload',uploadRouter);
 app.use('/cartPage',cartPageRouter);
 app.use('/wishlist',wishlistRouter);
 app.use('/profile',profileRouter);
+app.use('/wallet',walletRouter);
 app.use('/order',orderRouter);
 app.use('/footer',footerRouter);
 app.use('/offer',offerRouter);

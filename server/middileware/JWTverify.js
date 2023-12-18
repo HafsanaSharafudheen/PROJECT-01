@@ -14,6 +14,7 @@ function JWTVerify(req,res, next){
       } else {
         // JWT verification successful        
         req.userDetails=decoded;
+        
         next();
       }
     });

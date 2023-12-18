@@ -1,93 +1,103 @@
 <%- include('./partials/header.ejs') %>
 <link rel="stylesheet" type="text/css" href="/about.css">
+<style>
+  .text-box p {
+    padding: 1rem;
+    font-weight: 500;
+    color: black;
+    font-size: 1rem;
+  }
+.card{
+    border: black;
+}
+  .story-box {
+    margin-top: 12rem;
+    align-items: center;
+  }
+
+  .text-box {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s ease-in-out forwards;
+  }
+ 
+  .story-box p{
+      font-size: 20px;
+  }
+  
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<!-- Your HTML code remains the same -->
 
 <div class="main-container p-5">
-    <h1>ABOUT US</h1>
+  <h1>ABOUT US</h1>
 
+  <div class="container">
     <div class="row">
-        <div class="col-md-6 col-lg-6 pt-5">
-            <p>Welcome to Baby Bundles - Your Trusted Partner in Nurturing Parenthood! At Baby Bundles, we understand the joy and excitement that comes with welcoming a new member into your family. Our journey began with a simple yet powerful vision: to provide parents with high-quality baby products that enhance the precious moments of parenthood. We believe in making every step of the parenting journey smoother, from those early days of anticipation to the magical moments of watching your little one grow.</p>
-        </div>
+      <div class="col-lg-12">
+        <img src="/images/slide-image-free-img.jpg" alt="Our Story Image">
+      </div>
 
-        <div class="col-md-6 col-lg-6">
-            <img src="/images/slide-image-free-img.jpg" alt="Our Story Image">
-        </div>
+      <div class="col-lg-12 text-box">
+        <p>Welcome to Baby Bundles - Your Trusted Partner in Nurturing Parenthood! At Baby Bundles, we understand the joy and excitement that comes with welcoming a new member into your family. Our journey began with a simple yet powerful vision: to provide parents with high-quality baby products that enhance the precious moments of parenthood. We believe in making every step of the parenting journey smoother, from those early days of anticipation to the magical moments of watching your little one grow.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="background-color: #E0E2E1;">
+    <div class="col-md-6">
+      <img src="/images/top-view-pink-paper-girl-holding-hands_23-2148283597.avif" alt="Our Story Image">
+    </div>
+    <div class="col-lg-6 story-box">
+      <h2>Our Story</h2>
+      <p>Baby Bundles was born out of a passion for creating a one-stop destination for all your baby needs. With a team of dedicated parents, we embarked on a mission to curate a collection of baby products that prioritize safety, comfort, and style. Our founders, inspired by their own parenting experiences, envisioned a platform that simplifies the process of choosing the best for your bundle of joy.</p>
+    </div>
+  </div>
+
+  <h3 style="text-align: center; font-weight: 700; margin-top: 4rem;">What Sets Us Apart</h3>
+  <div class="row mt-5">
+    <div class="col-md-6 card">
+      <span>Quality Assurance:</span>
+      <p>We prioritize the safety and well-being of your baby. All our products undergo rigorous quality checks to ensure they meet the highest standards.</p>
     </div>
 
-    <!-- Uncomment the following code for "Our Story" section -->
-    <div class="row">
-        <div class="col-lg-6">
-            <img style="width: auto;" src="/images/our-story-image.jpg" alt="Our Story Image">
-        </div>
-
-        <div class="col-lg-6">
-            <h4>Our Story</h4>
-            <p>Baby Bundles was born out of a passion for creating a one-stop destination for all your baby needs. With a team of dedicated parents, we embarked on a mission to curate a collection of baby products that prioritize safety, comfort, and style. Our founders, inspired by their own parenting experiences, envisioned a platform that simplifies the process of choosing the best for your bundle of joy.</p>
-        </div>
+    <div class="col-md-6 card">
+      <span>Curated Selection:</span>
+      <p>Our team of experts carefully selects each product, focusing on functionality, durability, and style. We believe in offering a range of options that cater to diverse parenting styles.</p>
     </div>
+
+    <div class="col-md-6 card">
+      <span>Customer-Centric Approach:</span>
+      <p>Your satisfaction is our priority. Our customer support team is here to assist you at every step, ensuring a seamless shopping experience.</p>
+    </div>
+
+    <div class="col-md-6 card">
+      <span>Community Engagement:</span>
+      <p>Baby Bundles is more than an ecommerce platform; it's a community. Join us on social media and be part of a supportive network of parents sharing experiences, tips, and the joys of parenthood.</p>
+    </div>
+  </div>
 </div>
-
-
-        </div>
-
-
-    </div>
-   
-</div> -->
-<div class="container">
-    <div class="row">
-        <h3 style="text-align: center;font-weight: 700; margin-top: 40px;">What Sets Us Apart
-        </h3>
-        <div class="col-md-5 card">
-<span>Quality Assurance:</span>
- <p>We prioritize the safety and well-being of your baby. All our products undergo rigorous quality checks to ensure they meet the highest standards.
-
-</p>
-        </div>
-        </div>
-        <div class="col-md-5 card">
-<span> Curated Selection:</span>
-           <p> Our team of experts carefully selects each product, focusing on functionality, durability, and style. We believe in offering a range of options that cater to diverse parenting styles.
-
-            </p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-5 card">
-            <span>Customer-Centric Approach:</span>
-<p> Your satisfaction is our priority. Our customer support team is here to assist you at every step, ensuring a seamless shopping experience.
-
-</p>
-        </div>
-        <div class="col-md-5 card">
-            <span>Community Engagement:</span>
-<p> Baby Bundles is more than an ecommerce platform; it's a community. Join us on social media and be part of a supportive network of parents sharing experiences, tips, and the joys of parenthood.
-
-</p>
-        </div>
-    </div>
-</div>
-
-
 
 <div class="container commitment">
-    <div class="row">
-        <div class="col-md-12">
-            <h3>Our Commitment
-            </h3>
-            <p>
-                At Baby Bundles, we are committed to being your trusted partner throughout the parenthood journey. Whether you're a new parent navigating the world of baby products or an experienced caregiver looking for the latest innovations, we have something for everyone.
+  <div class="row">
+    <div class="col-md-12 mt-5">
+      <h3>Our Commitment</h3>
+      <p>At Baby Bundles, we are committed to being your trusted partner throughout the parenthood journey. Whether you're a new parent navigating the world of baby products or an experienced caregiver looking for the latest innovations, we have something for everyone.
 
-Thank you for choosing Baby Bundles as your go-to destination for all things baby. We look forward to being a part of your beautiful parenting story.
-<br>
-<br>
-Happy Parenting!
-<br><br>
-The Baby Bundles Team</p>
-        </div>
+        Thank you for choosing Baby Bundles as your go-to destination for all things baby. We look forward to being a part of your beautiful parenting story.
+        <br>
+        <br>
+        Happy Parenting!
+        <br><br><strong>The Baby Bundles Team</strong></p>
     </div>
+  </div>
 </div>
-
-
 
 <%- include('./partials/footer.ejs') %>

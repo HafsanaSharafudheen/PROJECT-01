@@ -19,13 +19,16 @@
 
 <div class="container">
     <div class="row form-section">
+        <div class="row form-section">
+
         <div class="col-md-6">
-                <form action="/footer/submitForm"  method="POST">
+                <form action="/footer/submitForm" id="contactForm"  method="POST">
                     <label><i class="fas fa-user"></i> YOUR NAME</label>
                     <input type="text" name="name" placeholder="Name" required>
                     <label><i class="fas fa-file"></i> SUBJECT</label>
                     <input type="text" name="subject" placeholder="Subject" required>
                 </div>
+        </div>
                 <div class="col-md-6">
                     <label><i class="fas fa-envelope"></i> YOUR EMAIL</label>
                     <input type="text" name="email" placeholder="Email" required>
@@ -36,5 +39,57 @@
         </div>
     </div>
 </div>
+<script>
+   document.addEventListener('DOMContentLoaded', function () {
+       debugger
+    const contactForm = document.getElementById('contactForm');
+    const messageContainer = document.createElement('div');
+   
+    contactForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(contactForm);
+debugger
+        try {
+            const response = await fetch('/footer/submitForm', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded', // Set the content type
+                },
+                body: new URLSearchParams(formData).toString(), // Convert FormData to URL-encoded format
+         
+            });
+
+            if (response.status === 200) {
+                const data = await response.json();
+
+                // Show success message with swal
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: data.message, // corrected variable name
+                });
+            } else {
+                // Show error message with swal
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error in form submission',
+                });
+            }
+        } catch (error) {
+            // Show unexpected error message with swal
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An unexpected error occurred',
+            });
+        }
+    });
+});
+
+   
+
+</script>
 
 <%- include('./partials/footer.ejs') %>

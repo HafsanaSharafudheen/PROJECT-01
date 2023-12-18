@@ -4,37 +4,47 @@
     &#10004;
 </div>
 
-<p>Your order has been successfully placed!</p>
+<p style="font-size: 2rem;">Your order has been successfully placed!</p>
 
 <div class="button-container">
     <a href="/home">
-        <button>Continue Shopping</button>
+        <button class="continue-btn">Continue Shopping</button>
     </a>
-    <button onclick="window.location.href='/order/viewOrderPage'">View Order</button>
-
 </div>
+    <button class="continue-btn" onclick="window.location.href='/order/viewOrderPage'">View Order</button>
+
+
 <script>
     
 </script>
 <style>
     body {
         text-align: center;
-        margin: 20px;
+        margin: 30px;
     }
 
     .success-icon {
-        color: green;
+        color:green;
+      
         font-size: 5em;
         margin-bottom: 20px;
     }
 
-    .button-container {
-        margin-top: 20px;
-    }
+    
+    .continue-btn  {
+    border-color: rgb(255, 255, 255);
+    background-color: #D7A2A2;
+    color: black;
+    width: 40%;
+    font-size: 1rem;
+    margin-top: 4vh;
+    padding: 1vh;
+    border-radius: 30px;
+}
 
-    .button-container button {
-        padding: 10px;
-        font-size: 1em;
-        margin: 0 10px;
-    }
+.continue-btn:hover {
+    background-color: #af665e;
+    color: white;
+}
+
 </style>

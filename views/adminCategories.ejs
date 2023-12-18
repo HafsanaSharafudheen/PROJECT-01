@@ -2,14 +2,14 @@
 <%- include('./partials/admin-navbar.ejs') %>
 
    <!-- Page content -->
-   <div class="col-lg-9 col-md-8 col-sm-12">
+   <div class="col-lg-10 col-md-10 col-sm-12 text-center">
     <span class="welcome-text">CATEGORY </span>
 
     <% if (!categories || categories.length == 0) { %>
         <p>No categories available</p>
     <% } %>
     
-    <button type="button" id="btn-addCategory" class="login-button" onclick="openModalforAddCategory(null)">ADD
+    <button type="button" id="btn-addCategory" class="addBtn" onclick="openModalforAddCategory(null)">ADD
         Category</button>
 
     <table class="table">
@@ -267,6 +267,7 @@ function readURL(input) {
 background-color: #95A5A6;
 width: fit-content;
     }
+   
 </style>
 
 <%- include('./partials/adminfooter.ejs') %>

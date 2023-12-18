@@ -21,8 +21,8 @@ box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 .card{
     background-color: #fbeacb;
     /* background-color: #ffc107; */
-    padding: 20px;
-    margin: 42px 40px 27px 10px;
+    padding: 50px;
+    /* margin: 32px -4px 12px -26px; */
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
 }
 

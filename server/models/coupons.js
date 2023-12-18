@@ -22,7 +22,9 @@ const couponsSchema = new mongoose.Schema({
   expiryDate: {
     type: Date,
     required: true,
-  },
+  }, deleted: { type: Boolean,
+    default: false }, 
+
 });
 
 const Coupons = mongoose.model('Coupons', couponsSchema);

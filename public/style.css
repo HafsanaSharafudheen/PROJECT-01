@@ -32,9 +32,7 @@
 
 .right-side-div {
     background-color: #D7A2A2;
-
     border-radius: 20px;
-
     text-align: center;
 }
 
@@ -78,7 +76,14 @@ padding-left: 10px;
     background-color: #D38E87;
     color: white;
 }
-
+.addBtn{
+    padding: 9px;
+    margin: 10px 0rem 10px 33rem;
+    background-color: #D38E87;
+    color: white;
+    border-radius: 20px;
+    border: none;
+}
 .remember-forgot {
     margin: 2em 2em 0em 5em;
     font-size: 15px;
@@ -285,7 +290,7 @@ padding-left: 10px;
     font-size: 18px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin: 0 5px;
+    margin: 20px 5px 10px 9px;
 }
 .otp-input:focus {
     outline: none;
