@@ -18,9 +18,6 @@ router.post('/verify-otp', (req, res) => {
 
       }
 })
-// router.get('/submit-referral-code',(req,res)=>{
-  
-// })
 
 
 

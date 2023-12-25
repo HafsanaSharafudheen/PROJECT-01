@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
 
-//mongodb connection
-mongoose.connect('mongodb://localhost:27017/babybundles',{    
-  useNewUrlParser:true,
-  useUnifiedTopology:true, 
+// MongoDB connection
+mongoose.connect(process.env.CONNECTIONSTRING, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-})
-const db=mongoose.connection;
+const db = mongoose.connection;
+
 db.on('error', (err) => {
-  console.log('MongoDB connection error:', err);
+  console.error('MongoDB connection error:', err);
 });
 
 db.once('open', () => {
@@ -16,4 +17,4 @@ db.once('open', () => {
 });
 
 require('./userdb');
-require('./otpcollection')
+require('./otpcollection');
