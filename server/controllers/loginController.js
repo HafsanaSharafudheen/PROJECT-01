@@ -96,7 +96,7 @@ async function userVerification(req, res) {
         //for saving token to the client side
         res.cookie('token', token, {
           httpOnly: true,
-          secure: true
+//          secure: true
         });
 
         // Return the token to the client for authentication
