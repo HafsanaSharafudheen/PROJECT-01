@@ -410,8 +410,15 @@ input[type="file"]+label::before {
 /* homepage design */
 .inner {
     overflow: hidden;
+    padding: 10px 0;
 }
-
+.card-title{
+    display: -webkit-box;
+    max-width: 200px;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
 .inner img {
     transition: all 1.5s ease;
     width:10rem;
@@ -420,6 +427,9 @@ input[type="file"]+label::before {
 
 .inner:hover img {
     transform: scale(1.2);
+}
+.card {
+height: 350px;
 }
 .card-title{
     text-transform: uppercase;
