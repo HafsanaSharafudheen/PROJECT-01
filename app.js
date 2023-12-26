@@ -53,21 +53,6 @@ const  instance = new Razorpay({
   key_secret: process.env.RAZORPAY_API_SECRET_KEY,
 });
 
-const privateKeyPath = '/path/to/private-key.pem';
-const certificatePath = '/path/to/certificate.pem';
-
-// Read the SSL/TLS certificate and private key from files
-const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
-const certificate = fs.readFileSync(certificatePath, 'utf8');
-
-// Create an HTTPS server with the express app
-const credentials = { key: privateKey, cert: certificate };
-const httpsServer = https.createServer(credentials, app);
-
-app.get('*', (req, res) => {
-  res.redirect(`https://${req.headers.host}${req.url}`);
-});
-
 
 app.use('/', userRouter);
 app.use('/home', homeRouter);
