@@ -7,7 +7,7 @@ async function calculateWalletSum(userId) {
         if (typeof userId === 'string') {
             userId = new ObjectId(userId);
         }
-
+        
         const walletSumResult = await Wallet.aggregate([{
                 $match: {
                     user_id: userId
