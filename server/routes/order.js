@@ -13,6 +13,7 @@ const Coupons=require('../models/coupons')
 const Wallet=require('../models/wallet')
 const orderController=require('../controllers/orderController')
 const walletServices=require('../services/walletServices')
+require('dotenv').config();
 
 router.post('/addressPage', jwtVerifyModule.JWTVerify, async (req, res) => {
   const addressList = await Address.find({
@@ -22,7 +23,8 @@ router.post('/addressPage', jwtVerifyModule.JWTVerify, async (req, res) => {
 debugger;
   return res.render('checkOut', {
     addressList: addressList,
-    summary: req.body
+    summary: req.body,
+    RAZORPAY_API_KEY: process.env.RAZORPAY_API_KEY,
 
   })
 })
