@@ -63,17 +63,13 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-md-6 mt-5">
-      <button class="AddBtn" onclick="initiatePayment()">Add Money</button>
-    </div>
-  </div>
+ 
 
-  <div class="row mt-5">
+  <div class="row">
     <% if (userWallet && userWallet.length > 0) { %>
       <% userWallet.forEach(function(userWallet) { %>
         <div class="col-md-6 cardDiv">
-          <h6>Wallet Amount: <span style="color: red;"><%= userWallet.walletAmount %></span></h6>
+          \\<h6>Wallet Amount: <span style="color: red;"><%= userWallet.walletAmount %></span></h6>
           <div class="transaction-box">
             <h6>Transaction: <%= userWallet.transaction %></h6>
             <h6>Description: <%= userWallet.transactionDescription %></h6>
@@ -89,10 +85,6 @@
   </div>
 </div>
 
-<script>
-    function initiatePayment(){
-        
-    }
-</script>
+
 
 <%- include('./partials/footer.ejs') %>

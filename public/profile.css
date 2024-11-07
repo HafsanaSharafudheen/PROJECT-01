@@ -1,8 +1,5 @@
-body {
-    background-color: #f8f9fa;
-    padding: 20px;
-}
-input {  width: 80%;
+
+.main-div input {  width: 80%;
 padding: 10px;
 margin: 8px 0;
 box-sizing: border-box;
@@ -99,12 +96,13 @@ button:hover {
 .main-divCards{
     background-color: #D7A2A2;
     color: white;
-    padding: 10px;
-    margin-bottom: 20px; /* Add some space between cards */
+    padding: 10px 20px;
+    margin: 10px;
     font-weight: 600;
     border-radius: 20px;
     transition: transform 0.3s ease-in-out; /* Add a smooth transition effect */
     width: 15rem;
-    margin-left: 6rem;
+    margin-right: 30px;
+  
 }
 
