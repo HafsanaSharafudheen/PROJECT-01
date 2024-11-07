@@ -1,8 +1,9 @@
-<div class="row navbar">
-    <div class="col-lg-2">
-        <span class="baby-b" style="color: white; margin-left: 10px;">Baby Bundles</span>
+<div class="row navbar col-auto">
+    <div class="col-lg-6 col-auto">
+        <span class="baby-b ml-5" >Baby Bundles</span>
     </div>
-    <div class="col-8 col-lg-4">
+    
+    <div class="col-md-3 col-lg-3 col-auto mt-4">
         <div class="d-flex gap-2">
             <input id="searchInput" type="search" class="form-control search-bar" placeholder="Search for products..." />
             <button type="button" class="btn btn-light search-btn" onclick="searchProducts()">
@@ -12,7 +13,7 @@
         
     </div>
     
-    <div class="col-4 col-lg-6">
+    <div class="col-md-3 col-lg-3 col-auto mt-4">
         <!-- Your right-side navigation here -->
   <ul class="button-list">
 
@@ -50,13 +51,14 @@
                 </li>
             </ul>
     </div>
+</div>
     
 <nav class="navbar navbar-expand-lg row">
     <div class="col-lg-12">
         <div class="row">
             <!-- Your existing navigation code -->
- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler w-100" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -70,7 +72,6 @@
                             Categories
                         </a>
                         <ul class="dropdown-menu" id="categoryList" aria-labelledby="navbarDropdown">
-
                         </ul>
                     </li>
                     <li class="nav-item">

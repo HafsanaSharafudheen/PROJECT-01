@@ -27,7 +27,8 @@
     font-weight: bold;
     color: #d88689;
     font-family: 'Butterfly Kids', cursive;
-
+    white-space: nowrap;    
+    color: white;
 }
 
 .right-side-div {
