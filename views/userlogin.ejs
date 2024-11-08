@@ -37,40 +37,41 @@
 
                     <div class="form-row" id="login-otp" style="display: none">
                         <label for="otp" class="form-label">Enter the OTP send to your number
-                            <a class="text-center pt-3" style="display: none;" href="#" onclick="return resend()"
-                            id="resendLink">Resend OTP</a>
+                            
                         </label>
                         
-                        <div class="col-lg-10">
+                        <!--otp timer-->
+                <div id="otp-timer" style="display: none;">
+                    Time left: <span id="minutes">00</span>:<span id="seconds">00</span>
+                </div>
                             <input type="text" class="otp-input inp px-3" name="digits" maxlength="4">
-                        </div>
+                            <a class="text-center" style="display: none;" href="#" onclick="return resend()"
+                            id="resendLink">Resend OTP</a>
                     </div>
+<div class="text-center">
 
-<!--otp timer-->
-<div id="otp-timer" style="display: none;">
-    Time left: <span id="minutes">00</span>:<span id="seconds">00</span>
-  </div>
-                    <!-- send otp button -->
-                    <div class="form-row pt-5">
-                        <div class="col-lg-10">
-                            <button type="submit" id="btn-sendOTP" class="login-button">Send OTP</button>
+               
+                <!-- send otp button -->
+                <div class="form-row pt-5" id="sendOtpDiv">
+                    <div class="col-lg-10">
+                        <button type="submit" id="btn-sendOTP" class="login-button">Send OTP</button>
 
-                           
-                        </div>
+
                     </div>
-                    <!-- login button -->
-                    <div class="form-row py-3 pt-5" id="otp-verification" style="display: none;">
-                        <div class="offset-1 col-lg-10">
-                            <button type="button" id="btn-login" class="login-button"
-                                onclick="return otpform()">LOGIN</button>
-                        </div>
+                </div>
+                <!-- login button -->
+                <div class="form-row py-3 pt-5" id="otp-verification" style="display: none;">
+                    <div class="col-lg-10">
+                        <button type="button" id="btn-login" class="login-button" onclick="return otpform()">LOGIN</button>
                     </div>
+                </div>
 
-                    <div class="register-link text-center mt-3">
-                        <p>Didn't Have an Account?<a href="/signup">Sign Up</a></p>
-                    </div>
+                <div class="register-link text-center mt-3">
+                    <p>Didn't Have an Account?<a href="/signup">Sign Up</a></p>
+                </div>
 
 
+            </div>
                 </form>
 
             </div>
@@ -117,6 +118,8 @@
         const loginotp = document.getElementById('login-otp');
          const otptimer=document.getElementById('otp-timer');
         const btnsendOTP = document.getElementById('btn-sendOTP');
+        const DivsendOTP = document.getElementById('sendOtpDiv');
+
         //const resendLink = document.getElementById('resendLink');
         const otpVerification = document.getElementById('otp-verification');
         const btnlogin = document.getElementById('btn-login');
@@ -141,6 +144,7 @@
 
                     loginotp.style.display = 'block';
       btnsendOTP.style.display = 'none';
+      DivsendOTP.style.display='none';
       resendLink.style.display = 'block';
       otptimer.style.display = "block";
       otpVerification.style.display = "block";
