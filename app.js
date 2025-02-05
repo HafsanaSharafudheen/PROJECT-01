@@ -46,7 +46,7 @@ app.use(
   })
 );
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 const  instance = new Razorpay({
   key_id: process.env.RAZORPAY_API_KEY,
