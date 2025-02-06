@@ -46,11 +46,11 @@ app.use(
   })
 );
 
-if (process.env.NODE_ENV === 'production') {
-  app.use('/uploads', express.static('/home/ubuntu/PROJECT-01/uploads'));
-} else {
+
   app.use('/uploads', express.static('uploads'));
-}
+  
+  app.use(express.static("public"));
+
 
 const  instance = new Razorpay({
   key_id: process.env.RAZORPAY_API_KEY,
