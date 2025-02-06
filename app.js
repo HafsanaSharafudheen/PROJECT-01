@@ -48,9 +48,8 @@ app.use(
 
 
   app.use('/uploads', express.static('uploads'));
-  
-  app.use(express.static("public"));
 
+app.use(express.static(path.join(__dirname, "public")));
 
 const  instance = new Razorpay({
   key_id: process.env.RAZORPAY_API_KEY,
